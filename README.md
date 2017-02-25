@@ -14,8 +14,8 @@ description
 ## expected final features
 
 ## planned technologies
-frontend: React & bootstrap or material-ui
-backend:  node with express et al. or Ruby on Rails
+* frontend: React & bootstrap or material-ui
+* backend:  node with express et al. or Ruby on Rails
 
 ## technical challenges
 * implementing peer-to-peer communications
