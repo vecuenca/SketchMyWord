@@ -10,6 +10,7 @@ Three Honeys
 A game similar to Pictionary, where players try to guess the picture being drawn by a master artist. The faster they guess correctly, the more points they earn! The player with the most points at the end of the game is crowned the winner.
 
 The basic flow of a game round:
+
 1. One player is chosen as the Artist.
 2. The Artist is given a word to draw. 
 3. The rest of the players try to guess the word. They are given one minute to do so.4. When a player correctly guesses the word being drawn by the Artist, they earn points according to how much time is left.
