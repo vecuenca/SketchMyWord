@@ -28,7 +28,7 @@ The basic flow of a game round:
 1. The ability to create accounts.
 2. A public RESTful API including the ability to fetch player statistics as well as word statistics.
 3. Additional artists tools, including different colours, brush sizes, and brush shapes.
-4. Integration with social media including Facebook and Twitter.
+4. Integration with social media including Facebook and Twitter (i.e. the ability to invite friends and broadcast an open game is available to join)
 
 ## planned technologies
 * frontend: React & bootstrap or material-ui
