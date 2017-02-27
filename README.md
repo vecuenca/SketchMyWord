@@ -18,8 +18,10 @@ The basic flow of a game round:
 
 
 ## expected beta features
-1. A user goes on our site and creates a new game. They are given a session id which they can share with up to 3 other friends.
-2. 4 players are able to play a basic version of $drawApp. 
+* A user goes on our site and creates a new game. They are given a session id which they can share with up to 3 other friends.
+* Since we do not know the technical complexity of streaming a drawing to other players, we will have two expected versions of our beta:
+- The first one is a drawable canvas that is streamed to all other watchers.
+- If that is able to be completed fast enough, then we will deliver a basic version of $drawApp (as described above)
 
 ## expected final features
 1. The ability to create accounts.
