@@ -28,14 +28,15 @@ The basic flow of a game round:
 ## expected final features
 1. The ability to create accounts.
 2. A public RESTful API including the ability to fetch player statistics as well as word statistics.
-3. Additional artists tools, including different colours, brush sizes, and brush shapes.
-4. Integration with social media including Facebook and Twitter (i.e. the ability to invite friends and broadcast an open game is available to join)
+3. A front end high scores chart that displays player statistics.
+4. Additional artists tools, including different colours, brush sizes, and brush shapes.
+5. Integration with social media including Facebook and Twitter (i.e. the ability to invite friends and broadcast an open game is available to join)
 
 ## planned technologies
 * frontend: React & bootstrap or material-ui
 * backend:  node with express et al. or Ruby on Rails
 
 ## technical challenges
-* implementing peer-to-peer communications
-* concurrency
+* implementing a sessional server-to-multiple-clients model
+* concurrency and latency
 
