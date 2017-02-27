@@ -13,7 +13,8 @@ The basic flow of a game round:
 
 1. One player is chosen as the Artist.
 2. The Artist is given a word to draw. 
-3. The rest of the players try to guess the word. They are given one minute to do so.4. When a player correctly guesses the word being drawn by the Artist, they earn points according to how much time is left.
+3. The rest of the players try to guess the word. They are given one minute to do so.
+4. When a player correctly guesses the word being drawn by the Artist, they earn points according to how much time is left.
 5. The round continues until all players guess the word or time runs out. 
 
 
