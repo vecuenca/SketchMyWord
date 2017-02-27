@@ -13,9 +13,10 @@ The basic flow of a game round:
 
 1. One player is chosen as the Artist.
 2. The Artist is given a word to draw. 
-3. The rest of the players try to guess the word. They are given one minute to do so.
-4. When a player correctly guesses the word being drawn by the Artist, they earn points according to how much time is left.
-5. The round continues until all players guess the word or time runs out. 
+3. The rest of the players try to guess the word. They are given one minute to do so. As the clock winds down, random letters of the word are revealed to the player.
+4. The first player to guess the word gets the most points. Players that guess the word after earn a reduced amount of points.
+5. The round continues until all players guess the word or time runs out.
+6. A new Artist is chosen and another round begins.  
 
 
 ## expected beta features
