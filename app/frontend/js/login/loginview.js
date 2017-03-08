@@ -25,7 +25,7 @@ var view = (function() {
 	}
 
 	view.displayError = function(errorMsg) {
-		document.getElementById('error').innerHTML = errorMsg;
+		Materialize.toast(errorMsg, 5000);
 	}
 
   return view;
