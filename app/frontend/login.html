@@ -36,6 +36,7 @@
 							<li class="tab col s6"><a href="#signin">Sign in</a></li>
 							<li class="tab col s6"><a href="#signup">Sign up</a></li>
 						</ul>
+						<h4 id="error" class="red-text"></h3>
 						<form id="signin" class="col s12" method="post">
 							<div class='row'>
 								<div class='col s12'>
@@ -43,13 +44,13 @@
 							</div>
 							<div class='row'>
 								<div class='input-field col s12'>
-									<input class='validate' type='email' name='username' id='username' />
+									<input class='validate' type='text' name='username' id='signin-username' />
 									<label for='username'>Enter your username</label>
 								</div>
 							</div>
 							<div class='row'>
 								<div class='input-field col s12'>
-									<input class='validate' type='password' name='password' id='password' />
+									<input class='validate' type='password' name='password' id='signup-password' />
 									<label for='password'>Enter your password</label>
 								</div>
 								<label>
@@ -70,13 +71,13 @@
 							</div>
 							<div class='row'>
 								<div class='input-field col s12'>
-									<input class='validate' type='email' name='username' id='username' />
+									<input class='validate' type='email' name='username' id='signup-username' />
 									<label for='username'>Enter your username</label>
 								</div>
 							</div>
 							<div class='row'>
 								<div class='input-field col s12'>
-									<input class='validate' type='password' name='password' id='password' />
+									<input class='validate' type='password' name='password' id='signup-password' />
 									<label for='password'>Enter your password</label>
 								</div>
 								<label>
@@ -84,7 +85,7 @@
 							</div>
 							<div class='row'>
 								<div class='input-field col s12'>
-									<input class='validate' type='password' name='password' id='confirm-password' />
+									<input class='validate' type='password' name='password' id='signup-confirm-password' />
 									<label for='confirm-password'>Confirm your password</label>
 								</div>
 								<label>
@@ -118,6 +119,7 @@
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="js/materialize.js"></script>
   <script src="js/init.js"></script>
-
+	<script src="js/init.js"></script>
+	<script src="js/login/loginview.js"></script>
   </body>
 </html>
