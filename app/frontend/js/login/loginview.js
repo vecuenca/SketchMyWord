@@ -19,7 +19,6 @@ var view = (function() {
 			});
 			document.dispatchEvent(event);
 			document.getElementById('signin').reset();
-			console.log(event);
 		} else {
 			view.displayError('Please enter a username or password');
 		}
