@@ -1,0 +1,27 @@
+{
+  "name": "sketch-my-word",
+  "version": "1.0.0",
+  "description": "Three Honeys",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UTSCC09/3honeys.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UTSCC09/3honeys/issues"
+  },
+  "homepage": "https://github.com/UTSCC09/3honeys#readme",
+  "dependencies": {
+    "nodemon": "^1.11.0",
+    "body-parser": "^1.16.0",
+    "express": "^4.14.1",
+    "body-parser": "^1.16.0",
+    "promise-mysql": "^3.0.0",
+    "install": "^0.8.4"
+  }
+}
