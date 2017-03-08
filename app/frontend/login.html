@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+	<link href="css/login.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
   <!--app bar nav-->
@@ -24,78 +25,83 @@
       <h5 class="">Welcome!</h5>
 			<h5 class="">Please log in or create an account to play SketchMyWord!</h5>
       <br>
-      <div class="container">
-        <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
-          <form class="col s12" method="post">
-            <div class='row'>
-              <div class='col s12'>
-              </div>
-            </div>
-            <div class='row'>
-              <div class='input-field col s12'>
-                <input class='validate' type='email' name='username' id='username' />
-                <label for='username'>Enter your username</label>
-              </div>
-            </div>
-            <div class='row'>
-              <div class='input-field col s12'>
-                <input class='validate' type='password' name='password' id='password' />
-                <label for='password'>Enter your password</label>
-              </div>
-              <label>
-								<a href='#!'><b>Forgot Password?</b></a>
-							</label>
-            </div>
-            <br/>
-            <center>
-              <div class='row'>
-                <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect orange'>Login</button>
-              </div>
-            </center>
-          </form>
-        </div>
-      </div>
-			<a href="#!">Create account</a>
-			<div class="container">
-        <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
-          <form class="col s12" method="post">
-            <div class='row'>
-              <div class='col s12'>
-              </div>
-            </div>
-            <div class='row'>
-              <div class='input-field col s12'>
-                <input class='validate' type='email' name='username' id='username' />
-                <label for='username'>Enter your username</label>
-              </div>
-            </div>
-            <div class='row'>
-              <div class='input-field col s12'>
-                <input class='validate' type='password' name='password' id='password' />
-                <label for='password'>Enter your password</label>
-              </div>
-              <label>
-							</label>
-            </div>
-						<div class='row'>
-              <div class='input-field col s12'>
-                <input class='validate' type='password' name='password' id='confirm-password' />
-                <label for='confirm-password'>Confirm your password</label>
-              </div>
-              <label>
-							</label>
-            </div>
-            <br/>
-            <center>
-              <div class='row'>
-                <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect orange'>Sign up</button>
-              </div>
-            </center>
-          </form>
-        </div>
-      </div>
-			<a href="#!">Sign in</a>
-    </center>
+
+			
+
+			<!--sign in form-->
+			<div id="signin-form">
+				<div class="container">
+					<div class="z-depth-1 grey lighten-4 row" style="padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+						<ul class="tabs grey lighten-4">
+							<li class="tab col s6"><a href="#signin">Sign in</a></li>
+							<li class="tab col s6"><a href="#signup">Sign up</a></li>
+						</ul>
+						<form id="signin" class="col s12" method="post">
+							<div class='row'>
+								<div class='col s12'>
+								</div>
+							</div>
+							<div class='row'>
+								<div class='input-field col s12'>
+									<input class='validate' type='email' name='username' id='username' />
+									<label for='username'>Enter your username</label>
+								</div>
+							</div>
+							<div class='row'>
+								<div class='input-field col s12'>
+									<input class='validate' type='password' name='password' id='password' />
+									<label for='password'>Enter your password</label>
+								</div>
+								<label>
+									<a href='#!'><b>Forgot Password?</b></a>
+								</label>
+							</div>
+							<br/>
+							<center>
+								<div class='row'>
+									<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect orange'>Login</button>
+								</div>
+							</center>
+						</form>
+						<form id="signup" class="col s12" method="post">
+							<div class='row'>
+								<div class='col s12'>
+								</div>
+							</div>
+							<div class='row'>
+								<div class='input-field col s12'>
+									<input class='validate' type='email' name='username' id='username' />
+									<label for='username'>Enter your username</label>
+								</div>
+							</div>
+							<div class='row'>
+								<div class='input-field col s12'>
+									<input class='validate' type='password' name='password' id='password' />
+									<label for='password'>Enter your password</label>
+								</div>
+								<label>
+								</label>
+							</div>
+							<div class='row'>
+								<div class='input-field col s12'>
+									<input class='validate' type='password' name='password' id='confirm-password' />
+									<label for='confirm-password'>Confirm your password</label>
+								</div>
+								<label>
+								</label>
+							</div>
+							<br/>
+							<center>
+								<div class='row'>
+									<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect orange'>Sign up</button>
+								</div>
+							</center>
+						</form>
+					</div>
+				</div>
+
+			</div>
+		</center>
 
     <div class="section"></div>
     <div class="section"></div>

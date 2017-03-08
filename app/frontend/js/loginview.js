@@ -4,7 +4,9 @@ var view = (function() {
 
   var view = {};
 
-	
+	document.getElementById('btn-create-account').onclick = function() {
+    
+  };
 
   return view;
 
