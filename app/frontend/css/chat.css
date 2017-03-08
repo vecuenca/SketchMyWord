@@ -1,0 +1,16 @@
+.chat-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	min-height: 600px;
+}
+
+
+.chat-message {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	flex-wrap: wrap;
+	min-height: 40px;
+}
