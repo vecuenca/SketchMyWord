@@ -15,10 +15,15 @@
 .brush-medium {
 	height: 50px;
 	width: 50px;
-
 }
 
 .brush-small {
 	height: 25px;
 	width: 25px;
 }
+
+.brush-eraser {
+	background-image: url(./../resources/eraser.png);
+}
+
+.

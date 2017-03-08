@@ -27,3 +27,7 @@ main {
 	min-height: 600px;
 }
 
+.sketch-container {
+	padding-left: 10px;
+}
+
