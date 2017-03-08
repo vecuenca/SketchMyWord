@@ -6,5 +6,12 @@
       window.location = '/index.html';
 		});
 	});
+
+	document.addEventListener('onSignUp', function(e) {
+		model.signUp(e.detail, function(resp, err) {
+			if (err) return view.showError(err);
+      view.signUpSuccess();
+		});
+	});
   
 }(model, view));

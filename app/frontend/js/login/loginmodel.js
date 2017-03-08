@@ -16,6 +16,20 @@ var model = (function() {
 		}).catch(function(err) {
 			callback(null, err);
 		});
+  };
+
+	model.signUp = function(data, callback) {
+    fetch('/api/users/', {
+			method: 'put',
+			body: {
+				username: data.username, 
+				password: data.password
+			}
+		}).then(function(resp) {
+			callback(resp, null);
+		}).catch(function(err) {
+			callback(null, err);
+		});
   };  
 
   return model;
