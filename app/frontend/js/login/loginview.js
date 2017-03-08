@@ -24,6 +24,30 @@ var view = (function() {
 		}
 	}
 
+	document.getElementById('signup').onsubmit = function(e) {
+		e.preventDefault();
+
+		var username = document.getElementById('signin-username').value;
+		var password = document.getElementById('signup-password').value;
+		var passwordConfirm = document.getElementById('signup-confirm-password').value;
+
+		if (username.length == 0 && password.length == 0 && passwordConfirm.length == 0) {
+			view.displayError('Please fill in all fields.');
+		} else if (password !== passwordConfirm) {
+			view.displayError('Your passwords don\'t match.');
+		} else {
+			var event = new CustomEvent('onSignUp', {
+				detail: {
+					username:        username,
+					password:        password,
+					passwordConfirm: passwordConfirm
+				}
+			});
+			document.dispatchEvent(event);
+			document.getElementById('signup').reset();
+		}
+	}
+
 	view.displayError = function(errorMsg) {
 		Materialize.toast(errorMsg, 5000);
 	}
