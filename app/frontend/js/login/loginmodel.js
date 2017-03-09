@@ -19,7 +19,7 @@ var model = (function() {
 			})
 		}).then(function(resp) {
 			if (resp.status == 401) {
-				callback(resp, 'Sorry, we were unable to find your account.');
+				callback(resp, 'The username or password you entered is incorrect.');
 			} else {
 				callback(resp, null);
 			}

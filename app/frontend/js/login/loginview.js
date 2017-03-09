@@ -8,7 +8,7 @@ var view = (function() {
 		e.preventDefault();
 		
 		var username = document.getElementById('signin-username').value;
-		var password = document.getElementById('signup-password').value;
+		var password = document.getElementById('signin-password').value;
 
 		if (username.length > 0 && password.length > 0) {
 			var event = new CustomEvent('onSignIn', {
@@ -46,6 +46,11 @@ var view = (function() {
 			document.dispatchEvent(event);
 			document.getElementById('signup').reset();
 		}
+	}
+
+	view.signUpSuccess = function() {
+		view.displayToast('Your user was created successfully!');
+		$('ul.tabs').tabs('select_tab', 'signin');
 	}
 
 	view.displayToast = function(msg) {
