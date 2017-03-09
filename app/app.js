@@ -52,6 +52,13 @@ app.get('/', function(req, res, next) {
     return next();
 });
 
+app.get('/signout/', function (req, res, next) {
+  req.session.destroy(function(err) {
+    if (err) return res.status(500).end(err);
+    return res.redirect('/login.html');
+  });
+});
+
 app.use(express.static('frontend'));
 
 //AUTHENTICATION
