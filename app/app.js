@@ -6,8 +6,6 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(express.static('frontend'));
-
 var session = require('express-session');
 app.use(session({
     secret:            'big crab',
@@ -15,7 +13,6 @@ app.use(session({
     saveUninitialized: true,
     cookie: 		   { sameSite: true }
 }));
-
 
 var connection;
  
@@ -48,6 +45,14 @@ var createUser = function(user){
             (\`username\`, \`password\`) 
             VALUES (?, ?);`, [user.username, user.password]);
 };
+
+// ROUTING
+app.get('/', function(req, res, next) {
+    if (!req.session.user) return res.redirect('/login.html');
+    return next();
+});
+
+app.use(express.static('frontend'));
 
 //AUTHENTICATION
 
