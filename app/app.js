@@ -70,13 +70,9 @@ app.post('/api/signin/', function(req, res, next){
           WHERE \`username\` = ? 
           AND \`password\`= ? `, [req.body.username, req.body.password])
   .then(function(results, fields){
-    console.log('results', results[0].username, 'fields',fields);
-
-    console.log('a');
     if (!results || results[0].password != req.body.password) {
       return res.status(401).send('Sorry, we couldn\'t find your account.');
     }
-    console.log('a');
     req.session.user = results[0];
     res.cookie('username', results[0].username, {sameSite: true });
     return res.json({success: true});
