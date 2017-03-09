@@ -8,6 +8,15 @@ app.use(bodyParser.json());
 
 app.use(express.static('frontend'));
 
+var session = require('express-session');
+app.use(session({
+    secret:            'big crab',
+    resave:            false,
+    saveUninitialized: true,
+    cookie: 		   { sameSite: true }
+}));
+
+
 var connection;
  
 mysql.createConnection({
@@ -36,7 +45,7 @@ app.use(function (req, res, next){
 var createUser = function(user){
     return connection.query(
         `INSERT INTO \`sketch-my-word\`.\`users\`
-	        (\`username\`, \`password\`) 
+            (\`username\`, \`password\`) 
             VALUES (?, ?);`, [user.username, user.password]);
 };
 
