@@ -35,7 +35,7 @@ var createUser = function(user){
 };
 //AUTHENTICATION
 
-app.post('/api/signin/', function(req, res, next){
+app.post('/signin/', function(req, res, next){
     if (!req.body.username || ! req.body.password) return res.status(400).send("Bad Request");
     connection.query(
         `SELECT * FROM \`sketch-my-word\`.\`users\` 
@@ -53,7 +53,7 @@ app.post('/api/signin/', function(req, res, next){
 });
 
 //CREATE
-app.put('/api/users/', function(req, res, next){
+app.put('/users/', function(req, res, next){
     if (!req.body.username || ! req.body.password) return res.status(400).send("Bad Request");
     createUser(req.body)
     .then(function(result){
