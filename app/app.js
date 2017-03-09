@@ -69,17 +69,17 @@ app.post('/api/signin/', function(req, res, next){
       `SELECT * FROM \`sketch-my-word\`.\`users\` 
           WHERE \`username\` = ? 
           AND \`password\`= ? `, [req.body.username, req.body.password])
-  .then(function(error, results, fields){
-    if (error.length > 0)  {
-      return res.status(500).send(error);
-    }
+  .then(function(results, fields){
+    console.log('results', results[0].username, 'fields',fields);
+
+    console.log('a');
     if (!results || results[0].password != req.body.password) {
       return res.status(401).send('Sorry, we couldn\'t find your account.');
     }
-    req.session.user = user;
+    console.log('a');
+    req.session.user = results[0];
     res.cookie('username', results[0].username, {sameSite: true });
-    res.json({success: true});
-    return next();
+    return res.json({success: true});
   })
   .catch(function(error){
     if(error) return res.status(500).send(error);

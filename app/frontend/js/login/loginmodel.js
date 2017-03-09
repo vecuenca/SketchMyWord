@@ -19,12 +19,12 @@ var model = (function() {
 			})
 		}).then(function(resp) {
 			if (resp.status == 401) {
-				callback(resp, 'The username or password you entered is incorrect.');
+				callback('The username or password you entered is incorrect.', resp);
 			} else {
-				callback(resp, null);
+				callback(null, resp);
 			}
 		}).catch(function(err) {
-			callback(null, err);
+			callback(err, null);
 		});
   };
 
@@ -38,9 +38,9 @@ var model = (function() {
 				password: data.password
 			})
 		}).then(function(resp) {
-			callback(resp, null);
+			callback(null, resp);
 		}).catch(function(err) {
-			callback(null, err);
+			callback(err, null);
 		});
   };  
 
