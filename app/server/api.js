@@ -1,8 +1,13 @@
 var config = require('../config.js');
+var schema = require('./Schemas/signin')
+var ZSchema = require("z-schema");
 var mysql = require('promise-mysql');
 var express = require('express');
 var app = express.Router();
 var bodyParser = require('body-parser');
+
+var validator = new ZSchema();
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -36,6 +41,7 @@ var createUser = function(user){
 //AUTHENTICATION
 
 app.post('/signin/', function(req, res, next){
+    validator.validate(req,schema);
     if (!req.body.username || ! req.body.password) return res.status(400).send("Bad Request");
     connection.query(
         `SELECT * FROM \`sketch-my-word\`.\`users\` 
@@ -54,6 +60,7 @@ app.post('/signin/', function(req, res, next){
 
 //CREATE
 app.put('/users/', function(req, res, next){
+    validator.validate(req,schema);
     if (!req.body.username || ! req.body.password) return res.status(400).send("Bad Request");
     createUser(req.body)
     .then(function(result){

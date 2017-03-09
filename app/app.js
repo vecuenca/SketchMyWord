@@ -19,6 +19,7 @@ app.use('/api', api);
 
 app.use(function (req, res, next){
     console.log("HTTP Response", res.statusCode);
+    res.send();
 });
 
 app.listen(3000, function () {
