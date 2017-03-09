@@ -64,23 +64,31 @@ app.use(express.static('frontend'));
 //AUTHENTICATION
 
 app.post('/api/signin/', function(req, res, next){
-    if (!req.body.username || ! req.body.password) return res.status(400).send("Bad Request");
-    connection.query(
-        `SELECT * FROM \`sketch-my-word\`.\`users\` 
-            WHERE \`username\` = ? 
-            AND \`password\`= ? `, [req.body.username, req.body.password])
-            .then(function(error, results, fields){
-                if (error) return res.status(500).send(error);
-                res.json(results);
-            })
-            .catch(function(error){
-                if(error) return res.status(500).send(error);
-            });
+  if (!req.body.username || ! req.body.password) return res.status(400).send("Bad Request");
+  connection.query(
+      `SELECT * FROM \`sketch-my-word\`.\`users\` 
+          WHERE \`username\` = ? 
+          AND \`password\`= ? `, [req.body.username, req.body.password])
+  .then(function(error, results, fields){
+    if (error.length > 0)  {
+      return res.status(500).send(error);
+    }
+    if (!results || results[0].password != req.body.password) {
+      return res.status(401).send('Sorry, we couldn\'t find your account.');
+    }
+    req.session.user = user;
+    res.cookie('username', results[0].username, {sameSite: true });
+    res.json({success: true});
+    return next();
+  })
+  .catch(function(error){
+    if(error) return res.status(500).send(error);
+  });
 });
 
 //CREATE
 app.put('/api/users/', function(req, res, next){
-    if (!req.body.username || ! req.body.password) return res.status(400).send("Bad Request");
+    if (!req.body.username || !req.body.password) return res.status(400).send("Bad Request");
     createUser(req.body)
     .then(function(result){
         res.json(result);

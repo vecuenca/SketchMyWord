@@ -8,7 +8,6 @@ var model = (function() {
   var model = {};
 
   model.signIn = function(data, callback) {
-		console.log(data);
     fetch('/api/signin/', {
 			method: 'post',
 			credentials: 'include',
@@ -18,7 +17,11 @@ var model = (function() {
 				password: data.password
 			})
 		}).then(function(resp) {
-			callback(resp, null);
+			if (resp.status == 401) {
+				callback(resp, resp.statusText);
+			} else {
+				callback(resp, null);
+			}
 		}).catch(function(err) {
 			callback(null, err);
 		});
