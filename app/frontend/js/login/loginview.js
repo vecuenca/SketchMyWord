@@ -20,21 +20,21 @@ var view = (function() {
 			document.dispatchEvent(event);
 			document.getElementById('signin').reset();
 		} else {
-			view.displayError('Please enter a username or password');
+			view.displayToast('Please enter a username or password');
 		}
 	}
 
 	document.getElementById('signup').onsubmit = function(e) {
 		e.preventDefault();
 
-		var username = document.getElementById('signin-username').value;
+		var username = document.getElementById('signup-username').value;
 		var password = document.getElementById('signup-password').value;
 		var passwordConfirm = document.getElementById('signup-confirm-password').value;
 
 		if (username.length == 0 && password.length == 0 && passwordConfirm.length == 0) {
-			view.displayError('Please fill in all fields.');
+			view.displayToast('Please fill in all fields.');
 		} else if (password !== passwordConfirm) {
-			view.displayError('Your passwords don\'t match.');
+			view.displayToast('Your passwords don\'t match.');
 		} else {
 			var event = new CustomEvent('onSignUp', {
 				detail: {
@@ -48,8 +48,8 @@ var view = (function() {
 		}
 	}
 
-	view.displayError = function(errorMsg) {
-		Materialize.toast(errorMsg, 5000);
+	view.displayToast = function(msg) {
+		Materialize.toast(msg, 5000);
 	}
 
   return view;
