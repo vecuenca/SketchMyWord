@@ -2,15 +2,21 @@
 var model = (function() {
   "use strict";
 
+	var headers = new Headers({
+		'Content-Type': 'application/json'
+	});
   var model = {};
 
   model.signIn = function(data, callback) {
+		console.log(data);
     fetch('/api/signin/', {
 			method: 'post',
-			body: {
+			credentials: 'include',
+			headers: headers,
+			body: JSON.stringify({
 				username: data.username, 
 				password: data.password
-			}
+			})
 		}).then(function(resp) {
 			callback(resp, null);
 		}).catch(function(err) {
