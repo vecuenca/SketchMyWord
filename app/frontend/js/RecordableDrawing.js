@@ -14,17 +14,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var width = document.getElementById('canvas_box').clientWidth;
     var height = document.getElementById('canvas_box').clientHeight;
     var socket = io.connect();
-    // reset();
-
-
     
     // // Make it visually fill the positioned parent
-    // canvas.style.width ='100%';
-    // canvas.style.height='100%';
-    // ...then set the internal size to match
     canvas.width  = width;
     canvas.height = height;
-    
 
     // register mouse event handlers
     canvas.onmousedown = function (e) {
@@ -37,8 +30,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     canvas.onmousemove = function (e) {
         // normalize mouse position to range 0.0 - 1.0
-        mouse.pos.x = e.clientX - document.getElementById("canvas_box").offsetLeft;
-        mouse.pos.y = e.clientY - document.getElementById("canvas_box").offsetTop;
+        mouse.pos.x = e.pageX - document.getElementById("canvas_box").offsetLeft;
+        mouse.pos.y = e.pageY - document.getElementById("canvas_box").offsetTop;
         mouse.move = true;
     };
 

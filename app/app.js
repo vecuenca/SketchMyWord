@@ -42,7 +42,7 @@ io.on('connection', function (socket) {
 mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'password',
+    password: '1234',
     database: 'sketch-my-word',
     port: '3306'
 }).then(function (conn) {
