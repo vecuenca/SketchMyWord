@@ -38,4 +38,4 @@ Thumbs.db
 
 # OUR FILES #
 ######################
-*/node_modules
+node_modules*

@@ -16,25 +16,35 @@
   <nav class="light-blue lighten-1" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">SketchMyPic</a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="#">Log out</a></li>
+        <li><a id="btn-logout" href="/signout">Sign out</a></li>
       </ul>
       <ul class="right hide-on-med-and-down">
-        <li><a href="#">yongzhe666</a></li>
+        <li><a id="header-username" href="#">Hello, </a></li>
       </ul>
       <ul id="nav-mobile" class="side-nav">
-        <li><a href="#">Login</a></li>
+        <li><a href="#">Logout</a></li>
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
   </nav>
 
+  
+  <!--game session id modal-->  
+  <div id="session-modal" class="modal">
+    <div class="modal-content">
+      <h3 class="center">Your game session id is:</h2>
+      <h1 class="header center orange-text">GleamingGraciousBorer</h1>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+  </div>
+
   <div class="section no-pad-bot" id="index-banner">
     <div class="sketch-container">
       <br>
-      <h3 class="center">Your game session id is:</h2>
-      <h1 class="header center orange-text">GleamingGraciousBorer</h1>
       <div class="row center">
-        <a id="download-button" class="btn-large waves-effect waves-light orange">Create Game</a>
+        <a id="btn-create-game" href="#session-modal" class="btn-large waves-effect waves-light orange">Create Game</a>
         <a id="download-button" class="btn-large waves-effect waves-light orange">Join Game</a>
       </div>
       <div class="row center">
@@ -116,5 +126,8 @@
   <script src="js/RecordableDrawing.js"></script>
   <script src="js/materialize.js"></script>
   <script src="js/init.js"></script>
+  <script src="js/game/gamemodel.js"></script>
+	<script src="js/game/gameview.js"></script>
+	<script src="js/game/gamecontroller.js"></script>
   </body>
 </html>

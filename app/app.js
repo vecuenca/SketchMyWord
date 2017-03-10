@@ -1,6 +1,17 @@
-var mysql = require('promise-mysql');
+var config = require('./config');
 var express = require('express');
+var mysql = require('promise-mysql');
 var app = express();
+
+var api = require('./server/api');
+var session = require('express-session');
+app.use(session({
+    secret:            'big crab',
+    resave:            false,
+    saveUninitialized: true,
+    cookie: 		   { secure: false }
+}));
+
 var bodyParser = require('body-parser');
 var http = require('http');
 var socketIo = require('socket.io');
@@ -61,38 +72,28 @@ app.use(function (req, res, next) {
     return next();
 });
 
-var createUser = function (user) {
-    return connection.query(
-        `INSERT INTO \`sketch-my-word\`.\`users\`
-	        (\`username\`, \`password\`) 
-            VALUES (?, ?);`, [user.username, user.password]);
-};
 
-//AUTHENTICATION
-
-app.post('/api/signin/', function (req, res, next) {
-    if (!req.body.username || !req.body.password) return res.status(400).send("Bad Request");
-    connection.query(
-            `SELECT * FROM \`sketch-my-word\`.\`users\` 
-            WHERE \`username\` = ? 
-            AND \`password\`= ? `, [req.body.username, req.body.password])
-        .then(function (error, results, fields) {
-            if (error) return res.status(500).send(error);
-            res.json(results);
-        })
-        .catch(function (error) {
-            if (error) return res.status(500).send(error);
-        });
+// ROUTING
+app.get('/', function(req, res, next) {
+    if (!req.session.user) return res.redirect('/login.html');
+    return next();
 });
 
-//CREATE
-app.put('/api/users/', function (req, res, next) {
-    if (!req.body.username || !req.body.password) return res.status(400).send("Bad Request");
-    createUser(req.body)
-        .then(function (result) {
-            res.json(result);
-        })
-        .catch(function (error) {
-            if (error) return res.status(500).send(error);
-        });
+app.get('/signout/', function (req, res, next) {
+  req.session.destroy(function(err) {
+    if (err) return res.status(500).end(err);
+    return res.redirect('/login.html');
+  });
 });
+
+app.use(express.static('frontend'));
+app.use('/api', api);
+
+app.use(function (req, res, next){
+    console.log("HTTP Response", res.statusCode);
+    res.send();
+});
+
+// app.listen(3000, function () {
+//   console.log('App listening on port 3000');
+// });
