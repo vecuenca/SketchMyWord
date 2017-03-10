@@ -1,8 +1,16 @@
 var mysql = require('promise-mysql');
 var express = require('express');
 var app = express();
-
 var bodyParser = require('body-parser');
+var http = require('http');
+var socketIo = require('socket.io');
+
+var server = http.createServer(app);
+var io = socketIo.listen(server);
+server.listen(3000, function(){
+    console.log("Server running on localhost:8080");
+});
+
 app.use(bodyParser.urlencoded({
     extended: false
 }));
@@ -11,6 +19,25 @@ app.use(bodyParser.json());
 app.use(express.static('frontend'));
 
 var connection;
+
+var line_history = [];
+
+// event-handler for new incoming connections
+io.on('connection', function (socket) {
+
+   // first send the history to the new client
+   for (var i in line_history) {
+      socket.emit('draw_line', { line: line_history[i] } );
+   }
+
+   // add handler for message type "draw_line".
+   socket.on('draw_line', function (data) {
+      // add received line to history 
+      line_history.push(data.line);
+      // send line to all clients
+      io.emit('draw_line', { line: data.line });
+   });
+});
 
 mysql.createConnection({
     host: 'localhost',
@@ -68,12 +95,4 @@ app.put('/api/users/', function (req, res, next) {
         .catch(function (error) {
             if (error) return res.status(500).send(error);
         });
-});
-
-app.use(function (req, res, next) {
-    console.log("HTTP Response", res.statusCode);
-});
-
-app.listen(3000, function () {
-    console.log('App listening on port 3000');
 });

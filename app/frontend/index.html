@@ -51,8 +51,8 @@
         </div>
         <!--sketchpad-->
         <div class="col s8 m8">
-          <div class="card sketchpad grey lighten-4">
-            <canvas id="canvas" width="800" height="800" style="border:1px solid #000000;"></canvas>
+          <div id="canvas_box" class="card sketchpad grey lighten-4">
+            <canvas id="drawing" style="border:1px solid #000000;"></canvas>
           </div>
         </div>
         <!--chat-->
@@ -112,10 +112,10 @@
     </div>
   </footer>
   <!--  Scripts-->
+  <script src="socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="js/RecordableDrawing.js"></script>
   <script src="js/materialize.js"></script>
   <script src="js/init.js"></script>
-
   </body>
 </html>

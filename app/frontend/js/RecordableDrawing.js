@@ -1,69 +1,71 @@
-var canvas = (function(){
-   "use strict";
+document.addEventListener("DOMContentLoaded", function () {
+    var mouse = {
+        click: false,
+        move: false,
+        pos: {
+            x: 0,
+            y: 0
+        },
+        pos_prev: false
+    };
+    // get canvas element and create context
+    var canvas = document.getElementById('drawing');
+    var context = canvas.getContext('2d');
+    var width = document.getElementById('canvas_box').clientWidth;
+    var height = document.getElementById('canvas_box').clientHeight;
+    var socket = io.connect();
+    // reset();
 
-   var clickX = new Array();
-   var clickY = new Array();
-   var clickDrag = new Array();
-   var paint = false;
 
-   var canvas = {};
+    
+    // // Make it visually fill the positioned parent
+    // canvas.style.width ='100%';
+    // canvas.style.height='100%';
+    // ...then set the internal size to match
+    canvas.width  = width;
+    canvas.height = height;
+    
 
-   var context = document.getElementById('canvas').getContext("2d");
+    // register mouse event handlers
+    canvas.onmousedown = function (e) {
+        console.log(document.getElementById("canvas_box").offsetTop);
+        mouse.click = true;
+    };
+    canvas.onmouseup = function (e) {
+        mouse.click = false;
+    };
 
-   var cvs = document.getElementById('canvas');
+    canvas.onmousemove = function (e) {
+        // normalize mouse position to range 0.0 - 1.0
+        mouse.pos.x = e.clientX - document.getElementById("canvas_box").offsetLeft;
+        mouse.pos.y = e.clientY - document.getElementById("canvas_box").offsetTop;
+        mouse.move = true;
+    };
 
-   cvs.addEventListener("mousedown", (function(e){
-       paint = true;
-       addClick(e.clientX - cvs.offsetLeft, e.clientY - cvs.offsetTop, false);
-       redraw();
-   }));
+    // draw line received from server
+    socket.on('draw_line', function (data) {
+        var line = data.line;
+        context.beginPath();
+        context.moveTo(line[0].x, line[0].y);
+        context.lineTo(line[1].x, line[1].y);
+        context.stroke();
+    });
 
-   cvs.addEventListener( "mousemove", (function(e){
-       if(paint){
-            addClick(e.clientX - cvs.offsetLeft, e.clientY - cvs.offsetTop, true);
-            redraw();
+    // main loop, running every 25ms
+    function mainLoop() {
+        // check if the user is drawing
+        if (mouse.click && mouse.move && mouse.pos_prev) {
+            // send line to to the server
+            socket.emit('draw_line', {
+                line: [mouse.pos, mouse.pos_prev]
+            });
+            mouse.move = false;
         }
-   }));
-
-   cvs.addEventListener("mouseup", (function(e){
-       paint = false;
-   }));
-
-   cvs.addEventListener("mouseout", function(e){
-       paint = false;
-   });
-
-    function addClick(x, y, dragging){
-        clickX.push(x);
-        clickY.push(y);
-        clickDrag.push(dragging);
+        mouse.pos_prev = {
+            x: mouse.pos.x,
+            y: mouse.pos.y
+        };
+        setTimeout(mainLoop, 25);
     }
-
-    function redraw(){
-        context.clearRect(0, 0, context.canvas.width, context.canvas.height); 
-
-        context.strokeStyle = "#df4b26";
-        context.lineJoin = "round";
-        context.lineWidth = 5;
-                    
-        for(var i=0; i < clickX.length; i++) {		
-            if (!clickDrag[i] && i == 0) {
-                context.beginPath();
-                context.moveTo(clickX[i], clickY[i]);
-                context.stroke();
-            } else if (!clickDrag[i] && i > 0) {
-                context.closePath();
-
-                context.beginPath();
-                context.moveTo(clickX[i], clickY[i]);
-                context.stroke();
-            } else {
-                context.lineTo(clickX[i], clickY[i]);
-                context.stroke();
-            }
-        }
-    }
-
-   return canvas;
-
-}());
+    mainLoop();
+});
