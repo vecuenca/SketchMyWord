@@ -1,15 +1,15 @@
 /*jshint esversion: 6 */
-var view = (function() {
+var gameView = (function() {
   "use strict";
 
-  var view = {};
+  var gameView = {};
 
 	window.onload = function() {
 		var cookieUser = str_obj(document.cookie).username;
 		document.getElementById('header-username').innerHTML += cookieUser;
 	}
 
-	view.displayToast = function(msg) {
+	gameView.displayToast = function(msg) {
 		Materialize.toast(msg, 5000);
 	}
 
@@ -24,6 +24,6 @@ var view = (function() {
     return result;
   }
 
-  return view;
+  return gameView;
 
 }());

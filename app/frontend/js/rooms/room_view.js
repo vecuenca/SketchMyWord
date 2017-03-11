@@ -1,7 +1,7 @@
-var roomsView = (function () {
+var roomView = (function () {
     "use strict";
 
-    var roomsView = {};
+    var roomView = {};
     var socket;
 
     document.getElementById('btn-create-game').onclick = function(e){
@@ -24,22 +24,22 @@ var roomsView = (function () {
         window.location = '/index.html';
     });
 
-    roomsView.roomCreateSuccess = function(roomId){
+    roomView.roomCreateSuccess = function(roomId){
         socket = io.connect();
         document.getElementById('room-id').value = roomId;
     };
 
-    roomsView.roomJoinSuccess = function(){
+    roomView.roomJoinSuccess = function(){
         //eventually change this to waiting screen
         socket = io.connect();
         socket.emit('join_room');
         // window.location = '/index.html';
     };
 
-    roomsView.displayToast = function (msg) {
+    roomView.displayToast = function (msg) {
         Materialize.toast(msg, 5000);
     }
 
-    return roomsView;
+    return roomView;
 
 }());

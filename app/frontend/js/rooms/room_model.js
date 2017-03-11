@@ -1,13 +1,14 @@
-var model = (function(){
+/*jshint esversion: 6 */
+var roomModel = (function(){
     "use strict";
 
     var headers = new Headers({
 		'Content-Type': 'application/json'
 	});
 
-    var model = {};
+    var roomModel = {};
 
-    model.createRoom = function(data, callback) {
+    roomModel.createRoom = function(data, callback) {
         fetch('/game/', {
             method: 'put',
             credentials: 'include',
@@ -23,7 +24,7 @@ var model = (function(){
         });
     };
 
-    model.joinRoom = function(data, callback) {
+    roomModel.joinRoom = function(data, callback) {
         fetch('/game/' + data.roomId + '/', {
             method: 'post',
             credentials: 'include',
@@ -39,5 +40,5 @@ var model = (function(){
         });
     };
 
-    return model;
+    return roomModel;
 }());

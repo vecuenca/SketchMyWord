@@ -57,6 +57,11 @@ io.on('connection', function (socket) {
   });
 
   socket.on('join_room', function(){
+      rooms[socket.room].users.push(req.session.user.username);
+
+      if(rooms[socket.room].users.length == 4){
+          socket.broadcast.to(room).emit('full_users');
+      }
   });
 
   // handler for when a client draws a line
