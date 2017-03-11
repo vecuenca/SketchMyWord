@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 app.use(express.static('frontend'));
 
 var connection;
-var line_history = [];
+var rooms = {};
 
 // event-handler for new incoming connections
 io.on('connection', function (socket) {
@@ -38,7 +38,7 @@ io.on('connection', function (socket) {
   // should be fired when we redirect to index.html
   socket.on('init_user', function(username, room) {
     // verify user actually belongs to this room
-    if (!app.rooms[room].users.contains(username)) {
+    if (!rooms[room].users.contains(username)) {
       return; // broadcast unauthorized message?
     }
 
@@ -60,7 +60,7 @@ io.on('connection', function (socket) {
   socket.on('draw_line', function (data) {
     var line = data.line;
     // add received line to history 
-    app.rooms[room].lineHistory.push(line);
+    rooms[socket.room].lineHistory.push(line);
     // send line to all clients in the current room EXCEPT itself
     socket.broadcast.to(socket.room)
       .emit('draw_line', { line: line });

@@ -41,8 +41,6 @@ var createUser = function(user){
             VALUES (?, ?);`, [user.username, user.password]);
 };
 
-app.rooms = {};
-
 //AUTHENTICATION
 
 app.post('/signin/', function(req, res, next){
