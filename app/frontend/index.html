@@ -147,14 +147,27 @@
       </div>
     </div>
   </footer>
-  <!--  Scripts-->
+  
   <script src="socket.io/socket.io.js"></script>
+
+  <!--Materialize stuff-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/RecordableDrawing.js"></script>
   <script src="js/materialize.js"></script>
   <script src="js/init.js"></script>
-  <script src="js/game/gamemodel.js"></script>
-	<script src="js/game/gameview.js"></script>
-	<script src="js/game/gamecontroller.js"></script>
+
+  <!--probably want to refactor this-->
+  <script src="js/RecordableDrawing.js"></script>
+
+  <!--Views-->
+  <script src="js/view/game_view.js"></script>
+  <script src="js/view/room_view.js"></script>
+  <script src="js/view.js"></script>
+
+  <!--Models-->
+  <script src="js/model/game_model.js"></script>
+	<script src="js/model/room_model.js"></script>
+
+  <!--should be last, as it has a lot of dependencies-->
+	<script src="js/game/controller.js"></script>
   </body>
 </html>
