@@ -14,6 +14,6 @@
 
 			// populate app bar username with logged in user
 			var cookieUser = util.str_obj(document.cookie).username;
-			$('#header-username').innerHTML += cookieUser;
+			$('#header-username')[0].innerHTML += cookieUser;
     };
 } (roomView, gameView, util));
