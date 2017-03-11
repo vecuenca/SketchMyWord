@@ -56,6 +56,9 @@ io.on('connection', function (socket) {
     }
   });
 
+  socket.on('join_room', function(){
+  });
+
   // handler for when a client draws a line
   socket.on('draw_line', function (data) {
     var line = data.line;
