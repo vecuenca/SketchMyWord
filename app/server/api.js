@@ -45,13 +45,15 @@ var createUser = function(user){
 
 app.post('/signin/', function(req, res, next){
   validator.validate(req,schema);
-  if (!req.body.username || ! req.body.password) return res.status(400).send("Bad Request");
+  if (!req.body.username || ! req.body.password) {
+    return res.status(400).send("Bad Request");
+  } 
   connection.query(
-      `SELECT * FROM \`sketch-my-word\`.\`users\`
-          WHERE \`username\` = ?
-          AND \`password\`= ? `, [req.body.username, req.body.password])
-  .then(function(results, fields){
-    if (!results || results[0].password != req.body.password) {
+    `SELECT * FROM \`sketch-my-word\`.\`users\`
+      WHERE \`username\` = ?
+      AND \`password\`= ? `, [req.body.username, req.body.password])
+  .then(function(results, fields) {
+    if (!results || results.length == 0 || results[0].password != req.body.password) {
       return res.status(401).send('Sorry, we couldn\'t find your account.');
     }
     req.session.user = results[0];
