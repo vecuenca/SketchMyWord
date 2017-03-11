@@ -41,7 +41,7 @@ var createUser = function(user){
             VALUES (?, ?);`, [user.username, user.password]);
 };
 
-var rooms = {};
+app.rooms = {};
 
 //AUTHENTICATION
 
@@ -90,7 +90,7 @@ app.put('/game/', function(req, res, next) {
   // create a new game instance, add it to store
   // add logic for room collisions later probably :p
   rooms[roomId] = {
-    currSketchLines: [],
+    lineHistory: [],
     users: [req.session.user.username]
   };
 
@@ -124,7 +124,5 @@ app.post('/game/:roomId/', function(req, res, next) {
 var generateRoomToken = function() {
   return crypto.randomBytes(12).toString('hex');
 };
-
-
 
 module.exports = app;

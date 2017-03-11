@@ -35,18 +35,36 @@ var line_history = [];
 // event-handler for new incoming connections
 io.on('connection', function (socket) {
 
-   // first send the history to the new client
-   for (var i in line_history) {
-      socket.emit('draw_line', { line: line_history[i] } );
-   }
+  // should be fired when we redirect to index.html
+  socket.on('init_user', function(username, room) {
+    // verify user actually belongs to this room
+    if (!app.rooms[room].users.contains(username)) {
+      return; // broadcast unauthorized message?
+    }
 
-   // add handler for message type "draw_line".
-   socket.on('draw_line', function (data) {
-      // add received line to history 
-      line_history.push(data.line);
-      // send line to all clients
-      io.emit('draw_line', { line: data.line });
-   });
+    // set socket data to use later
+    socket.username = username;
+    socket.room = room;
+
+    socket.join(room);
+
+    // send line history so far
+    var lineHistory = rooms[room].lineHistory;
+    for (var line in lineHistory) {
+      socket.broadcast.to(room)
+        .emit('draw_line', { line: lineHistory[line] } );  
+    }
+  });
+
+  // handler for when a client draws a line
+  socket.on('draw_line', function (data) {
+    var line = data.line;
+    // add received line to history 
+    app.rooms[room].lineHistory.push(line);
+    // send line to all clients in the current room EXCEPT itself
+    socket.broadcast.to(socket.room)
+      .emit('draw_line', { line: line });
+  });
 });
 
 mysql.createConnection({
