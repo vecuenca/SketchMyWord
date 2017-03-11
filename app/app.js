@@ -30,7 +30,6 @@ app.use(bodyParser.json());
 app.use(express.static('frontend'));
 
 var connection;
-
 var line_history = [];
 
 // event-handler for new incoming connections
@@ -93,7 +92,3 @@ app.use(function (req, res, next){
     console.log("HTTP Response", res.statusCode);
     res.send();
 });
-
-// app.listen(3000, function () {
-//   console.log('App listening on port 3000');
-// });

@@ -5,6 +5,7 @@ var mysql = require('promise-mysql');
 var express = require('express');
 var app = express.Router();
 var bodyParser = require('body-parser');
+var crypto = require('crypto');
 
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
@@ -14,7 +15,7 @@ var validator = new ZSchema();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-var connection; 
+var connection;
 mysql.createConnection({
     host: config.mysql.host,
     user: config.mysql.user,
@@ -24,7 +25,7 @@ mysql.createConnection({
 }).then(function(conn){
     connection = conn;
     conn.query(
-    `CREATE TABLE IF NOT EXISTS \`sketch-my-word\`.\`users\`( 
+    `CREATE TABLE IF NOT EXISTS \`sketch-my-word\`.\`users\`(
         \`username\` VARCHAR(45) NOT NULL,
         \`password\` VARCHAR(45) NOT NULL,
         PRIMARY KEY(\`username\`));`)
@@ -36,11 +37,11 @@ mysql.createConnection({
 var createUser = function(user){
     return connection.query(
         `INSERT INTO \`sketch-my-word\`.\`users\`
-	        (\`username\`, \`password\`) 
+            (\`username\`, \`password\`)
             VALUES (?, ?);`, [user.username, user.password]);
 };
 
-
+var rooms = {};
 
 //AUTHENTICATION
 
@@ -48,8 +49,8 @@ app.post('/signin/', function(req, res, next){
   validator.validate(req,schema);
   if (!req.body.username || ! req.body.password) return res.status(400).send("Bad Request");
   connection.query(
-      `SELECT * FROM \`sketch-my-word\`.\`users\` 
-          WHERE \`username\` = ? 
+      `SELECT * FROM \`sketch-my-word\`.\`users\`
+          WHERE \`username\` = ?
           AND \`password\`= ? `, [req.body.username, req.body.password])
   .then(function(results, fields){
     if (!results || results[0].password != req.body.password) {
@@ -66,7 +67,7 @@ app.post('/signin/', function(req, res, next){
 
 //CREATE
 app.put('/users/', function(req, res, next){
-    validator.validate(req,schema);
+    validator.validate(req, schema);
     if (!req.body.username || ! req.body.password) return res.status(400).send("Bad Request");
     createUser(req.body)
     .then(function(result){
@@ -78,5 +79,52 @@ app.put('/users/', function(req, res, next){
         return next();
     });
 });
+
+// create a new room
+app.put('/game/', function(req, res, next) {
+  if (!req.session.user) {
+    return res.status(403).send("Forbidden");
+  }
+
+  var roomId = generateRoomToken();
+  // create a new game instance, add it to store
+  // add logic for room collisions later probably :p
+  rooms[roomId] = {
+    currSketchLines: [],
+    users: [req.session.user.username]
+  };
+
+  return res.json({ roomId: roomId });
+});
+
+app.post('/game/:roomId/', function(req, res, next) {
+  if (!req.session.user) {
+    return res.status(403).send('Forbidden');
+  }
+
+  // check if room exists
+  var roomId = req.params.roomId;
+  if (!rooms[roomId]) {
+    return res.status(400).send('No room with that id exists.');
+  }
+  
+  // check if room is full
+  // currently, max num of players is 4
+  if (rooms[roomId].users.length >= 4) {
+    return res.status(400).send('Sorry, that room is full.');
+  }
+  
+  // update room with new user
+  // need logic to validate multiple logins in same room?
+  rooms[roomId].users.push(req.session.user.username);
+
+  res.json({success: true});  
+});
+
+var generateRoomToken = function() {
+  return crypto.randomBytes(12).toString('hex');
+};
+
+
 
 module.exports = app;
