@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>SketchMyWord</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+	<link href="css/login.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+  <!--app bar nav-->
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">SketchMyPic</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a id="btn-logout" href="/signout">Sign out</a></li>
+      </ul>
+      <ul class="right hide-on-med-and-down">
+        <li><a id="header-username" href="#">Hello, </a></li>
+      </ul>
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="#">Logout</a></li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+	<!--game session id modal-->  
+  <div id="create-game-modal" class="modal" style="width: 40%">
+    <div class="modal-content">
+      <h4 class="center">Your room id is:</h2>
+			<br>
+			<div id="room-id-spinner" class="progress">
+				<div class="indeterminate"></div>
+			</div>
+      <h3 id="room-id" class="header center orange-text"></h1>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+  </div>
+
+	<!--join game modal-->  
+  <div id="join-game-modal" class="modal">
+    <div class="modal-content">
+      <h4 class="center">Your game session id is:</h2>
+      <h3 id="room-id" class="header center orange-text"></h1>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+  </div>
+
+  <div class="section"></div>
+  <main>
+    <center>
+      <br>
+      <div class="row center">
+        <a id="btn-create-game" href="#create-game-modal" class="btn-large waves-effect waves-light orange">Create Game</a>
+        <a id="btn-join-game"   href="#join-game-modal" class="btn-large waves-effect waves-light orange">Join Game</a>
+      </div>
+      <br>
+		</center>
+    <div class="section"></div>
+    <div class="section"></div>
+  </main>
+
+  <footer class="page-footer orange">
+    <div class="footer-copyright">
+      <div class="container">
+      Made by the <a class="orange-text text-lighten-3">3 Honeys</a>
+      </div>
+    </div>
+  </footer>
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+  </body>
+</html>
