@@ -1,4 +1,4 @@
-(function(model, roomView, roomModel, gameView, gameModel){
+(function(roomView, roomModel, gameView, gameModel){
     "use strict";
 
     document.addEventListener('onCreateRoom', function (e) {
@@ -15,4 +15,4 @@
         })
     });
 
-}(model, roomView, roomModel, gameModel, gameView));
+}(roomView, roomModel, gameModel, gameView));

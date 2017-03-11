@@ -1,12 +1,12 @@
 /*jshint esversion: 6 */
-var gamesModel = (function() {
+var gameModel = (function() {
   "use strict";
 
 	var headers = new Headers({
 		'Content-Type': 'application/json'
 	});
 
-  var gamesModel = {};
+  var gameModel = {};
 
-  return gamesModel;
+  return gameModel;
 }());
