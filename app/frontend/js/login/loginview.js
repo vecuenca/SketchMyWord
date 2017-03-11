@@ -20,7 +20,7 @@ var view = (function() {
 			document.dispatchEvent(event);
 			document.getElementById('signin').reset();
 		} else {
-			view.displayToast('Please enter a username or password');
+			util.displayToast('Please enter a username or password');
 		}
 	}
 
@@ -32,9 +32,9 @@ var view = (function() {
 		var passwordConfirm = document.getElementById('signup-confirm-password').value;
 
 		if (username.length == 0 && password.length == 0 && passwordConfirm.length == 0) {
-			view.displayToast('Please fill in all fields.');
+			util.displayToast('Please fill in all fields.');
 		} else if (password !== passwordConfirm) {
-			view.displayToast('Your passwords don\'t match.');
+			util.displayToast('Your passwords don\'t match.');
 		} else {
 			var event = new CustomEvent('onSignUp', {
 				detail: {
@@ -49,12 +49,8 @@ var view = (function() {
 	}
 
 	view.signUpSuccess = function() {
-		view.displayToast('Your user was created successfully!');
+		util.displayToast('Your user was created successfully!');
 		$('ul.tabs').tabs('select_tab', 'signin');
-	}
-
-	view.displayToast = function(msg) {
-		Materialize.toast(msg, 5000);
 	}
 
   return view;
