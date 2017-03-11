@@ -44,10 +44,22 @@
   </div>
 
 	<!--join game modal-->  
-  <div id="join-game-modal" class="modal">
+  <div id="join-game-modal" class="modal" style="width: 40%">
     <div class="modal-content">
-      <h4 class="center">Your game session id is:</h2>
-      <h3 id="room-id" class="header center orange-text"></h1>
+      <form id="form-join-game">
+				<div class="row">
+					<label for="room-id-input">Room id</label>
+					<input placeholder="Enter a room id" id="room-id-input" type="text">
+					<input type="submit" style="display: none" />
+				</div>
+			</form>
+			<ul class="collection with-header">
+        <li class="collection-header"><h4>Games in progress</h4></li>
+        <li class="collection-item"><div>OrangeMonkeyEagle<a href="#!" class="secondary-content">1/4</a></div></li>
+        <li class="collection-item"><div>CorrectBatteryHorse<a href="#!" class="secondary-content">1/4</a></div></li>
+        <li class="collection-item grey lighten-2"><div>JealousEssentialCrab<a href="#!" class="secondary-content red-text">4/4</a></div></li>
+        <li class="collection-item"><div>LargeFreshSnek<a href="#!" class="secondary-content">3/4</a></div></li>
+      </ul>
     </div>
     <div class="modal-footer">
       <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
