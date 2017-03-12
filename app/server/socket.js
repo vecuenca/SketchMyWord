@@ -35,7 +35,7 @@ module.exports = {
 				// READY TO START GAME
 				console.log('room size', rooms[room].users.length);
 				if (rooms[room].users.length >= 2) {
-					console.log('succ');
+					console.log('emitting full_users');
 					socket.broadcast.to(room).emit('full_users');
 				}
 			});

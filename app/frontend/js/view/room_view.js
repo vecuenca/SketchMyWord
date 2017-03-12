@@ -6,10 +6,12 @@ var roomView = (function (util) {
 
 	roomView.onload = function() {
 		document.getElementById('btn-create-game').onclick = function(e){
+			e.preventDefault();
 			document.dispatchEvent(new CustomEvent('onCreateRoom'));
 		};
 
 		document.getElementById('form-join-game').onsubmit = function(e){
+			e.preventDefault();
 			var event = new CustomEvent('onRoomJoin', {
 				detail: {
 					roomId: document.getElementById('room-id-input').value
@@ -48,15 +50,18 @@ var roomView = (function (util) {
 	};
 
 	roomView.roomJoinSuccess = function(roomId){
+		console.log('connecting');
 		socket = io.connect();
 		var cookieUsername = util.str_obj(document.cookie).username;
+		console.log('emitting');
+		socket.on('full_users', function(data) {
+			console.log('TIME TO PLAY GAME');
+			$('#join-game-modal').modal('close');
+			document.dispatchEvent(new CustomEvent('displayGame'));
+		});
 		socket.emit('join_room', cookieUsername, roomId);
 		// wait for room to be full
 		console.log('WAITING FOR THE ROOM TO BE FULL');
-		socket.on('full_users', function(data) {
-			console.log('TIME TO PLAY GAME');
-			document.dispatchEvent(new CustomEvent('displayGame'));
-		});
 	};
 
 	roomView.displayToast = function (msg) {
