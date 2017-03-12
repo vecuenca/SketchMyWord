@@ -40,7 +40,7 @@ var roomView = (function (util) {
 		socket.emit('join_room', cookieUsername, roomId);
 		
 		// wait for room to be full
-		socket.on('full_users', function(data){
+		socket.on('full_users', function(data) {
 			// close currently open room creation modal
 			$('#create-game-modal').modal('close');
 			document.dispatchEvent(new CustomEvent('displayGame'));
@@ -52,8 +52,9 @@ var roomView = (function (util) {
 		var cookieUsername = util.str_obj(document.cookie).username;
 		socket.emit('join_room', cookieUsername, roomId);
 		// wait for room to be full
-		socket.on('full_users', function(data){
-			console.log('JOINed GAME');
+		console.log('WAITING FOR THE ROOM TO BE FULL');
+		socket.on('full_users', function(data) {
+			console.log('TIME TO PLAY GAME');
 			document.dispatchEvent(new CustomEvent('displayGame'));
 		});
 	};

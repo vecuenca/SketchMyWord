@@ -23,7 +23,7 @@
 	// Game functions
 	document.addEventListener('displayGame', function(e) {
 		roomView.hide();
-		gameView.show();
+		gameView.display();
 	});
 
 }(roomView, roomModel, gameView, gameModel, util));
