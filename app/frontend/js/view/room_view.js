@@ -53,15 +53,15 @@ var roomView = (function (util) {
 		console.log('connecting');
 		socket = io.connect();
 		var cookieUsername = util.str_obj(document.cookie).username;
+		console.log('WAITING FOR THE ROOM TO BE FULL');
 		console.log('emitting');
+		socket.emit('join_room', cookieUsername, roomId);
 		socket.on('full_users', function(data) {
 			console.log('TIME TO PLAY GAME');
 			$('#join-game-modal').modal('close');
 			document.dispatchEvent(new CustomEvent('displayGame', {detail: {socket: socket}}));
 		});
-		socket.emit('join_room', cookieUsername, roomId);
 		// wait for room to be full
-		console.log('WAITING FOR THE ROOM TO BE FULL');
 	};
 
 	roomView.displayToast = function (msg) {

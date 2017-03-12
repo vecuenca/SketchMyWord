@@ -36,7 +36,7 @@ module.exports = {
 				console.log('room size', rooms[room].users.length);
 				if (rooms[room].users.length >= 2) {
 					console.log('emitting full_users');
-					socket.broadcast.to(room).emit('full_users');
+					io.sockets.in(socket.room).emit('full_users');
 				}
 			});
 
