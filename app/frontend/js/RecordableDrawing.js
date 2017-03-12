@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var context = canvas.getContext('2d');
     var width = document.getElementById('canvas_box').clientWidth;
     var height = document.getElementById('canvas_box').clientHeight;
-    var socket = io.connect();
     
     // // Make it visually fill the positioned parent
     canvas.width  = width;
