@@ -5,8 +5,7 @@
 	document.addEventListener('onCreateRoom', function (e) {
 		roomModel.createRoom(e.detail, function (err, resp) {
 			// TODO: REFACTOR THIS
-			resp.json()
-			.then(function(data) {
+			resp.json().then(function(data) {
 				roomView.roomCreateSuccess(data.roomId);
 			});
 			if (err) return util.displayToast(err);
@@ -17,12 +16,19 @@
 		var roomId = e.detail.roomId;
 		// TODO: REFACTOR THIS
 		roomModel.joinRoom(e.detail, function (err, resp) {
-			resp.json()
-			.then(function(data) {
+			resp.json().then(function(data) {
 				console.log('JOIN DATA', data);
 				roomView.roomJoinSuccess(roomId);
 			});
 			if (err) return util.displayToast(err);
+		});
+	});
+
+	document.addEventListener('onGetRooms', function(e) {
+		roomModel.getRooms(function(err, res) {
+			res.json().then(function(data) {
+				roomView.displayRoomListInModal(data.rooms);
+			});
 		});
 	});
 
