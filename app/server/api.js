@@ -66,7 +66,8 @@ app.post('/signin/', function(req, res, next){
   });
 });
 
-//CREATE
+// -------------------- CREATE -------------------- 
+// create a new user
 app.put('/users/', function(req, res, next){
     validator.validate(req, schema);
     if (!req.body.username || ! req.body.password) return res.status(400).send("Bad Request");
@@ -99,6 +100,7 @@ app.put('/game/', function(req, res, next) {
   return next();
 });
 
+// join an existing room
 app.post('/game/:roomId/', function(req, res, next) {
   if (!req.session.user) {
     return res.status(403).send('Forbidden');
@@ -120,6 +122,22 @@ app.post('/game/:roomId/', function(req, res, next) {
   // need logic to validate multiple logins in same room?
   state.rooms[roomId].users.push(req.session.user.username);
   res.json({success: true}); 
+  return next();
+});
+
+// -------------------- READ --------------------
+// get all current games with number of users in them
+app.get('/game', function(req, res, next) {
+  if (!req.session.user) {
+    return res.status(403).send('Forbidden');
+  }
+  // there's probably a more elegant way to do this..
+  var roomsWithUsers = [];
+  Object.keys(state.rooms).forEach(function(key,index) {
+    roomsWithUsers.push({ roomId: key, 
+                          users: state.rooms[key].users.length }); 
+  });
+  res.json({ rooms: roomsWithUsers }); 
   return next();
 });
 
