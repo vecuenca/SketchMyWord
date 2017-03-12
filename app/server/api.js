@@ -90,10 +90,11 @@ app.put('/game/', function(req, res, next) {
   var roomId = generateRoomToken();
   // create a new game instance, add it to store
   // add logic for room collisions later probably :p
-  rooms[roomId] = {
+  socket.rooms[roomId] = {
     lineHistory: [],
     users: [req.session.user.username]
   };
+  console.log(socket.rooms);
 
   return res.json({ roomId: roomId });
 });
@@ -105,19 +106,19 @@ app.post('/game/:roomId/', function(req, res, next) {
 
   // check if room exists
   var roomId = req.params.roomId;
-  if (!rooms[roomId]) {
+  if (!socket.rooms[roomId]) {
     return res.status(400).send('No room with that id exists.');
   }
   
   // check if room is full
   // currently, max num of players is 4
-  if (rooms[roomId].users.length >= 4) {
+  if (socket.rooms[roomId].users.length >= 4) {
     return res.status(400).send('Sorry, that room is full.');
   }
   
   // update room with new user
   // need logic to validate multiple logins in same room?
-  rooms[roomId].users.push(req.session.user.username);
+  socket.rooms[roomId].users.push(req.session.user.username);
 
   res.json({success: true});  
 });

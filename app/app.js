@@ -1,10 +1,9 @@
 var config = require('./config');
+var socket = require('./server/socket');
+var api = require('./server/api');
 var express = require('express');
 var mysql = require('promise-mysql');
 var app = express();
-var socket = require('./server/socket');
-
-var api = require('./server/api');
 var session = require('express-session');
 app.use(session({
     secret:            'big crab',
@@ -30,7 +29,7 @@ app.use(bodyParser.json());
 
 var connection;
 
-socket(io);
+socket.roomHandler(io);
 
 mysql.createConnection({
     host: 'localhost',
