@@ -25,7 +25,7 @@ var roomModel = (function(){
     };
 
     roomModel.joinRoom = function(data, callback) {
-        fetch('/api/game/' + data.roomId + '/', {
+        fetch('/api/game/' + data.roomId, {
             method: 'post',
             credentials: 'include',
             headers: headers

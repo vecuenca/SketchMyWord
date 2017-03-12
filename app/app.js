@@ -70,7 +70,7 @@ app.get('/signout/', function (req, res, next) {
 app.use(express.static('frontend'));
 app.use('/api', api);
 
-app.use(function (req, res, next){
-    console.log("HTTP Response", res.statusCode);
-    res.send();
-});
+// app.use(function (req, res, next){
+//     console.log("HTTP Response", res.statusCode);
+//     res.send();
+// });
