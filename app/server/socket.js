@@ -25,8 +25,6 @@ module.exports = {
 				rooms[socket.room].lineHistory.push(line);
 				// send line to all clients in the current room EXCEPT itself
 				io.sockets.in(socket.room).emit('draw_line', { line: line });
-				// socket.to(socket.room)
-				// 	.emit('draw_line', { line: line });
 			});
 		});
 	},
