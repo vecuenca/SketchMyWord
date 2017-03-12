@@ -33,7 +33,8 @@ var roomView = (function () {
 		socket.on('full_users', function(data){
 			window.location = '/index.html';
 		});
-		document.getElementById('room-id').value = roomId;
+		document.getElementById('room-id').innerHTML = roomId;
+		$('#room-id-spinner').hide();
 	};
 
 	roomView.roomJoinSuccess = function(){
