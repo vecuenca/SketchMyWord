@@ -95,8 +95,8 @@ app.put('/game/', function(req, res, next) {
     users: [req.session.user.username]
   };
   console.log('put api room state', state.rooms);
-
-  return res.json({ roomId: roomId });
+  res.json({ roomId: roomId });
+  return next();
 });
 
 app.post('/game/:roomId/', function(req, res, next) {
@@ -119,8 +119,8 @@ app.post('/game/:roomId/', function(req, res, next) {
   // update room with new user
   // need logic to validate multiple logins in same room?
   state.rooms[roomId].users.push(req.session.user.username);
-
-  res.json({success: true});  
+  res.json({success: true}); 
+  return next();
 });
 
 var generateRoomToken = function() {

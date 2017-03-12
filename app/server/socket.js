@@ -46,8 +46,9 @@ module.exports = {
 				// add received line to history 
 				rooms[socket.room].lineHistory.push(line);
 				// send line to all clients in the current room EXCEPT itself
-				socket.broadcast.to(socket.room)
-					.emit('draw_line', { line: line });
+				io.sockets.in(socket.room).emit('draw_line', { line: line });
+				// socket.to(socket.room)
+				// 	.emit('draw_line', { line: line });
 			});
 		});
 	},

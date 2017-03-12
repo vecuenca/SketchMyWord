@@ -45,7 +45,7 @@ var roomView = (function (util) {
 		socket.on('full_users', function(data) {
 			// close currently open room creation modal
 			$('#create-game-modal').modal('close');
-			document.dispatchEvent(new CustomEvent('displayGame'));
+			document.dispatchEvent(new CustomEvent('displayGame', {detail: {socket: socket}}));
 		});
 	};
 

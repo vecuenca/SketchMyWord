@@ -20,7 +20,7 @@ var socketIo = require('socket.io');
 var server = http.createServer(app);
 var io = socketIo.listen(server);
 server.listen(3000, function(){
-    console.log("Server running on localhost:8080");
+    console.log("Server running on localhost:3000");
 });
 
 app.use(bodyParser.urlencoded({

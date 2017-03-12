@@ -30,6 +30,7 @@
 	document.addEventListener('displayGame', function(e) {
 		roomView.hide();
 		gameView.display();
+		gameView.setup(e.detail.socket);
 	});
 
 }(roomView, roomModel, gameView, gameModel, util));

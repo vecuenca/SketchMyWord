@@ -13,9 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
     var context = canvas.getContext('2d');
     var width = document.getElementById('canvas_box').clientWidth;
     var height = document.getElementById('canvas_box').clientHeight;
-    
+
     // // Make it visually fill the positioned parent
-    canvas.width  = width;
+    canvas.width = width;
     canvas.height = height;
 
     // register mouse event handlers
