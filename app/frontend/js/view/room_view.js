@@ -6,10 +6,7 @@ var roomView = (function () {
 
 	roomView.onload = function() {
 		document.getElementById('btn-create-game').onclick = function(e){
-			var event = new CustomEvent('onCreateRoom', {
-				detail: {}
-			});
-			document.dispatchEvent(event);
+			document.dispatchEvent(new CustomEvent('onCreateRoom'));
 		};
 
 		document.getElementById('form-join-game').onsubmit = function(e){
