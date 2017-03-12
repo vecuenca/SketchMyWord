@@ -1,20 +1,15 @@
 /*jshint esversion: 6 */
-var gameView = (function() {
+var util = (function() {
   "use strict";
 
-  var gameView = {};
+  var util = {};
 
-	window.onload = function() {
-		var cookieUser = str_obj(document.cookie).username;
-		document.getElementById('header-username').innerHTML += cookieUser;
-	}
-
-	gameView.displayToast = function(msg) {
-		Materialize.toast(msg, 5000);
+	util.displayToast = function(msg, lifetime = 5000) {
+		Materialize.toast(msg, lifetime);
 	}
 
 	// taken from http://stackoverflow.com/questions/5047346/converting-strings-like-document-cookie-to-objects
-  function str_obj(str) {
+  util.str_obj = function(str) {
     str = str.split(', ');
     var result = {};
     for (var i = 0; i < str.length; i++) {
@@ -24,6 +19,6 @@ var gameView = (function() {
     return result;
   }
 
-  return gameView;
+  return util;
 
 }());

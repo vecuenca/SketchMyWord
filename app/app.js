@@ -28,8 +28,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.use(express.static('frontend'));
-
 var connection;
 
 socket(io);
@@ -55,7 +53,6 @@ app.use(function (req, res, next) {
     console.log("HTTP request", req.method, req.url, req.body);
     return next();
 });
-
 
 // ROUTING
 app.get('/', function(req, res, next) {

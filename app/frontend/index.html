@@ -28,7 +28,62 @@
     </div>
   </nav>
 
-  <div class="section no-pad-bot" id="index-banner">
+  <!--###################ROOMS HTML###################-->
+  <!--game session id modal-->  
+  <div id="create-game-modal" class="modal" style="width: 40%">
+    <div class="modal-content">
+      <h4 class="center">Your room id is:</h2>
+			<br>
+			<div id="room-id-spinner" class="progress">
+				<div class="indeterminate"></div>
+			</div>
+      <h3 id="room-id" class="header center orange-text"></h1>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+  </div>
+
+	<!--join game modal-->  
+  <div id="join-game-modal" class="modal" style="width: 40%">
+    <div class="modal-content">
+      <form id="form-join-game">
+				<div class="row">
+					<label for="room-id-input">Room id</label>
+					<input placeholder="Enter a room id" id="room-id-input" type="text">
+					<input type="submit" style="display: none" />
+				</div>
+			</form>
+			<ul class="collection with-header">
+        <li class="collection-header"><h4>Games in progress</h4></li>
+        <li class="collection-item"><div>OrangeMonkeyEagle<a href="#!" class="secondary-content">1/4</a></div></li>
+        <li class="collection-item"><div>CorrectBatteryHorse<a href="#!" class="secondary-content">1/4</a></div></li>
+        <li class="collection-item grey lighten-2"><div>JealousEssentialCrab<a href="#!" class="secondary-content red-text">4/4</a></div></li>
+        <li class="collection-item"><div>LargeFreshSnek<a href="#!" class="secondary-content">3/4</a></div></li>
+      </ul>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+    </div>
+  </div>
+
+  <!--room functions-->
+  <main id='room-area'>
+    <center>
+      <br>
+      <div class="row center">
+        <a id="btn-create-game" href="#create-game-modal" class="btn-large waves-effect waves-light orange">Create Game</a>
+        <a id="btn-join-game"   href="#join-game-modal" class="btn-large waves-effect waves-light orange">Join Game</a>
+      </div>
+      <br>
+		</center>
+    <div class="section"></div>
+    <div class="section"></div>
+  </main>
+
+  <!--###################GAME HTML###################-->
+  <!--game area, includes sketchpad, artist tools, chat-->
+  <div id="game-area" class="section no-pad-bot">
     <div class="sketch-container">
       <br>
       <div class="row center">
@@ -84,21 +139,36 @@
     </div>
   </div>
 
+  <!--footer-->
   <footer class="page-footer orange">
     <div class="footer-copyright">
       <div class="container">
-      Made by the <a class="orange-text text-lighten-3">3 Honeys</a>
+      Made with 🦀 by the <a class="orange-text text-lighten-3">3 Honeys</a>
       </div>
     </div>
   </footer>
-  <!--  Scripts-->
+  
   <script src="socket.io/socket.io.js"></script>
+
+  <!--Materialize stuff-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize/materialize.js"></script>
+  <script src="js/materialize/init.js"></script>
+
+  <!--other stuff-->
   <script src="js/RecordableDrawing.js"></script>
-  <script src="js/materialize.js"></script>
-  <script src="js/init.js"></script>
-  <script src="js/game/gamemodel.js"></script>
-	<script src="js/game/gameview.js"></script>
-	<script src="js/game/gamecontroller.js"></script>
+  <script src="js/util.js"></script>
+
+  <!--Views-->
+  <script src="js/view/game_view.js"></script>
+  <script src="js/view/room_view.js"></script>
+  <script src="js/view.js"></script>
+
+  <!--Models-->
+  <script src="js/model/game_model.js"></script>
+	<script src="js/model/room_model.js"></script>
+
+  <!--should be last, as it has a lot of dependencies-->
+	<script src="js/game/controller.js"></script>
   </body>
 </html>
