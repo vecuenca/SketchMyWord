@@ -1,5 +1,5 @@
 module.exports = {
-    roomHandler: function (io) {
+    roomHandler: function (io, rooms) {
 
         io.on('connection', function (socket) {
             // should be fired when we redirect to index.html

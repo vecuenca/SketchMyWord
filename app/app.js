@@ -1,6 +1,7 @@
 var config = require('./config');
 var socket = require('./server/socket');
 var api = require('./server/api');
+var state = require('./server/state')
 var express = require('express');
 var mysql = require('promise-mysql');
 var app = express();
@@ -29,7 +30,7 @@ app.use(bodyParser.json());
 
 var connection;
 
-socket.roomHandler(io);
+socket.roomHandler(io, state.rooms);
 
 mysql.createConnection({
     host: 'localhost',
