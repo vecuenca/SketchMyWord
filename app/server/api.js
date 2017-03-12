@@ -142,7 +142,7 @@ app.get('/game', function(req, res, next) {
 });
 
 var generateRoomToken = function() {
-  return crypto.randomBytes(12).toString('hex');
+  return crypto.randomBytes(8).toString('hex');
 };
 
 module.exports = app;

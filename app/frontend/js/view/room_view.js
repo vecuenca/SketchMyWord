@@ -19,8 +19,14 @@ var roomView = (function (util) {
 			});
 			document.dispatchEvent(event);
 		};
-	};
 
+    $('#join-game-modal').modal({ 
+      // callback for modal open. fire event to fetch room list
+      ready: function(modal, trigger) {
+        document.dispatchEvent(new CustomEvent('onGetRooms'));
+      }
+    });
+	};
 
 	roomView.display = function() {
 		$('#room-area').show();
@@ -61,12 +67,41 @@ var roomView = (function (util) {
 			$('#join-game-modal').modal('close');
 			document.dispatchEvent(new CustomEvent('displayGame', {detail: {socket: socket}}));
 		});
-		// wait for room to be full
 	};
 
-	roomView.displayToast = function (msg) {
-		Materialize.toast(msg, 5000);
-	};
+  roomView.displayRoomListInModal = function(rooms) {
+    // clear all rows except header
+    $('#room-header').nextAll('li').remove();
+
+    // insert the rooms
+    var roomList = $('#room-list');
+    rooms.forEach(function(room) {
+      var e = document.createElement('li');
+      e.id = room.roomId;
+      e.className = 'collection-item';
+      e.innerHTML = `
+        <div>${room.roomId}<a href="#!" class="secondary-content">${room.users}/2</a></div>`;
+
+      // if room is full
+      if (room.users >= 2) {
+        e.className += ' grey lighten-2';
+        e.querySelector('.secondary-content').className += ' red-text';
+      // setup onclick to join room
+      } else {
+        e.onclick = function(e) {
+          e.preventDefault();
+          var event = new CustomEvent('onRoomJoin', {
+            detail: {
+              roomId: room.roomId
+            }
+          });
+          document.dispatchEvent(event);
+        };
+      }     
+
+      roomList.append(e);
+    });
+  };  
 
 	return roomView;
 
