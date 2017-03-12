@@ -57,7 +57,7 @@ var roomView = (function (util) {
 		socket.on('full_users', function(data) {
 			console.log('TIME TO PLAY GAME');
 			$('#join-game-modal').modal('close');
-			document.dispatchEvent(new CustomEvent('displayGame'));
+			document.dispatchEvent(new CustomEvent('displayGame', {detail: {socket: socket}}));
 		});
 		socket.emit('join_room', cookieUsername, roomId);
 		// wait for room to be full
