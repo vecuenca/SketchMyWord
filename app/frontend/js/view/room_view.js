@@ -1,4 +1,4 @@
-var roomView = (function () {
+var roomView = (function (util) {
 	"use strict";
 
 	var roomView = {};
@@ -29,19 +29,33 @@ var roomView = (function () {
 	};
 
 	roomView.roomCreateSuccess = function(roomId){
-		socket = io.connect();
-		socket.on('full_users', function(data){
-			window.location = '/index.html';
-		});
+		// display room id and hide spinner
 		document.getElementById('room-id').innerHTML = roomId;
 		$('#room-id-spinner').hide();
+
+		// connect to server and join the room we just created
+		socket = io.connect();
+		var cookieUsername = util.str_obj(document.cookie).username;
+		console.log('emitting', cookieUsername, roomId);
+		socket.emit('join_room', cookieUsername, roomId);
+		
+		// wait for room to be full
+		socket.on('full_users', function(data){
+			// close currently open room creation modal
+			$('#create-game-modal').modal('close');
+			document.dispatchEvent(new CustomEvent('displayGame'));
+		});
 	};
 
-	roomView.roomJoinSuccess = function(){
-		//eventually change this to waiting screen
+	roomView.roomJoinSuccess = function(roomId){
 		socket = io.connect();
-		socket.emit('join_room');
-		// window.location = '/index.html';
+		var cookieUsername = util.str_obj(document.cookie).username;
+		socket.emit('join_room', cookieUsername, roomId);
+		// wait for room to be full
+		socket.on('full_users', function(data){
+			console.log('JOINed GAME');
+			document.dispatchEvent(new CustomEvent('displayGame'));
+		});
 	};
 
 	roomView.displayToast = function (msg) {
@@ -50,4 +64,4 @@ var roomView = (function () {
 
 	return roomView;
 
-}());
+}(util));

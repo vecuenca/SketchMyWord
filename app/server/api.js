@@ -94,7 +94,7 @@ app.put('/game/', function(req, res, next) {
     lineHistory: [],
     users: [req.session.user.username]
   };
-  console.log(state.rooms);
+  console.log('put api room state', state.rooms);
 
   return res.json({ roomId: roomId });
 });
