@@ -6,6 +6,7 @@ var express = require('express');
 var app = express.Router();
 var bodyParser = require('body-parser');
 var crypto = require('crypto');
+var socket = require('./socket');
 
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
