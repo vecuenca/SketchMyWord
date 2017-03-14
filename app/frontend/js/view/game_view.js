@@ -26,15 +26,15 @@ var gameView = (function (util) {
     $('#form-chat').submit(function(e) {
       e.preventDefault();
       var messageValue = $('#chat-input').val();
-
-      if (messageValue) {
-        
+      if (messageValue == "") {
+        return;
       }
 
       var message = {
         username: username,
         message: messageValue
       };
+      
       socket.emit('new_message', message);
       $('#form-chat')[0].reset();
     });
