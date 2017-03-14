@@ -20,12 +20,21 @@ var roomView = (function (util) {
 			document.dispatchEvent(event);
 		};
 
+		// callback for modal open. fire event to fetch room list
     $('#join-game-modal').modal({ 
-      // callback for modal open. fire event to fetch room list
       ready: function(modal, trigger) {
         document.dispatchEvent(new CustomEvent('onGetRooms'));
       }
     });
+
+		$('#form-chat').submit(function(e) {
+			e.preventDefault();
+			var event = new CustomEvent('onMessageSubmit', {
+				detail: {
+					message: $('#chat-input').val()
+				}
+			});
+		});
 	};
 
 	roomView.display = function() {
