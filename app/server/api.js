@@ -93,6 +93,7 @@ app.put('/game/', function(req, res, next) {
   // add logic for room collisions later probably :p
   state.rooms[roomId] = {
     lineHistory: [],
+    chatHistory: [],
     users: [req.session.user.username]
   };
   console.log('put api room state', state.rooms);

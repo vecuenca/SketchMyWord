@@ -26,6 +26,11 @@ module.exports = {
 				// send line to all clients in the current room EXCEPT itself
 				io.sockets.in(socket.room).emit('draw_line', { line: line });
 			});
+
+			socket.on('new_message', function(messageObj) {
+				rooms[socket.room].chatHistory.push(messageObj);
+				io.sockets.in(socket.room).emit('render_message', messageObj);
+			});
 		});
 	},
 }

@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-var gameView = (function () {
+var gameView = (function (util) {
   "use strict";
 
   var gameView = {};
@@ -20,19 +20,42 @@ var gameView = (function () {
   var height = document.getElementById('canvas_box').clientHeight;
   var socket;
   var set = false;
+  var username = util.getUsername();
 
   gameView.onload = function () {
-    // Nothing yet...
-    return;
+    $('#form-chat').submit(function(e) {
+      e.preventDefault();
+      var messageValue = $('#chat-input').val();
+
+      if (messageValue) {
+        
+      }
+
+      var message = {
+        username: username,
+        message: messageValue
+      };
+      socket.emit('new_message', message);
+      $('#form-chat')[0].reset();
+    });
   }
+
+  gameView.renderMessage = function(messageObj) {
+    var msgDiv = document.createElement('div');
+    msgDiv.className = 'card chat-message';
+    msgDiv.innerHTML = `
+    <span class="green-text">${messageObj.username}&nbsp;</span>${messageObj.message}
+    `;
+    $('#chat-contents').prepend(msgDiv);
+  };
 
   gameView.display = function () {
     $('#game-area').show();
-  }
+  };
 
   gameView.hide = function () {
     $('#game-area').hide();
-  }
+  };
 
   gameView.setup = function (passedSocket) {
     canvas.width = width;
@@ -64,6 +87,10 @@ var gameView = (function () {
     });
     socket = passedSocket;
     set = true;
+
+    socket.on('render_message', function(messageObj) {
+      gameView.renderMessage(messageObj);
+    });
   }
 
   // main loop, running every 25ms
@@ -101,4 +128,4 @@ var gameView = (function () {
 
   return gameView;
 
-}());
+}(util));
