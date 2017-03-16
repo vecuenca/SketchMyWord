@@ -34,7 +34,7 @@ var gameView = (function (util) {
         username: username,
         message: messageValue
       };
-      
+
       socket.emit('new_message', message);
       $('#form-chat')[0].reset();
     });
@@ -46,7 +46,14 @@ var gameView = (function (util) {
     msgDiv.innerHTML = `
     <span class="green-text">${messageObj.username}&nbsp;</span>${messageObj.message}
     `;
-    $('#chat-contents').prepend(msgDiv);
+    $('#chat-flex-container').prepend(msgDiv);
+
+    // scroll down chat box to the message we just rendered
+    var height = 0;
+    $('#chat-flex-container div').each(function(i, value) {
+      height += parseInt($(this).height());
+    });
+    $('#chat-contents').animate({ scrollTop: height }, 'slow');
   };
 
   gameView.display = function () {
