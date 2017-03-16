@@ -11,8 +11,9 @@ module.exports = {
 				socket.join(room);
 
 				// READY TO START GAME
-				console.log('room size', rooms[room].users.length);
-				if (rooms[room].users.length >= 2) {
+				console.log('room size', rooms[room].roomSize);
+				console.log('room length', rooms[room].users.length);
+				if (rooms[room].users.length >= rooms[room].roomSize) {
 					console.log('emitting full_users');
 					io.sockets.in(socket.room).emit('full_users');
 				}

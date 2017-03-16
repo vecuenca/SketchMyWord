@@ -88,15 +88,19 @@ app.put('/game/', function(req, res, next) {
     return res.status(403).send("Forbidden");
   }
 
+  var roomSize = req.body.roomSize;
+  console.log('roomsize', roomSize);
+  
   var roomId = generateRoomToken();
+
   // create a new game instance, add it to store
   // add logic for room collisions later probably :p
   state.rooms[roomId] = {
     lineHistory: [],
     chatHistory: [],
-    users: [req.session.user.username]
+    users: [req.session.user.username],
+    roomSize:  roomSize
   };
-  console.log('put api room state', state.rooms);
   res.json({ roomId: roomId });
   return next();
 });
@@ -115,7 +119,7 @@ app.post('/game/:roomId/', function(req, res, next) {
   
   // check if room is full
   // currently, max num of players is 4
-  if (state.rooms[roomId].users.length >= 4) {
+  if (state.rooms[roomId].users.length >= state.rooms[roomId].roomSize) {
     return res.status(400).send('Sorry, that room is full.');
   }
   
@@ -136,7 +140,8 @@ app.get('/game', function(req, res, next) {
   var roomsWithUsers = [];
   Object.keys(state.rooms).forEach(function(key,index) {
     roomsWithUsers.push({ roomId: key, 
-                          users: state.rooms[key].users.length }); 
+                          users: state.rooms[key].users.length,
+                          roomSize: state.rooms[key].roomSize }); 
   });
   res.json({ rooms: roomsWithUsers }); 
   return next();

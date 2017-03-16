@@ -5,12 +5,16 @@ var roomView = (function (util) {
 	var socket;
 
 	roomView.onload = function() {
-		document.getElementById('btn-create-game').onclick = function(e){
+		$('#form-create-room').submit(function(e) {
 			e.preventDefault();
-			document.dispatchEvent(new CustomEvent('onCreateRoom'));
-		};
+			var roomSize = $('#room-size').val();
+			// create the room
+			document.dispatchEvent(new CustomEvent('onCreateRoom', {
+				detail: { roomSize: roomSize }
+			}));
+		});
 
-		document.getElementById('form-join-game').onsubmit = function(e){
+		$('#form-join-game').submit(function(e){
 			e.preventDefault();
 			var event = new CustomEvent('onRoomJoin', {
 				detail: {
@@ -18,7 +22,7 @@ var roomView = (function (util) {
 				}
 			});
 			document.dispatchEvent(event);
-		};
+		});
 
 		// callback for modal open. fire event to fetch room list
     $('#join-game-modal').modal({ 
@@ -46,20 +50,26 @@ var roomView = (function (util) {
 	};
 
 	roomView.roomCreateSuccess = function(roomId){
-		// display room id and hide spinner
+		// display room id, show waiting for users container
 		document.getElementById('room-id').innerHTML = roomId;
-		$('#room-id-spinner').hide();
+		$('#modal-users-waiting-container').show();
+		$('#form-create-room').hide();
 
 		// connect to server and join the room we just created
 		socket = io.connect();
 		var cookieUsername = util.str_obj(document.cookie).username;
-		console.log('emitting', cookieUsername, roomId);
 		socket.emit('join_room', cookieUsername, roomId);
 		
 		// wait for room to be full
 		socket.on('full_users', function(data) {
+			$('#room-id-spinner').hide();
 			// close currently open room creation modal
 			$('#create-game-modal').modal('close');
+
+			// reset modal
+			$('#modal-users-waiting-container').hide();
+			$('#form-create-room').show();
+		
 			document.dispatchEvent(new CustomEvent('displayGame', {detail: {socket: socket}}));
 		});
 	};
@@ -88,20 +98,23 @@ var roomView = (function (util) {
       e.id = room.roomId;
       e.className = 'collection-item';
       e.innerHTML = `
-        <div>${room.roomId}<a href="#!" class="secondary-content">${room.users}/2</a></div>`;
+        <div>${room.roomId}<a href="#!" class="secondary-content">${room.users}/${room.roomSize}</a></div>`;
 
       // if room is full
-      if (room.users >= 2) {
+      if (room.users >= room.roomSize) {
         e.className += ' grey lighten-2';
         e.querySelector('.secondary-content').className += ' red-text';
       // setup onclick to join room
       } else {
         e.onclick = function(e) {
           e.preventDefault();
+
+					// show waiting screen, hide joining
+					$('#join-game-container').hide();
+					$('#waiting-user-container').show();
+
           var event = new CustomEvent('onRoomJoin', {
-            detail: {
-              roomId: room.roomId
-            }
+            detail: { roomId: room.roomId }
           });
           document.dispatchEvent(event);
         };
