@@ -19,6 +19,10 @@ var util = (function() {
     return result;
   }
 
+  util.getUsername = function() {
+    return util.str_obj(document.cookie).username;
+  }
+
   return util;
 
 }());

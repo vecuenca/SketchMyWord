@@ -20,12 +20,21 @@ var roomView = (function (util) {
 			document.dispatchEvent(event);
 		};
 
+		// callback for modal open. fire event to fetch room list
     $('#join-game-modal').modal({ 
-      // callback for modal open. fire event to fetch room list
       ready: function(modal, trigger) {
         document.dispatchEvent(new CustomEvent('onGetRooms'));
       }
     });
+
+		$('#form-chat').submit(function(e) {
+			e.preventDefault();
+			var event = new CustomEvent('onMessageSubmit', {
+				detail: {
+					message: $('#chat-input').val()
+				}
+			});
+		});
 	};
 
 	roomView.display = function() {
@@ -56,14 +65,13 @@ var roomView = (function (util) {
 	};
 
 	roomView.roomJoinSuccess = function(roomId){
-		console.log('connecting');
 		socket = io.connect();
 		var cookieUsername = util.str_obj(document.cookie).username;
-		console.log('WAITING FOR THE ROOM TO BE FULL');
-		console.log('emitting');
+
 		socket.emit('join_room', cookieUsername, roomId);
+
+		// waiting for room to be full
 		socket.on('full_users', function(data) {
-			console.log('TIME TO PLAY GAME');
 			$('#join-game-modal').modal('close');
 			document.dispatchEvent(new CustomEvent('displayGame', {detail: {socket: socket}}));
 		});
@@ -98,11 +106,9 @@ var roomView = (function (util) {
           document.dispatchEvent(event);
         };
       }     
-
       roomList.append(e);
     });
   };  
 
 	return roomView;
-
 }(util));
