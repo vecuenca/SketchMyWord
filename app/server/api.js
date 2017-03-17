@@ -111,21 +111,29 @@ app.post('/game/:roomId/', function(req, res, next) {
     return res.status(403).send('Forbidden');
   }
 
+  var roomId   = req.params.roomId;
+  var room     = state.rooms[roomId];
+  var username = req.session.user.username;
+
   // check if room exists
-  var roomId = req.params.roomId;
-  if (!state.rooms[roomId]) {
+  if (!room) {
     return res.status(400).send('No room with that id exists.');
   }
   
   // check if room is full
   // currently, max num of players is 4
-  if (state.rooms[roomId].users.length >= state.rooms[roomId].roomSize) {
+  if (room.users.length >= room.roomSize) {
     return res.status(400).send('Sorry, that room is full.');
+  }
+
+  // check if we are already in this room
+  if (room.users.indexOf(username) === -1) {
+    return res.status(400).send('You have already joined this room.');
   }
   
   // update room with new user
   // need logic to validate multiple logins in same room?
-  state.rooms[roomId].users.push(req.session.user.username);
+  room.users.push(username);
   res.json({success: true}); 
   return next();
 });
@@ -140,7 +148,7 @@ app.get('/game', function(req, res, next) {
   var roomsWithUsers = [];
   Object.keys(state.rooms).forEach(function(key,index) {
     roomsWithUsers.push({ roomId: key, 
-                          users: state.rooms[key].users.length,
+                          users: state.rooms[key].users,
                           roomSize: state.rooms[key].roomSize }); 
   });
   res.json({ rooms: roomsWithUsers }); 
