@@ -59,5 +59,21 @@ var roomModel = (function () {
     });
   }
 
+  roomModel.leaveRoom = function(data, callback) {
+    fetch('/api/game/' + data.roomId, {
+      method: 'delete',
+      credentials: 'include',
+      headers: headers
+    }).then(function (resp) {
+      if (resp.status == 403 || resp.status == 400) {
+        callback(resp, null);
+      } else {
+        callback(null, resp);
+      }
+    }).catch(function (err) {
+      callback(err, null);
+    });
+  }
+
   return roomModel;
 }());
