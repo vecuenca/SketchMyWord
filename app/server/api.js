@@ -127,7 +127,7 @@ app.post('/game/:roomId/', function(req, res, next) {
   }
 
   // check if we are already in this room
-  if (room.users.indexOf(username) === -1) {
+  if (room.users.indexOf(username) > -1) {
     return res.status(400).send('You have already joined this room.');
   }
   
