@@ -89,7 +89,6 @@ app.put('/game/', function(req, res, next) {
   }
 
   var roomSize = req.body.roomSize;
-  console.log('roomsize', roomSize);
   
   var roomId = generateRoomToken();
 
@@ -99,6 +98,7 @@ app.put('/game/', function(req, res, next) {
     lineHistory: [],
     chatHistory: [],
     users: [req.session.user.username],
+    host: req.session.user.username,
     roomSize:  roomSize
   };
   res.json({ roomId: roomId });
@@ -158,5 +158,27 @@ app.get('/game', function(req, res, next) {
 var generateRoomToken = function() {
   return crypto.randomBytes(8).toString('hex');
 };
+
+// -------------------- DELETE --------------------
+app.delete('/game/:roomId/', function(req, res, next){
+  if (!req.session.user) {
+    return res.status(403).send('Forbidden');
+  }
+  var roomId = req.params.roomId;
+  if (!state.rooms[roomId]) {
+    return res.status(400).send('No room with that id exists.');
+  }
+
+  //remove the user from the room
+  var index = state.rooms[req.params.roomId].users.indexOf(req.session.user.username);
+  state.rooms[req.params.roomId].users.splice(index, 1);
+  if (state.rooms[req.params.roomId].host == req.session.user.username){
+    res.json({success: true, host: true});
+  }else{
+    res.json({success: true, host: false});
+  }
+  
+  return next();
+});
 
 module.exports = app;

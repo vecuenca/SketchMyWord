@@ -5,6 +5,24 @@ var roomView = (function (util) {
 	var socket;
 
 	roomView.onload = function() {
+		$('#cancel-room-create').click(function(e) {
+			if (!$('#room-id').text())	return;
+			document.dispatchEvent(new CustomEvent('onLeaveRoom', {
+				detail: {
+					roomId: document.getElementById('room-id').innerHTML,
+				}
+			}));
+		});
+
+		$('#cancel-room-join').click(function(e) {
+			if (!$('#join-waiting-text').is(':visible')) return;
+			document.dispatchEvent(new CustomEvent('onLeaveRoom', {
+				detail: {
+					roomId: $('#join-waiting-text').attr('roomId'),
+				}
+			}));
+		});
+
 		$('#form-create-room').submit(function(e) {
 			e.preventDefault();
 			var roomSize = $('#room-size').val();
@@ -80,10 +98,17 @@ var roomView = (function (util) {
 
 		socket.emit('join_room', cookieUsername, roomId);
 
+		//move to controller later
+		$('#join-waiting-text').attr('roomId', roomId);
+
 		// waiting for room to be full
 		socket.on('full_users', function(data) {
 			$('#join-game-modal').modal('close');
 			document.dispatchEvent(new CustomEvent('displayGame', {detail: {socket: socket}}));
+		});
+
+		socket.on('leave_room', function(data){
+			roomView.roomLeaveSuccess({host: false});
 		});
 	};
 
@@ -125,6 +150,24 @@ var roomView = (function (util) {
       roomList.append(e);
     });
   };  
+
+	roomView.roomLeaveSuccess = function(data) {
+		//close socket and close the modal
+		socket.close();
+		if(data.host){
+			// we must have left from the create game modal
+			$('#create-game-modal').modal('close');
+			$('#form-create-room').show();
+			$('#modal-users-waiting-container').hide();
+		} else {
+			// o.w. we tried to join a game
+			$('#join-game-modal').modal('close');
+			$('#join-game-container').show();
+			$('#waiting-user-container').hide();
+		}
+		
+		
+	}
 
 	return roomView;
 }(util));
