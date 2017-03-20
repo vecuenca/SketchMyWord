@@ -16,6 +16,7 @@ module.exports = {
 				if (rooms[room].users.length >= rooms[room].roomSize) {
 					console.log('emitting full_users');
 					io.sockets.in(socket.room).emit('full_users');
+					gameHandler(io, room, rooms[room]);
 				}
 			});
 
