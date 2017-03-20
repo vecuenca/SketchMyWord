@@ -15,6 +15,7 @@ var roomView = (function (util) {
 		});
 
 		$('#cancel-room-join').click(function(e) {
+			if (!$('#join-waiting-text').is(':visible')) return;
 			document.dispatchEvent(new CustomEvent('onLeaveRoom', {
 				detail: {
 					roomId: $('#join-waiting-text').attr('roomId'),
