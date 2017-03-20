@@ -54,6 +54,7 @@ var gameView = (function (util) {
       height += parseInt($(this).height());
     });
     $('#chat-contents').animate({ scrollTop: height }, 'slow');
+    msgDiv.className += ' slide-in-right';
   };
 
   gameView.display = function () {

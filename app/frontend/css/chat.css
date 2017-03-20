@@ -4,6 +4,7 @@
 
 #chat-contents {
 	overflow-y: scroll;
+	overflow-x: hidden;
 	height: 600px;
 }
 
@@ -21,6 +22,12 @@
 	flex-wrap: wrap;
 	min-height: 40px;
 	padding-left: 10px;
+}
+
+.slide-in-right {
+	-webkit-animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	-moz-animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 	margin-bottom: 5px;
 	margin-top: 5px;
 }

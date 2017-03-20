@@ -123,14 +123,17 @@ var roomView = (function (util) {
       e.id = room.roomId;
       e.className = 'collection-item';
       e.innerHTML = `
-        <div>${room.roomId}<a href="#!" class="secondary-content">${room.users}/${room.roomSize}</a></div>`;
+        <div>${room.roomId}<a href="#!" class="secondary-content">${room.users.length}/${room.roomSize}</a></div>`;
 
       // if room is full
-      if (room.users >= room.roomSize) {
+      if (room.users.length >= room.roomSize) {
         e.className += ' grey lighten-2';
         e.querySelector('.secondary-content').className += ' red-text';
+			// we already belong to this room
+			} else if (room.users.indexOf(util.getUsername()) > -1) {
+				e.className += ' grey lighten-2';
       // setup onclick to join room
-      } else {
+			} else {
         e.onclick = function(e) {
           e.preventDefault();
 
