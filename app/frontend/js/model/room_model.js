@@ -12,7 +12,10 @@ var roomModel = (function () {
     fetch('/api/game/', {
       method: 'put',
       credentials: 'include',
-      headers: headers
+      headers: headers,
+      body: JSON.stringify({
+        roomSize: data.roomSize
+      })
     }).then(function (resp) {
       if (resp.status == 403) {
         callback(resp, null);
@@ -43,6 +46,22 @@ var roomModel = (function () {
   roomModel.getRooms = function (callback) {
     fetch('/api/game', {
       method: 'get',
+      credentials: 'include',
+      headers: headers
+    }).then(function (resp) {
+      if (resp.status == 403 || resp.status == 400) {
+        callback(resp, null);
+      } else {
+        callback(null, resp);
+      }
+    }).catch(function (err) {
+      callback(err, null);
+    });
+  }
+
+  roomModel.leaveRoom = function(data, callback) {
+    fetch('/api/game/' + data.roomId, {
+      method: 'delete',
       credentials: 'include',
       headers: headers
     }).then(function (resp) {
