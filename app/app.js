@@ -1,5 +1,5 @@
 var config = require('./config');
-var socket = require('./server/socket');
+var socketlib = require('./server/socket');
 var api = require('./server/api');
 var state = require('./server/state')
 var express = require('express');
@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 
 var connection;
 
-socket.roomHandler(io, state.rooms);
+socketlib.roomHandler(io, state.rooms);
 
 mysql.createConnection({
     host: 'localhost',
@@ -69,8 +69,7 @@ app.get('/signout/', function (req, res, next) {
 
 app.use(express.static('frontend'));
 app.use('/api', api);
-
-// app.use(function (req, res, next){
-//     console.log("HTTP Response", res.statusCode);
-//     res.send();
-// });
+app.use(function(req, res, next){
+    socketlib.stateHandler(io, state.rooms);
+    res.end();
+})

@@ -24,7 +24,7 @@ module.exports = {
 				var line = data.line;
 				// add received line to history 
 				rooms[socket.room].lineHistory.push(line);
-				// send line to all clients in the current room EXCEPT itself
+				//   send line to all clients in the current room EXCEPT itself
 				io.sockets.in(socket.room).emit('draw_line', { line: line });
 			});
 
@@ -34,4 +34,14 @@ module.exports = {
 			});
 		});
 	},
+
+	stateHandler: function(io, rooms) {
+		Object.keys(rooms).forEach(function(key, index) {
+			// if host leave or room is empty, remove it from state and close all sockets
+			if (rooms[key].users.indexOf(rooms[key].host) == -1 || rooms[key].users.length == 0){
+        io.sockets.in(key).emit('leave_room');
+				delete rooms[key];
+			}
+		});
+	}
 }
