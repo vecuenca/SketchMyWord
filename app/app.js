@@ -33,7 +33,7 @@ var connection;
 socketlib.roomHandler(io, state.rooms);
 
 mysql.createConnection({
-    host: 'localhost',
+    host: process.env.DATABASE_HOST || 'localhost',
     user: 'root',
     password: '1234',
     database: 'sketch-my-word',
