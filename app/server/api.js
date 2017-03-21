@@ -133,7 +133,7 @@ app.post('/game/:roomId/', function(req, res, next) {
   }
   
   // update room with new user
-  room.users.username = {};
+  room.users[username] = {};
 
   res.json({success: true}); 
   return next();

@@ -1,5 +1,6 @@
 var config = require('./config');
 var socketlib = require('./server/socket');
+var gamelib = require('./server/game')
 var api = require('./server/api');
 var state = require('./server/state')
 var express = require('express');
@@ -30,7 +31,7 @@ app.use(bodyParser.json());
 
 var connection;
 
-socketlib.roomHandler(io, state.rooms);
+socketlib.roomHandler(io, state.rooms, gamelib.gameHandler);
 
 mysql.createConnection({
     host: 'localhost',

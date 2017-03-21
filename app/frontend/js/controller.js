@@ -61,9 +61,18 @@
     socket.on('draw_line', function(data){
       gameView.drawLine(data);
     });
+
     socket.on('render_message', function (messageObj) {
       gameView.renderMessage(messageObj);
     });
+
+		socket.on('is_artist', function(wordToDraw) {
+			util.displayToast('You are the Artist! Your word is ' + wordToDraw);
+		});
+
+		socket.on('is_guesser', function(artist) {
+			util.displayToast(artist + ' is the Artist!');
+		});
 
     gameView.setup();
   });

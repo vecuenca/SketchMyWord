@@ -1,5 +1,5 @@
 module.exports = {
-	roomHandler: function (io, rooms) {
+	roomHandler: function (io, rooms, gameHandler) {
 		io.on('connection', function (socket) {
 
 			// has the client's socket join the requested room
@@ -12,12 +12,13 @@ module.exports = {
 				socket.room = room;
 
 				// store socket id in room 
-				rooms.room.users.socketId = socket.id;
-
+				rooms[room].users[username].socketId = socket.id;
+				console.log('room state after join', rooms);
 				socket.join(room);
 				
 				// game is ready to start
-				if (rooms[room].users.length >= rooms[room].roomSize) {
+
+				if (Object.keys(rooms[room].users).length >= rooms[room].roomSize) {
 					console.log('game ', room, ' ready to start. emitting full_users');
 					io.sockets.in(socket.room).emit('full_users');
 					gameHandler(io, room, rooms[room]);
@@ -43,7 +44,7 @@ module.exports = {
 	stateHandler: function(io, rooms) {
 		Object.keys(rooms).forEach(function(key, index) {
 			// if host leave or room is empty, remove it from state and close all sockets
-			if (rooms[key].users.indexOf(rooms[key].host) == -1 || rooms[key].users.length == 0){
+			if (rooms[key].host in rooms[key] || Object.keys(rooms[key].users).length == 0){
         io.sockets.in(key).emit('leave_room');
 				delete rooms[key];
 			}
