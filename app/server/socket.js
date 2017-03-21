@@ -1,20 +1,24 @@
 module.exports = {
 	roomHandler: function (io, rooms) {
 		io.on('connection', function (socket) {
+
 			// has the client's socket join the requested room
 			socket.on('join_room', function (username, room) {
 				console.log('cur room state', rooms);
-				console.log('join room', username, room);
+				console.log('user ', username, ' is joining room ', room);
+
+				// setup socket info to be used later
 				socket.username = username;
 				socket.room = room;
 
-				socket.join(room);
+				// store socket id in room 
+				rooms.room.users.socketId = socket.id;
 
-				// READY TO START GAME
-				console.log('room size', rooms[room].roomSize);
-				console.log('room length', rooms[room].users.length);
+				socket.join(room);
+				
+				// game is ready to start
 				if (rooms[room].users.length >= rooms[room].roomSize) {
-					console.log('emitting full_users');
+					console.log('game ', room, ' ready to start. emitting full_users');
 					io.sockets.in(socket.room).emit('full_users');
 					gameHandler(io, room, rooms[room]);
 				}
@@ -25,7 +29,7 @@ module.exports = {
 				var line = data.line;
 				// add received line to history 
 				rooms[socket.room].lineHistory.push(line);
-				//   send line to all clients in the current room EXCEPT itself
+				// send line to all clients in the current room EXCEPT itself
 				io.sockets.in(socket.room).emit('draw_line', { line: line });
 			});
 
