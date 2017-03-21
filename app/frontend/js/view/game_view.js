@@ -18,12 +18,11 @@ var gameView = (function (util) {
   var context = canvas.getContext('2d');
   var width = document.getElementById('canvas_box').clientWidth;
   var height = document.getElementById('canvas_box').clientHeight;
-  var socket;
   var set = false;
   var username = util.getUsername();
 
   gameView.onload = function () {
-    $('#form-chat').submit(function(e) {
+    $('#form-chat').submit(function (e) {
       e.preventDefault();
       var messageValue = $('#chat-input').val();
       if (messageValue == "") {
@@ -34,13 +33,16 @@ var gameView = (function (util) {
         username: username,
         message: messageValue
       };
-
-      socket.emit('new_message', message);
+      document.dispatchEvent(new CustomEvent('socketNewMessage', {
+        detail: {
+          message: message
+        }
+      }));
       $('#form-chat')[0].reset();
     });
   }
 
-  gameView.renderMessage = function(messageObj) {
+  gameView.renderMessage = function (messageObj) {
     var msgDiv = document.createElement('div');
     msgDiv.className = 'card chat-message';
     msgDiv.innerHTML = `
@@ -50,7 +52,7 @@ var gameView = (function (util) {
 
     // scroll down chat box to the message we just rendered
     var height = 0;
-    $('#chat-flex-container div').each(function(i, value) {
+    $('#chat-flex-container div').each(function (i, value) {
       height += parseInt($(this).height());
     });
     $('#chat-contents').animate({ scrollTop: height }, 'slow');
@@ -65,13 +67,12 @@ var gameView = (function (util) {
     $('#game-area').hide();
   };
 
-  gameView.setup = function (passedSocket) {
+  gameView.setup = function () {
     canvas.width = width;
     canvas.height = height;
 
     // register mouse event handlers
     canvas.onmousedown = function (e) {
-      console.log(socket);
       mouse.click = true;
     };
     canvas.onmouseup = function (e) {
@@ -85,21 +86,16 @@ var gameView = (function (util) {
       mouse.move = true;
     };
 
-    passedSocket.on('draw_line', function (data) {
-      console.log(data);
-      var line = data.line;
-      context.beginPath();
-      context.moveTo(line[0].x, line[0].y);
-      context.lineTo(line[1].x, line[1].y);
-      context.stroke();
-    });
-    socket = passedSocket;
     set = true;
-
-    socket.on('render_message', function(messageObj) {
-      gameView.renderMessage(messageObj);
-    });
   }
+
+  gameView.drawLine = function (data) {
+    var line = data.line;
+    context.beginPath();
+    context.moveTo(line[0].x, line[0].y);
+    context.lineTo(line[1].x, line[1].y);
+    context.stroke();
+  };
 
   // main loop, running every 25ms
   function mainLoop() {
@@ -108,9 +104,9 @@ var gameView = (function (util) {
       // check if the user is drawing
       if (mouse.click && mouse.move && mouse.pos_prev) {
         // send line to to the server
-        socket.emit('draw_line', {
+        document.dispatchEvent(new CustomEvent('socketDrawLine', {detail:{
           line: [mouse.pos, mouse.pos_prev]
-        });
+        }}));
         mouse.move = false;
       }
       mouse.pos_prev = {
