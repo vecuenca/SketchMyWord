@@ -1,4 +1,11 @@
 module.exports = {
+  gameHandler: function (io, roomId, room) {
+    // zero indexed because we're going to use this to iterate through
+    // the users array...
+    room.userArray = Object.keys(room.users);
+    room.numRounds = (room.userArray.length * 2) - 1;
+    module.exports.setupRound(io, roomId, room);
+  },
 
   roundTimeOver: function (io, roomId, room) {
     io.in(roomId).emit('round_time_over');
@@ -26,15 +33,19 @@ module.exports = {
   },
 
 	setupRound: function (io, roomId, room) {
-    var ROUND_TIME = 60000;   
-    var users = Object.keys(room.users);
+    var ROUND_TIME = 60000;
     room.timer = setTimeout(module.exports.roundTimeOver, ROUND_TIME, io, roomId, room);
 
-    // pick a random user
-    room.artist = users[Math.floor(Math.random() * users.length)];
+    // pick a user
+    if (room.numRounds >= room.userArray.length) {
+      room.artist = room.userArray[room.numRounds - room.userArray.length];
+    } else {
+      room.artist = room.userArray[room.numRounds];
+    }
+
     room.roundActive = true;
 
-    console.log('USERS ARE...', users);
+    console.log('USERS ARE...', room.userArray);
     console.log('THE ARTIST IS...', room.artist);
 
 		// pick a random word
@@ -57,18 +68,12 @@ module.exports = {
     });
 	},
 
-  gameHandler: function (io, roomId, room) {
-    room.numRounds = Object.keys(room.users).length;
-    module.exports.setupRound(io, roomId, room);
-  },
 
   endRound: function  (io, roomId, room) {
     if (room.timer) {
       clearTimeout(room.timer);
     }
 
-
-    console.log('wat');
     // create a sorted score array; emit to user
     var currentScore = [];
     Object.keys(room.users).forEach(function(user) {
@@ -90,7 +95,7 @@ module.exports = {
     room.wordToDraw       = null;
     room.timer            = null;
     
-    if (room.numRounds > 0) {
+    if (room.numRounds > -1) {
       io.in(roomId).emit('next_round_starting_soon');
       setTimeout(module.exports.setupRound, 10000, io, roomId, room);
     } else {
