@@ -91,6 +91,9 @@
 
     socket.on('game_over', function () {
 			util.displayToast('The game is over! The winner is Me');
+
+      gameView.hide();
+      roomView.display();
 		});
 
     socket.on('next_round_starting_soon', function () {

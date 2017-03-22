@@ -104,7 +104,9 @@ module.exports = {
   },
 
   gameOver: function (io, roomId, room) {
-    // calculate scores and broadcast them
+    // TODO: calculate scores and broadcast them
+
+
     io.in(roomId).emit('game_over');
 
     // send them back to room lobby?

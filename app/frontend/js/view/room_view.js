@@ -140,10 +140,6 @@ var roomView = (function (util) {
         e.onclick = function(e) {
           e.preventDefault();
 
-          // show waiting screen, hide joining
-          $('#join-game-container').hide();
-          $('#waiting-user-container').show();
-
           var event = new CustomEvent('onRoomJoin', {
             detail: { roomId: room.roomId }
           });
@@ -170,6 +166,5 @@ var roomView = (function (util) {
       $('#waiting-user-container').hide();
     }
   }
-
   return roomView;
 }(util));
