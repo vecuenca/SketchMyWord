@@ -1,11 +1,11 @@
 module.exports = {
 
-  roundTimeOver: function(io, roomId, room) {
+  roundTimeOver: function (io, roomId, room) {
     io.in(roomId).emit('round_time_over');
     module.exports.endRound(io, roomId, room);
   },
 
-  onCorrectGuess: function(io, roomId, room, socket) {
+  onCorrectGuess: function (io, roomId, room, socket) {
     socket.emit('correct_guess');
     socket.broadcast.to(socket.room).emit('word_guessed', socket.username);
 
@@ -18,7 +18,7 @@ module.exports = {
     }
   },
 
-	setupRound: function(io, roomId, room) {
+	setupRound: function (io, roomId, room) {
     var ROUND_TIME = 60000;   
     var users = Object.keys(room.users);
     room.timer = setTimeout(module.exports.roundTimeOver, ROUND_TIME, io, roomId, room);
@@ -43,19 +43,19 @@ module.exports = {
 		io.to(artistSocketId).emit('is_artist', room.wordToDraw);
 
     // tell all guessers their role and who the artist is
-    Object.keys(room.users).forEach(function(username) {
+    Object.keys(room.users).forEach(function (username) {
       if (username !== room.artist) {
         io.to(room.users[username].socketId).emit('is_guesser', room.artist);
       }
     });
 	},
 
-  gameHandler: function(io, roomId, room) {
+  gameHandler: function (io, roomId, room) {
     room.numRounds = Object.keys(room.users).length;
     module.exports.setupRound(io, roomId, room);
   },
 
-  endRound: function (io, roomId, room) {
+  endRound: function  (io, roomId, room) {
     // cancel timer, if it exists
     if (room.timer) {
       clearTimeout(room.timer);
@@ -71,13 +71,14 @@ module.exports = {
     
 
     if (room.numRounds > 0) {
-      module.exports.setupRound(io, roomId, room);
+      io.in(roomId).emit('next_round_starting_soon');
+      setTimeout(module.exports.setupRound, 5000, io, roomId, room);
     } else {
       module.exports.gameOver(io, roomId, room);
     }
   },
 
-  gameOver: function(io, roomId, room) {
+  gameOver: function (io, roomId, room) {
     // calculate scores and broadcast them
     io.in(roomId).emit('game_over');
 

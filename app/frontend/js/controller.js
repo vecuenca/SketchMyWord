@@ -58,7 +58,7 @@
     roomView.hide();
     gameView.display();
 
-    socket.on('draw_line', function(data){
+    socket.on('draw_line', function (data){
       gameView.drawLine(data);
     });
 
@@ -66,33 +66,37 @@
       gameView.renderMessage(messageObj);
     });
 
-		socket.on('is_artist', function(wordToDraw) {
+		socket.on('is_artist', function (wordToDraw) {
 			util.displayToast('You are the Artist! Your word is ' + wordToDraw);
 		});
 
-		socket.on('is_guesser', function(artist) {
+		socket.on('is_guesser', function (artist) {
 			util.displayToast(artist + ' is the Artist!');
 		});
 
-		socket.on('correct_guess', function() {
+		socket.on('correct_guess', function () {
 			util.displayToast('You guessed the word!');
 		});
 
-		socket.on('word_guessed', function(guesser) {
+		socket.on('word_guessed', function (guesser) {
 			util.displayToast(guesser + ' guessed the word!');
 		});
 
-    socket.on('round_time_over', function() {
+    socket.on('round_time_over', function () {
 			util.displayToast('Time\'s up! Onto the next round!');
 		});
 
-    socket.on('everyone_guessed', function() {
+    socket.on('everyone_guessed', function () {
 			util.displayToast('Everyone guessed the word! Onto the next round!');
 		});
 
-    socket.on('game_over', function() {
+    socket.on('game_over', function () {
 			util.displayToast('The game is over! The winner is Me');
 		});
+
+    socket.on('next_round_starting_soon', function () {
+      util.displayToast('The next round starts in 5 seconds!');
+    });
 
     gameView.setup();
   });
