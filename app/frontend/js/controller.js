@@ -98,7 +98,7 @@
     });
 
     socket.on('round_over', function (currentScore) {
-      // Clear canvas
+      gameView.clearCanvas();
 
       // update scores
       var scoreStr = "Current score:\n";

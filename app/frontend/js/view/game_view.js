@@ -40,7 +40,7 @@ var gameView = (function (util) {
       }));
       $('#form-chat')[0].reset();
     });
-  }
+  };
 
   gameView.renderMessage = function (messageObj) {
     var msgDiv = document.createElement('div');
@@ -95,6 +95,10 @@ var gameView = (function (util) {
     context.moveTo(line[0].x, line[0].y);
     context.lineTo(line[1].x, line[1].y);
     context.stroke();
+  };
+
+  gameView.clearCanvas = function () {
+    context.clearRect(0, 0, canvas.width, canvas.height)
   };
 
   // main loop, running every 25ms
