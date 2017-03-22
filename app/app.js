@@ -7,10 +7,10 @@ var mysql = require('promise-mysql');
 var app = express();
 var session = require('express-session');
 app.use(session({
-    secret:            'big crab',
-    resave:            false,
+    secret: 'big crab',
+    resave: false,
     saveUninitialized: true,
-    cookie: 		   { secure: false }
+    cookie: { secure: false }
 }));
 
 var bodyParser = require('body-parser');
@@ -19,7 +19,7 @@ var socketIo = require('socket.io');
 
 var server = http.createServer(app);
 var io = socketIo.listen(server);
-server.listen(3000, function(){
+server.listen(3000, function () {
     console.log("Server running on localhost:3000");
 });
 
@@ -31,15 +31,15 @@ app.use(bodyParser.json());
 var connection;
 
 socketlib.roomHandler(io, state.rooms);
-
 mysql.createConnection({
-    host: process.env.DATABASE_HOST || 'localhost',
+    host: config.mysql.host,
     user: 'root',
     password: '1234',
     database: 'sketch-my-word',
     port: '3306'
 }).then(function (conn) {
     connection = conn;
+
     conn.query(`CREATE TABLE IF NOT EXISTS \`sketch-my-word\`.\`users\`( 
         \`username\` VARCHAR(45) NOT NULL,
         \`password\` VARCHAR(45) NOT NULL,
@@ -55,21 +55,21 @@ app.use(function (req, res, next) {
 });
 
 // ROUTING
-app.get('/', function(req, res, next) {
+app.get('/', function (req, res, next) {
     if (!req.session.user) return res.redirect('/login.html');
     return next();
 });
 
 app.get('/signout/', function (req, res, next) {
-  req.session.destroy(function(err) {
-    if (err) return res.status(500).end(err);
-    return res.redirect('/login.html');
-  });
+    req.session.destroy(function (err) {
+        if (err) return res.status(500).end(err);
+        return res.redirect('/login.html');
+    });
 });
 
 app.use(express.static('frontend'));
 app.use('/api', api);
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
     socketlib.stateHandler(io, state.rooms);
     res.end();
 })
