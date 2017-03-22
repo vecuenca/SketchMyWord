@@ -44,7 +44,6 @@
     });
   });
 
-
   document.addEventListener('connectSocket', function (e) {
     socket = io.connect();
   });
@@ -96,6 +95,10 @@
 
     socket.on('next_round_starting_soon', function () {
       util.displayToast('The next round starts in 5 seconds!');
+    });
+
+    socket.on('round_over', function () {
+      // Clear canvas
     });
 
     gameView.setup();

@@ -94,16 +94,17 @@ app.put('/game/', function(req, res, next) {
 
   // create a new game instance, add it to store
   state.rooms[roomId] = {
-    lineHistory: [],
-    chatHistory: [],
+    lineHistory:     [],
+    chatHistory:     [],
     correctGuessers: [],
-    users: {},
-    host: username,
-    roomSize:  roomSize,
-    roundActive: false,
+    artistsToChoose: [],
+    users:           {},
+    host:            username,
+    roomSize:        roomSize,
+    roundActive:     false,
     // these props will be set later
-    wordToDraw: null,
-    timer: null
+    wordToDraw:      null,
+    timer:           null
   };
   state.rooms[roomId].users[username] = {};
 

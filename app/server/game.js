@@ -56,20 +56,21 @@ module.exports = {
   },
 
   endRound: function  (io, roomId, room) {
-    // cancel timer, if it exists
     if (room.timer) {
       clearTimeout(room.timer);
     }
+
+    io.in(roomId).emit('round_over');
 
     room.numRounds -= 1;
 
     // reset state of room
     room.roundActive      = false;
     room.correctGuessers  = [];
+    room.lineHistory      = []; 
     room.wordToDraw       = null;
     room.timer            = null;
     
-
     if (room.numRounds > 0) {
       io.in(roomId).emit('next_round_starting_soon');
       setTimeout(module.exports.setupRound, 5000, io, roomId, room);
