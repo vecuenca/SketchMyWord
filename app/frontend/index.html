@@ -58,18 +58,6 @@
 	<!--join game modal-->  
   <div id="join-game-modal" class="modal" style="width: 40%">
     <div class="modal-content">
-      <div id="join-game-container">
-        <form id="form-join-game">
-          <div class="row">
-            <label for="room-id-input">Room id</label>
-            <input placeholder="Enter a room id" id="room-id-input" type="text">
-            <input type="submit" style="display: none" />
-          </div>
-        </form>
-        <ul id="room-list" class="collection with-header">
-          <li id="room-header" class="collection-header"><h4>Games in progress</h4></li>
-        </ul>
-      </div>
       <div id="waiting-user-container" style="display: none">
         <h3 id="room-id" class="header center orange-text"></h3>
         <h4 id="join-waiting-text"class="center">Waiting for users to join...</h4>
@@ -84,12 +72,23 @@
   </div>
 
   <!--room functions-->
-  <main id='room-area'>
+  <main id="room-area">
     <center>
       <br>
       <div class="row center">
         <a id="btn-create-game" href="#create-game-modal" class="btn-large waves-effect waves-light orange">Create Game</a>
-        <a id="btn-join-game"   href="#join-game-modal" class="btn-large waves-effect waves-light orange">Join Game</a>
+      </div>
+      <div id="join-game-container" class="card row center container">
+        <form id="form-join-game">
+          <div class="row">
+            <label for="room-id-input">Room id</label>
+            <input placeholder="Enter a room id" id="room-id-input" type="text">
+            <input type="submit" style="display: none" />
+          </div>
+        </form>
+        <ul id="room-list" class="collection with-header">
+          <li id="room-header" class="collection-header"><h4>Games in progress</h4></li>
+        </ul>
       </div>
       <br>
 		</center>

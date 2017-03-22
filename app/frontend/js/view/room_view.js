@@ -39,6 +39,7 @@ var roomView = (function (util) {
         }
       });
       document.dispatchEvent(event);
+      $('#join-game-modal').modal('open');
     });
 
     // callback for modal open. fire event to fetch room list
@@ -60,10 +61,16 @@ var roomView = (function (util) {
 
   roomView.display = function () {
     $('#room-area').show();
+    
+    // start interval to fire off room fetch requests
+    roomView.roomFetchInterval = setInterval(function () { 
+      document.dispatchEvent(new CustomEvent('onGetRooms'))
+    }, 5000);
   };
 
   roomView.hide = function () {
     $('#room-area').hide();
+    clearInterval(roomView.roomFetchInterval);
   };
 
   roomView.roomCreateSuccess = function (roomId) {
@@ -141,6 +148,7 @@ var roomView = (function (util) {
             detail: { roomId: room.roomId }
           });
           document.dispatchEvent(event);
+          $('#join-game-modal').modal('open');
         };
       }
       roomList.append(e);
