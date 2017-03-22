@@ -89,18 +89,27 @@ app.put('/game/', function(req, res, next) {
   }
 
   var roomSize = req.body.roomSize;
-  
   var roomId = generateRoomToken();
+  var username = req.session.user.username;
 
   // create a new game instance, add it to store
-  // add logic for room collisions later probably :p
   state.rooms[roomId] = {
-    lineHistory: [],
-    chatHistory: [],
-    users: [req.session.user.username],
-    host: req.session.user.username,
-    roomSize:  roomSize
+    lineHistory:     [],
+    chatHistory:     [],
+    correctGuessers: [],
+    artistsToChoose: [],
+    users:           {},
+    host:            username,
+    roomSize:        roomSize,
+    roundActive:     false,
+
+    // these props will be set later
+    wordToDraw:      null,
+    timer:           null,
+    artist:          null,
   };
+  state.rooms[roomId].users[username] = { score: 0 };
+
   res.json({ roomId: roomId });
   return next();
 });
@@ -122,18 +131,18 @@ app.post('/game/:roomId/', function(req, res, next) {
   
   // check if room is full
   // currently, max num of players is 4
-  if (room.users.length >= room.roomSize) {
+  if (Object.keys(room.users).length >= room.roomSize) {
     return res.status(400).send('Sorry, that room is full.');
   }
 
   // check if we are already in this room
-  if (room.users.indexOf(username) > -1) {
+  if (username in room.users) {
     return res.status(400).send('You have already joined this room.');
   }
   
   // update room with new user
-  // need logic to validate multiple logins in same room?
-  room.users.push(username);
+  room.users[username] = { score: 0 };
+
   res.json({success: true}); 
   return next();
 });
@@ -170,8 +179,7 @@ app.delete('/game/:roomId/', function(req, res, next){
   }
 
   //remove the user from the room
-  var index = state.rooms[req.params.roomId].users.indexOf(req.session.user.username);
-  state.rooms[req.params.roomId].users.splice(index, 1);
+  delete state.rooms[req.params.roomId].users[req.session.user.username];
   if (state.rooms[req.params.roomId].host == req.session.user.username){
     res.json({success: true, host: true});
   }else{

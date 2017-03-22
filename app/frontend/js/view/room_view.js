@@ -39,6 +39,7 @@ var roomView = (function (util) {
         }
       });
       document.dispatchEvent(event);
+      $('#join-game-modal').modal('open');
     });
 
     // callback for modal open. fire event to fetch room list
@@ -60,10 +61,16 @@ var roomView = (function (util) {
 
   roomView.display = function () {
     $('#room-area').show();
+    
+    // start interval to fire off room fetch requests
+    roomView.roomFetchInterval = setInterval(function () { 
+      document.dispatchEvent(new CustomEvent('onGetRooms'))
+    }, 5000);
   };
 
   roomView.hide = function () {
     $('#room-area').hide();
+    clearInterval(roomView.roomFetchInterval);
   };
 
   roomView.roomCreateSuccess = function (roomId) {
@@ -120,28 +127,24 @@ var roomView = (function (util) {
       e.id = room.roomId;
       e.className = 'collection-item';
       e.innerHTML = `
-        <div>${room.roomId}<a href="#!" class="secondary-content">${room.users.length}/${room.roomSize}</a></div>`;
+        <div>${room.roomId}<a href="#!" class="secondary-content">${Object.keys(room.users).length}/${room.roomSize}</a></div>`;
 
       // if room is full
-      if (room.users.length >= room.roomSize) {
+      if (Object.keys(room.users).length >= room.roomSize) {
         e.className += ' grey lighten-2';
         e.querySelector('.secondary-content').className += ' red-text';
-        // we already belong to this room
-      } else if (room.users.indexOf(util.getUsername()) > -1) {
-        e.className += ' grey lighten-2';
-        // setup onclick to join room
-      } else {
-        e.onclick = function (e) {
+			} else if (util.getUsername() in room.users) {
+				e.className += ' grey lighten-2';
+      // we can join this room, setup the onclick event
+			} else {
+        e.onclick = function(e) {
           e.preventDefault();
-
-          // show waiting screen, hide joining
-          $('#join-game-container').hide();
-          $('#waiting-user-container').show();
 
           var event = new CustomEvent('onRoomJoin', {
             detail: { roomId: room.roomId }
           });
           document.dispatchEvent(event);
+          $('#join-game-modal').modal('open');
         };
       }
       roomList.append(e);
@@ -163,6 +166,5 @@ var roomView = (function (util) {
       $('#waiting-user-container').hide();
     }
   }
-
   return roomView;
 }(util));
