@@ -9,7 +9,7 @@ COPY . /home/nodejs/app
 WORKDIR /home/nodejs/app
 # install all npm modules
 RUN npm install --production
-
+WORKDIR /home/nodejs/app/app/
 
 # run the nodejs application
-CMD node ./app/app.js
+CMD node app.js
