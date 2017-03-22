@@ -102,11 +102,13 @@ app.put('/game/', function(req, res, next) {
     host:            username,
     roomSize:        roomSize,
     roundActive:     false,
+
     // these props will be set later
     wordToDraw:      null,
-    timer:           null
+    timer:           null,
+    artist:          null,
   };
-  state.rooms[roomId].users[username] = {};
+  state.rooms[roomId].users[username] = { score: 0 };
 
   res.json({ roomId: roomId });
   return next();
@@ -139,7 +141,7 @@ app.post('/game/:roomId/', function(req, res, next) {
   }
   
   // update room with new user
-  room.users[username] = {};
+  room.users[username] = { score: 0 };
 
   res.json({success: true}); 
   return next();

@@ -11,9 +11,16 @@ module.exports = {
 
     room.correctGuessers.push(socket.username);
 
+    // this player earns 3 points for guessing first
+    // otherwise they get one.
+    let pointsEarned = room.correctGuessers.length === 1 ? 3 : 1;
+    room.users[socket.username].score += pointsEarned;
+
     // check if everyone (except the Artist) guessed correctly
+    // the artist earns 2 points if this happens
     if (room.correctGuessers.length === Object.keys(room.users).length - 1) {
       io.in(roomId).emit('everyone_guessed');
+      room.users[room.artist].score += 2;
       module.exports.endRound(io, roomId, room);
     }
   },
@@ -60,11 +67,23 @@ module.exports = {
       clearTimeout(room.timer);
     }
 
-    io.in(roomId).emit('round_over');
+
+    console.log('wat');
+    // create a sorted score array; emit to user
+    var currentScore = [];
+    Object.keys(room.users).forEach(function(user) {
+      var userObj = {};
+      userObj.username = user;
+      userObj.score = room.users[user].score;
+      currentScore.push(userObj);
+    });
+    currentScore.sort(function(a, b) { return b.score - a.score});
+    console.log('current score is: ',currentScore);
+    io.in(roomId).emit('round_over', currentScore);
 
     room.numRounds -= 1;
 
-    // reset state of room
+    // reset round state of room
     room.roundActive      = false;
     room.correctGuessers  = [];
     room.lineHistory      = []; 
@@ -73,7 +92,7 @@ module.exports = {
     
     if (room.numRounds > 0) {
       io.in(roomId).emit('next_round_starting_soon');
-      setTimeout(module.exports.setupRound, 5000, io, roomId, room);
+      setTimeout(module.exports.setupRound, 10000, io, roomId, room);
     } else {
       module.exports.gameOver(io, roomId, room);
     }

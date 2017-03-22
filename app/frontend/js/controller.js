@@ -94,11 +94,18 @@
 		});
 
     socket.on('next_round_starting_soon', function () {
-      util.displayToast('The next round starts in 5 seconds!');
+      util.displayToast('The next round starts in 10 seconds!');
     });
 
-    socket.on('round_over', function () {
+    socket.on('round_over', function (currentScore) {
       // Clear canvas
+
+      // update scores
+      var scoreStr = "Current score:\n";
+      currentScore.forEach(function (x) {
+        scoreStr += x.username + ": " + x.score + "\n";
+      });
+      util.displayToast(scoreStr, 8000);
     });
 
     gameView.setup();
