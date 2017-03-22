@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+   webapp:
+     build: .
+     ports:
+       - "3000:3000"
+     links: 
+       - db
+     environment:
+       - DATABASE_HOST=db
+   db:
+    image: mysql:5.7
+    environment:
+        - MYSQL_DATABASE=sketch-my-word
+        - MYSQL_ROOT_PASSWORD=1234
+        - MYSQL_PORT=3306
