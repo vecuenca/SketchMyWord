@@ -21,7 +21,7 @@ module.exports = {
 	setupRound: function(io, roomId, room) {
     var ROUND_TIME = 60000;   
     var users = Object.keys(room.users);
-    room.timer = setTimeout(module.exports.roundTimeOver, ROUND_TIME, io, room);
+    room.timer = setTimeout(module.exports.roundTimeOver, ROUND_TIME, io, roomId, room);
 
     // pick a random user
     room.artist = users[Math.floor(Math.random() * users.length)];
