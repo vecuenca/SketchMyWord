@@ -79,16 +79,18 @@
         <a id="btn-create-game" href="#create-game-modal" class="btn-large waves-effect waves-light orange">Create Game</a>
       </div>
       <div id="join-game-container" class="card row center container">
-        <form id="form-join-game">
-          <div class="row">
-            <label for="room-id-input">Room id</label>
-            <input placeholder="Enter a room id" id="room-id-input" type="text">
-            <input type="submit" style="display: none" />
-          </div>
-        </form>
-        <ul id="room-list" class="collection with-header">
-          <li id="room-header" class="collection-header"><h4>Games in progress</h4></li>
-        </ul>
+        <div class="col s12">
+          <form id="form-join-game">
+            <div class="input-field">
+              <label for="room-id-input">Room id</label>
+              <input placeholder="Enter a room id to join that room" id="room-id-input" type="text">
+              <input type="submit" style="display: none"/>
+            </div>
+          </form>
+          <ul id="room-list" class="collection with-header">
+            <li id="room-header" class="collection-header"><h4>Games in progress</h4></li>
+          </ul>
+        </div>
       </div>
       <br>
 		</center>
