@@ -35,8 +35,21 @@ module.exports = {
 			});
 
 			socket.on('new_message', function(messageObj) {
-				rooms[socket.room].chatHistory.push(messageObj);
-				io.sockets.in(socket.room).emit('render_message', messageObj);
+				let room = rooms[socket.room];
+				room.chatHistory.push(messageObj);
+
+				// TODO: probably not a good idea to handle 
+				// game logic here...
+				if (room.wordToDraw 
+						&& room.wordToDraw === messageObj.message
+						&& room.artist != socket.username
+						&& !(socket.username in room.correctGuessers)) {
+					socket.emit('correct_guess');
+					socket.broadcast.to(socket.room).emit('word_guessed');
+					room.correctGuessers.push(socket.username);
+				} else {
+					io.sockets.in(socket.room).emit('render_message', messageObj);
+				}
 			});
 		});
 	},

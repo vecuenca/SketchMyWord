@@ -96,6 +96,7 @@ app.put('/game/', function(req, res, next) {
   state.rooms[roomId] = {
     lineHistory: [],
     chatHistory: [],
+    correctGuessers: [],
     users: {},
     host: req.session.user.username,
     roomSize:  roomSize

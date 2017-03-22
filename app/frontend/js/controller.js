@@ -74,6 +74,14 @@
 			util.displayToast(artist + ' is the Artist!');
 		});
 
+		socket.on('correct_guess', function(artist) {
+			util.displayToast('You guessed the word!');
+		});
+
+		socket.on('word_guessed', function(artist) {
+			util.displayToast('Someone guessed the word!');
+		});
+
     gameView.setup();
   });
 
