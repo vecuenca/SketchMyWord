@@ -31,7 +31,7 @@ app.use(bodyParser.json());
 
 var connection;
 
-socketlib.roomHandler(io, state.rooms, gamelib.gameHandler);
+socketlib.roomHandler(io, state.rooms, gamelib.gameHandler, gamelib.onCorrectGuess);
 
 mysql.createConnection({
     host: 'localhost',

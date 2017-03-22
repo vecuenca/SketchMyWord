@@ -89,8 +89,8 @@ app.put('/game/', function(req, res, next) {
   }
 
   var roomSize = req.body.roomSize;
-  
   var roomId = generateRoomToken();
+  var username = req.session.user.username;
 
   // create a new game instance, add it to store
   state.rooms[roomId] = {
@@ -98,10 +98,14 @@ app.put('/game/', function(req, res, next) {
     chatHistory: [],
     correctGuessers: [],
     users: {},
-    host: req.session.user.username,
-    roomSize:  roomSize
+    host: username,
+    roomSize:  roomSize,
+    roundActive: false,
+    // these props will be set later
+    wordToDraw: null,
+    timer: null
   };
-  state.rooms[roomId].users[req.session.user.username] = {};
+  state.rooms[roomId].users[username] = {};
 
   res.json({ roomId: roomId });
   return next();

@@ -1,5 +1,5 @@
 module.exports = {
-	roomHandler: function (io, rooms, gameHandler) {
+	roomHandler: function (io, rooms, gameHandler, onCorrectGuess) {
 		io.on('connection', function (socket) {
 
 			// has the client's socket join the requested room
@@ -17,7 +17,6 @@ module.exports = {
 				socket.join(room);
 				
 				// game is ready to start
-
 				if (Object.keys(rooms[room].users).length >= rooms[room].roomSize) {
 					console.log('game ', room, ' ready to start. emitting full_users');
 					io.sockets.in(socket.room).emit('full_users');
@@ -35,18 +34,15 @@ module.exports = {
 			});
 
 			socket.on('new_message', function(messageObj) {
-				let room = rooms[socket.room];
+				var room = rooms[socket.room];
 				room.chatHistory.push(messageObj);
 
-				// TODO: probably not a good idea to handle 
-				// game logic here...
+				// We don't want to render a correct guess...
 				if (room.wordToDraw 
 						&& room.wordToDraw === messageObj.message
 						&& room.artist != socket.username
 						&& !(socket.username in room.correctGuessers)) {
-					socket.emit('correct_guess');
-					socket.broadcast.to(socket.room).emit('word_guessed');
-					room.correctGuessers.push(socket.username);
+					onCorrectGuess(io, socket.room, room, socket);
 				} else {
 					io.sockets.in(socket.room).emit('render_message', messageObj);
 				}

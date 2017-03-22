@@ -74,12 +74,24 @@
 			util.displayToast(artist + ' is the Artist!');
 		});
 
-		socket.on('correct_guess', function(artist) {
+		socket.on('correct_guess', function() {
 			util.displayToast('You guessed the word!');
 		});
 
-		socket.on('word_guessed', function(artist) {
-			util.displayToast('Someone guessed the word!');
+		socket.on('word_guessed', function(guesser) {
+			util.displayToast(guesser + ' guessed the word!');
+		});
+
+    socket.on('round_time_over', function() {
+			util.displayToast('Time\'s up! Onto the next round!');
+		});
+
+    socket.on('everyone_guessed', function() {
+			util.displayToast('Everyone guessed the word! Onto the next round!');
+		});
+
+    socket.on('game_over', function() {
+			util.displayToast('The game is over! The winner is Me');
 		});
 
     gameView.setup();
