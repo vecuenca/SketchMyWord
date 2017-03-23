@@ -49,6 +49,10 @@
 	cursor: pointer;
 }
 
+.cog {
+	background-image: url(./../resources/cog-wheel-silhouette.png);
+}
+
 .color {
 	background-image: url(./../resources/painter-palette.png);
 }
