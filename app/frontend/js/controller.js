@@ -65,6 +65,54 @@
       gameView.renderMessage(messageObj);
     });
 
+    socket.on('is_artist', function (wordToDraw) {
+      util.displayToast('You are the Artist! Your word is ' + wordToDraw);
+      gameView.setLineRecord();
+    });
+
+    socket.on('is_guesser', function (artist) {
+      util.displayToast(artist + ' is the Artist!');
+      gameView.removeLineRecord();
+    });
+
+    socket.on('correct_guess', function () {
+      util.displayToast('You guessed the word!');
+    });
+
+    socket.on('word_guessed', function (guesser) {
+      util.displayToast(guesser + ' guessed the word!');
+    });
+
+    socket.on('round_time_over', function () {
+      util.displayToast('Time\'s up! Onto the next round!');
+    });
+
+    socket.on('everyone_guessed', function () {
+      util.displayToast('Everyone guessed the word! Onto the next round!');
+    });
+
+    socket.on('game_over', function () {
+      util.displayToast('The game is over! The winner is Me');
+
+      gameView.hide();
+      roomView.display();
+    });
+
+    socket.on('next_round_starting_soon', function () {
+      util.displayToast('The next round starts in 10 seconds!');
+    });
+
+    socket.on('round_over', function (currentScore) {
+      gameView.clearCanvas();
+
+      // update scores
+      var scoreStr = "Current score:\n";
+      currentScore.forEach(function (x) {
+        scoreStr += x.username + ": " + x.score + "\n";
+      });
+      util.displayToast(scoreStr, 8000);
+    });
+
     gameView.setup();
   });
 
@@ -98,7 +146,8 @@
 
   document.addEventListener('socketDrawLine', function (e) {
     socket.emit('draw_line', {
-      line: [e.detail.line[0], e.detail.line[1]]
+      line: [e.detail.line[0], e.detail.line[1]],
+      color: e.detail.color
     });
   });
 

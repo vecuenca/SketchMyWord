@@ -18,7 +18,7 @@ var gameView = (function (util) {
   var context = canvas.getContext('2d');
   var width = document.getElementById('canvas_box').clientWidth;
   var height = document.getElementById('canvas_box').clientHeight;
-  var set = false;
+  var isRecord = false;
   var username = util.getUsername();
 
   gameView.onload = function () {
@@ -86,7 +86,7 @@ var gameView = (function (util) {
       mouse.move = true;
     };
 
-    set = true;
+    isRecord = true;
   }
 
   gameView.drawLine = function (data) {
@@ -94,18 +94,33 @@ var gameView = (function (util) {
     context.beginPath();
     context.moveTo(line[0].x, line[0].y);
     context.lineTo(line[1].x, line[1].y);
+    context.strokeStyle = data.color;
     context.stroke();
   };
 
+  gameView.clearCanvas = function () {
+    context.clearRect(0, 0, canvas.width, canvas.height)
+  };
+
+  gameView.removeLineRecord = function () {
+    isRecord = false;
+  };
+
+  gameView.setLineRecord = function() {
+    isRecord = true;
+  }
+
   // main loop, running every 25ms
   function mainLoop() {
-    // if we open a socket connection
-    if (set) {
+    // if we open a socket connection AND is artist
+    if (isRecord) {
       // check if the user is drawing
       if (mouse.click && mouse.move && mouse.pos_prev) {
         // send line to to the server
+        var color = document.getElementById('color_input').value;
         document.dispatchEvent(new CustomEvent('socketDrawLine', {detail:{
-          line: [mouse.pos, mouse.pos_prev]
+          line: [mouse.pos, mouse.pos_prev],
+          color: color
         }}));
         mouse.move = false;
       }

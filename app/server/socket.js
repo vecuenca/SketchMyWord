@@ -21,11 +21,11 @@ module.exports = {
 
 			// handler for when a client draws a line
 			socket.on('draw_line', function (data) {
-				var line = data.line;
+				// var line = data.line;
 				// add received line to history 
-				rooms[socket.room].lineHistory.push(line);
-				//   send line to all clients in the current room EXCEPT itself
-				io.sockets.in(socket.room).emit('draw_line', { line: line });
+				rooms[socket.room].lineHistory.push(data);
+				// send line to all clients in the current room EXCEPT itself
+				io.sockets.in(socket.room).emit('draw_line', data);
 			});
 
 			socket.on('new_message', function(messageObj) {
