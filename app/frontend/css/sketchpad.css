@@ -65,6 +65,10 @@
 	cursor: pointer;
 }
 
+#word_to_show {
+	font-size: 24px;
+}
+
 #post_container {
 	width: 100%;
 }
