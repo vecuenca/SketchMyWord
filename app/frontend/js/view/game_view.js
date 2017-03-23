@@ -132,6 +132,21 @@ var gameView = (function (util) {
     isRecord = true;
   }
 
+  gameView.renderScore = function (scoreArr) {
+    var scoreList = $('#score-list');
+    scoreList.empty();
+
+    scoreArr.forEach(function (score) {
+      var e = document.createElement('li');
+      e.className = 'collection-item';
+      e.innerHTML = `
+        <div>${score.username}<a href="#!" class="secondary-content">${score.score} pts</a></div>
+      `;
+      scoreList.append(e);
+      e.className += ' bounce-in-left';
+    });
+  };
+
   // main loop, running every 25ms
   function mainLoop() {
     // if we open a socket connection AND is artist
