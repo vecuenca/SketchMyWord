@@ -64,7 +64,11 @@ module.exports = {
       if (socket.username === room.artist) {
         io.to(socketId).emit('is_artist', room.wordToDraw);     
       } else {
-        io.to(socketId).emit('is_guesser', room.artist);
+        var wordToShow = "";
+        for (var i = 0; i < room.wordToDraw.length; i ++) {
+          wordToShow = wordToShow.concat("_ ");
+        }
+        io.to(socketId).emit('is_guesser', {artist: room.artist, wordToShow: wordToShow});
       }
     });   
 	},
