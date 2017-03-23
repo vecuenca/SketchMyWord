@@ -56,16 +56,16 @@ module.exports = {
     console.log('THE WORD IS...', room.wordToDraw);
     console.log('ROOM state as of new round', room);
 
-    // tell artist their role and their word to draw
-    var artistSocketId = room.users[room.artist].socketId;
-		io.to(artistSocketId).emit('is_artist', room.wordToDraw);
-
-    // tell all guessers their role and who the artist is
-    Object.keys(room.users).forEach(function (username) {
-      if (username !== room.artist) {
-        io.to(room.users[username].socketId).emit('is_guesser', room.artist);
+    // tell all players their roles
+    var sioRoom = io.sockets.adapter.rooms[roomId];
+    Object.keys(sioRoom.sockets).forEach(function (socketId){
+      var socket = io.sockets.connected[socketId];
+      if (socket.username === room.artist) {
+        io.to(socketId).emit('is_artist', room.wordToDraw);     
+      } else {
+        io.to(socketId).emit('is_guesser', room.artist);
       }
-    });
+    });   
 	},
 
 
