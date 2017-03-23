@@ -87,10 +87,12 @@
 
     socket.on('round_time_over', function () {
       util.displayToast('Time\'s up! Onto the next round!');
+      gameView.resetTimer();
     });
 
     socket.on('everyone_guessed', function () {
       util.displayToast('Everyone guessed the word! Onto the next round!');
+      gameView.resetTimer();
     });
 
     socket.on('game_over', function () {

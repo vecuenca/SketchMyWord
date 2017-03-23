@@ -49,6 +49,12 @@ var gameView = (function (util) {
     clearInterval(timerInterval);
   }
 
+  gameView.resetTimer = function (){
+    gameView.pauseTimer();
+    timerTime = ROUND_TIME_SECONDS;
+    timerClock.text(returnFormattedToSeconds(timerTime));
+  }
+
   function returnFormattedToSeconds(time){
     var minutes = Math.floor(time / 60),
         seconds = Math.round(time - minutes * 60);
