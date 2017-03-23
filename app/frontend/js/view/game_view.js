@@ -18,8 +18,29 @@ var gameView = (function (util) {
   var context = canvas.getContext('2d');
   var width = document.getElementById('canvas_box').clientWidth;
   var height = document.getElementById('canvas_box').clientHeight;
-  var set = false;
+  var isRecord = false;
+  var lineWidth = 3;
+  var color = '#000000';
+  var isErase = false;
   var username = util.getUsername();
+
+  document.getElementById('pencil-tool').onclick = function (e) {
+    lineWidth = 5;
+    isErase = false;
+  };
+
+  document.getElementById('marker-tool').onclick = function (e) {
+    lineWidth = 20;
+    isErase = false;
+  };
+
+  document.getElementById('eraser-tool').onclick = function (e) {
+    isErase = true;
+  }
+
+  document.getElementById('color-tool').onchange = function (e) {
+    color = document.getElementById('color').value;
+  }
 
   gameView.onload = function () {
     $('#form-chat').submit(function (e) {
@@ -86,7 +107,7 @@ var gameView = (function (util) {
       mouse.move = true;
     };
 
-    set = true;
+    isRecord = true;
   }
 
   gameView.drawLine = function (data) {
@@ -94,6 +115,8 @@ var gameView = (function (util) {
     context.beginPath();
     context.moveTo(line[0].x, line[0].y);
     context.lineTo(line[1].x, line[1].y);
+    context.strokeStyle = data.color;
+    context.lineWidth = data.lineWidth;
     context.stroke();
   };
 
@@ -101,16 +124,54 @@ var gameView = (function (util) {
     context.clearRect(0, 0, canvas.width, canvas.height)
   };
 
+  gameView.removeLineRecord = function () {
+    isRecord = false;
+  };
+
+  gameView.setLineRecord = function () {
+    isRecord = true;
+  }
+
+  gameView.renderScore = function (scoreArr) {
+    var scoreList = $('#score-list');
+    scoreList.empty();
+
+    scoreArr.forEach(function (score) {
+      var e = document.createElement('li');
+      e.className = 'collection-item';
+      e.innerHTML = `
+        <div>${score.username}<a href="#!" class="secondary-content">${score.score} pts</a></div>
+      `;
+      scoreList.append(e);
+      e.className += ' bounce-in-left';
+    });
+  };
+
   // main loop, running every 25ms
   function mainLoop() {
-    // if we open a socket connection
-    if (set) {
+    // if we open a socket connection AND is artist
+    if (isRecord) {
       // check if the user is drawing
       if (mouse.click && mouse.move && mouse.pos_prev) {
         // send line to to the server
-        document.dispatchEvent(new CustomEvent('socketDrawLine', {detail:{
-          line: [mouse.pos, mouse.pos_prev]
-        }}));
+        if (isErase) {
+          document.dispatchEvent(new CustomEvent('socketDrawLine', {
+            detail: {
+              line: [mouse.pos, mouse.pos_prev],
+              color: '#f5f5f5',
+              lineWidth: 20,
+            }
+          }));
+        } else {
+          document.dispatchEvent(new CustomEvent('socketDrawLine', {
+            detail: {
+              line: [mouse.pos, mouse.pos_prev],
+              color: color,
+              lineWidth: lineWidth,
+            }
+          }));
+        }
+
         mouse.move = false;
       }
       mouse.pos_prev = {

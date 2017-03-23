@@ -67,10 +67,13 @@
 
     socket.on('is_artist', function (wordToDraw) {
       util.displayToast('You are the Artist! Your word is ' + wordToDraw);
+      gameView.setLineRecord();
+
     });
 
     socket.on('is_guesser', function (artist) {
       util.displayToast(artist + ' is the Artist!');
+      gameView.removeLineRecord();
     });
 
     socket.on('correct_guess', function () {
@@ -102,13 +105,10 @@
 
     socket.on('round_over', function (currentScore) {
       gameView.clearCanvas();
+    });
 
-      // update scores
-      var scoreStr = "Current score:\n";
-      currentScore.forEach(function (x) {
-        scoreStr += x.username + ": " + x.score + "\n";
-      });
-      util.displayToast(scoreStr, 8000);
+    socket.on('broadcast_score', function (score) {
+      gameView.renderScore(score);
     });
 
     gameView.setup();
@@ -144,7 +144,9 @@
 
   document.addEventListener('socketDrawLine', function (e) {
     socket.emit('draw_line', {
-      line: [e.detail.line[0], e.detail.line[1]]
+      line: [e.detail.line[0], e.detail.line[1]],
+      color: e.detail.color,
+      lineWidth: e.detail.lineWidth,
     });
   });
 

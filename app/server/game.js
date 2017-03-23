@@ -4,6 +4,7 @@ module.exports = {
     // the users array...
     room.userArray = Object.keys(room.users);
     room.numRounds = (room.userArray.length * 2) - 1;
+    module.exports.broadcastScores(io, roomId, room);
     module.exports.setupRound(io, roomId, room);
   },
 
@@ -68,12 +69,7 @@ module.exports = {
     });   
 	},
 
-
-  endRound: function  (io, roomId, room) {
-    if (room.timer) {
-      clearTimeout(room.timer);
-    }
-
+  broadcastScores: function (io, roomId, room) {
     // create a sorted score array; emit to user
     var currentScore = [];
     Object.keys(room.users).forEach(function(user) {
@@ -83,9 +79,16 @@ module.exports = {
       currentScore.push(userObj);
     });
     currentScore.sort(function(a, b) { return b.score - a.score});
-    console.log('current score is: ',currentScore);
-    io.in(roomId).emit('round_over', currentScore);
+    io.in(roomId).emit('broadcast_score', currentScore);
+  },
 
+  endRound: function (io, roomId, room) {
+    if (room.timer) {
+      clearTimeout(room.timer);
+    }
+
+    module.exports.broadcastScores(io, roomId, room);
+    io.in(roomId).emit('round_over');
     room.numRounds -= 1;
 
     // reset round state of room
