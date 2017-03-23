@@ -148,7 +148,8 @@
   document.addEventListener('socketDrawLine', function (e) {
     socket.emit('draw_line', {
       line: [e.detail.line[0], e.detail.line[1]],
-      color: e.detail.color
+      color: e.detail.color,
+      lineWidth: e.detail.lineWidth,
     });
   });
 

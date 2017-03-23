@@ -19,7 +19,26 @@ var gameView = (function (util) {
   var width = document.getElementById('canvas_box').clientWidth;
   var height = document.getElementById('canvas_box').clientHeight;
   var isRecord = false;
+  var lineWidth = 3;
+  var color = '#000000';
   var username = util.getUsername();
+
+  document.getElementById('pencil-tool').onclick = function(e) {
+    lineWidth = 5;
+  };
+
+  document.getElementById('marker-tool').onclick = function(e) {
+    lineWidth = 20;
+  };
+
+  document.getElementById('eraser-tool').onclick = function(e) {
+    color = '#f5f5f5';
+    lineWidth = 20;
+  }
+
+  document.getElementById('color-tool').onchange = function(e) {
+    color = document.getElementById('color').value;
+  }
 
   gameView.onload = function () {
     $('#form-chat').submit(function (e) {
@@ -95,6 +114,7 @@ var gameView = (function (util) {
     context.moveTo(line[0].x, line[0].y);
     context.lineTo(line[1].x, line[1].y);
     context.strokeStyle = data.color;
+    context.lineWidth = data.lineWidth;
     context.stroke();
   };
 
@@ -117,10 +137,10 @@ var gameView = (function (util) {
       // check if the user is drawing
       if (mouse.click && mouse.move && mouse.pos_prev) {
         // send line to to the server
-        var color = document.getElementById('color_input').value;
         document.dispatchEvent(new CustomEvent('socketDrawLine', {detail:{
           line: [mouse.pos, mouse.pos_prev],
-          color: color
+          color: color,
+          lineWidth: lineWidth,
         }}));
         mouse.move = false;
       }
