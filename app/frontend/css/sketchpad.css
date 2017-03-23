@@ -65,6 +65,23 @@
 	cursor: pointer;
 }
 
+#post_container {
+	width: 100%;
+}
+
+.card-content postit {
+	height: 56px;
+}
+
+#word-box {
+	position: absolute;
+    top: -5%;
+    left: 50%;
+    -ms-transform: rotate(-3deg);
+    -webkit-transform: rotate(-3deg);
+    transform: rotate(-3deg);
+}
+
 .cog {
 	background-image: url(./../resources/001-cogwheel.png);
 }

@@ -69,12 +69,14 @@
       util.displayToast('You are the Artist! Your word is ' + wordToDraw);
       gameView.startTimer();
       gameView.setLineRecord();
+      gameView.showWord(wordToDraw);
     });
 
-    socket.on('is_guesser', function (artist) {
-      util.displayToast(artist + ' is the Artist!');
+    socket.on('is_guesser', function (data) {
+      util.displayToast(data.artist + ' is the Artist!');
       gameView.startTimer();
       gameView.removeLineRecord();
+      gameView.showWord(data.wordToShow);
     });
 
     socket.on('correct_guess', function () {

@@ -117,20 +117,30 @@
         <!--sketchpad-->
         <div class="col s8">
           <div id="canvas_box" class="card sketchpad grey lighten-4">
+            <div id="word-box" class="row">
+              <div id="post_container" class="col s12 m5">
+                <div class="card-panel yellow lighten-2">
+                  <span id="word_to_show">Time to get Started!</span>
+                </div>
+              </div>
+            </div>
+
             <canvas id="drawing"></canvas>
             <div class="clock z-depth-1 waves-effect inactive">1:00</div>
             <div class="fixed-action-btn horizontal click-to-toggle" >
               <a id="tool_button" class="btn-floating btn-large red tool cog"></a>
               <ul>
-                <li><a id="pencil-tool" class="btn-floating red tool pencil tooltipped" 
-                  data-position="bottom" data-delay="50" data-tooltip="Small Brush"></a></li>
-                <li><a id="marker-tool" class="btn-floating yellow darken-1 tool marker tooltipped" 
-                  data-position="bottom" data-delay="50" data-tooltip="Big Brush"></a></li>
-                <li><a id="eraser-tool" class="btn-floating green tool eraser tooltipped" 
-                  data-position="bottom" data-delay="50" data-tooltip="Eraser"></a></li>
                 <li>
-                  <a id="color-tool" class="btn-floating blue tool color tooltipped" 
-                    data-position="bottom" data-delay="50" data-tooltip="Color">
+                  <a id="pencil-tool" class="btn-floating red tool pencil tooltipped" data-position="bottom" data-delay="50" data-tooltip="Small Brush"></a>
+                </li>
+                <li>
+                  <a id="marker-tool" class="btn-floating yellow darken-1 tool marker tooltipped" data-position="bottom" data-delay="50" data-tooltip="Big Brush"></a>
+                </li>
+                <li>
+                  <a id="eraser-tool" class="btn-floating green tool eraser tooltipped" data-position="bottom" data-delay="50" data-tooltip="Eraser"></a>
+                </li>
+                <li>
+                  <a id="color-tool" class="btn-floating blue tool color tooltipped" data-position="bottom" data-delay="50" data-tooltip="Color">
                     <input type="color" id="color"></input>
                   </a>
                 </li>

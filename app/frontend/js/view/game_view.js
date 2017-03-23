@@ -187,6 +187,11 @@ var gameView = (function (util) {
     });
   };
 
+  gameView.showWord = function(word_to_show) {
+    console.log(word_to_show);
+    document.getElementById("word_to_show").textContent = word_to_show;
+  }
+
   // main loop, running every 25ms
   function mainLoop() {
     // if we open a socket connection AND is artist
