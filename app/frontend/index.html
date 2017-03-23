@@ -119,11 +119,15 @@
             <div class="fixed-action-btn horizontal click-to-toggle" >
               <a id="tool_button" class="btn-floating btn-large grey lighten-2 tool cog"></a>
               <ul>
-                <li><a id="pencil-tool" class="btn-floating grey lighten-2 tool pencil"></a></li>
-                <li><a id="marker-tool" class="btn-floating grey lighten-2 tool marker"></a></li>
-                <li><a id="eraser-tool" class="btn-floating grey lighten-2 tool eraser"></a></li>
+                <li><a id="pencil-tool" class="btn-floating grey lighten-2 tool pencil tooltipped" 
+                  data-position="bottom" data-delay="50" data-tooltip="Small Brush"></a></li>
+                <li><a id="marker-tool" class="btn-floating grey lighten-2 tool marker tooltipped" 
+                  data-position="bottom" data-delay="50" data-tooltip="Big Brush"></a></li>
+                <li><a id="eraser-tool" class="btn-floating grey lighten-2 tool eraser tooltipped" 
+                  data-position="bottom" data-delay="50" data-tooltip="Eraser"></a></li>
                 <li>
-                  <a id="color-tool" class="btn-floating grey lighten-2 tool color">
+                  <a id="color-tool" class="btn-floating grey lighten-2 tool color tooltipped" 
+                    data-position="bottom" data-delay="50" data-tooltip="Color">
                     <input type="color" id="color"></input>
                   </a>
                 </li>
