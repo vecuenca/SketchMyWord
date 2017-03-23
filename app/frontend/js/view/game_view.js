@@ -21,22 +21,24 @@ var gameView = (function (util) {
   var isRecord = false;
   var lineWidth = 3;
   var color = '#000000';
+  var isErase = false;
   var username = util.getUsername();
 
-  document.getElementById('pencil-tool').onclick = function(e) {
+  document.getElementById('pencil-tool').onclick = function (e) {
     lineWidth = 5;
+    isErase = false;
   };
 
-  document.getElementById('marker-tool').onclick = function(e) {
+  document.getElementById('marker-tool').onclick = function (e) {
     lineWidth = 20;
+    isErase = false;
   };
 
-  document.getElementById('eraser-tool').onclick = function(e) {
-    color = '#f5f5f5';
-    lineWidth = 20;
+  document.getElementById('eraser-tool').onclick = function (e) {
+    isErase = true;
   }
 
-  document.getElementById('color-tool').onchange = function(e) {
+  document.getElementById('color-tool').onchange = function (e) {
     color = document.getElementById('color').value;
   }
 
@@ -126,7 +128,7 @@ var gameView = (function (util) {
     isRecord = false;
   };
 
-  gameView.setLineRecord = function() {
+  gameView.setLineRecord = function () {
     isRecord = true;
   }
 
@@ -137,11 +139,24 @@ var gameView = (function (util) {
       // check if the user is drawing
       if (mouse.click && mouse.move && mouse.pos_prev) {
         // send line to to the server
-        document.dispatchEvent(new CustomEvent('socketDrawLine', {detail:{
-          line: [mouse.pos, mouse.pos_prev],
-          color: color,
-          lineWidth: lineWidth,
-        }}));
+        if (isErase) {
+          document.dispatchEvent(new CustomEvent('socketDrawLine', {
+            detail: {
+              line: [mouse.pos, mouse.pos_prev],
+              color: '#f5f5f5',
+              lineWidth: 20,
+            }
+          }));
+        } else {
+          document.dispatchEvent(new CustomEvent('socketDrawLine', {
+            detail: {
+              line: [mouse.pos, mouse.pos_prev],
+              color: color,
+              lineWidth: lineWidth,
+            }
+          }));
+        }
+
         mouse.move = false;
       }
       mouse.pos_prev = {
