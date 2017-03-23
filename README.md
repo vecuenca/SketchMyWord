@@ -1,6 +1,9 @@
 # 3honeys
 Three Honeys
 
+## Compatibility
+Please use Chrome.
+
 ## team members
 * Brandon Ramoudith (ramoudit)
 * Vincent Cuenca    (cuencavi)
