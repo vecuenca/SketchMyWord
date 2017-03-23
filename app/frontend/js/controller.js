@@ -105,13 +105,10 @@
 
     socket.on('round_over', function (currentScore) {
       gameView.clearCanvas();
+    });
 
-      // update scores
-      var scoreStr = "Current score:\n";
-      currentScore.forEach(function (x) {
-        scoreStr += x.username + ": " + x.score + "\n";
-      });
-      util.displayToast(scoreStr, 8000);
+    socket.on('broadcast_score', function (score) {
+      gameView.renderScore(score);
     });
 
     gameView.setup();

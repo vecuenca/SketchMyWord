@@ -4,6 +4,7 @@ module.exports = {
     // the users array...
     room.userArray = Object.keys(room.users);
     room.numRounds = (room.userArray.length * 2) - 1;
+    module.exports.broadcastScores(io, roomId, room);
     module.exports.setupRound(io, roomId, room);
   },
 
@@ -56,24 +57,19 @@ module.exports = {
     console.log('THE WORD IS...', room.wordToDraw);
     console.log('ROOM state as of new round', room);
 
-    // tell artist their role and their word to draw
-    var artistSocketId = room.users[room.artist].socketId;
-		io.to(artistSocketId).emit('is_artist', room.wordToDraw);
-
-    // tell all guessers their role and who the artist is
-    Object.keys(room.users).forEach(function (username) {
-      if (username !== room.artist) {
-        io.to(room.users[username].socketId).emit('is_guesser', room.artist);
+    // tell all players their roles
+    var sioRoom = io.sockets.adapter.rooms[roomId];
+    Object.keys(sioRoom.sockets).forEach(function (socketId){
+      var socket = io.sockets.connected[socketId];
+      if (socket.username === room.artist) {
+        io.to(socketId).emit('is_artist', room.wordToDraw);     
+      } else {
+        io.to(socketId).emit('is_guesser', room.artist);
       }
-    });
+    });   
 	},
 
-
-  endRound: function  (io, roomId, room) {
-    if (room.timer) {
-      clearTimeout(room.timer);
-    }
-
+  broadcastScores: function (io, roomId, room) {
     // create a sorted score array; emit to user
     var currentScore = [];
     Object.keys(room.users).forEach(function(user) {
@@ -83,9 +79,16 @@ module.exports = {
       currentScore.push(userObj);
     });
     currentScore.sort(function(a, b) { return b.score - a.score});
-    console.log('current score is: ',currentScore);
-    io.in(roomId).emit('round_over', currentScore);
+    io.in(roomId).emit('broadcast_score', currentScore);
+  },
 
+  endRound: function (io, roomId, room) {
+    if (room.timer) {
+      clearTimeout(room.timer);
+    }
+
+    module.exports.broadcastScores(io, roomId, room);
+    io.in(roomId).emit('round_over');
     room.numRounds -= 1;
 
     // reset round state of room

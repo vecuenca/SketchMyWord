@@ -1,10 +1,5 @@
 .sketchpad-tools {
 	min-height: 600px;
-	
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: space-around
 }
 
 .brush-large {
@@ -50,7 +45,7 @@
 }
 
 .cog {
-	background-image: url(./../resources/cog-wheel-silhouette.png);
+	background-image: url(./../resources/001-cogwheel.png);
 }
 
 .color {
@@ -58,15 +53,15 @@
 }
 
 .pencil {
-	background-image: url(./../resources/001-pencil-edit-button.png);
+	background-image: url(./../resources/002-pencil-edit-button.png);
 }
 
 .marker {
-	background-image: url(./../resources/002-marker.png);
+	background-image: url(./../resources/003-marker.png);
 }
 
 .eraser {
-	background-image: url(./../resources/003-remove.png)
+	background-image: url(./../resources/004-remove.png)
 }
 
 .brush-eraser {

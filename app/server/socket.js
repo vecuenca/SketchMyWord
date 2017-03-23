@@ -11,8 +11,7 @@ module.exports = {
 				socket.username = username;
 				socket.room = room;
 
-				// store socket id in room 
-				rooms[room].users[username].socketId = socket.id;
+				// store socket id in room
 				console.log('room state after join', rooms);
 				socket.join(room);
 				
