@@ -40,7 +40,7 @@ var gameView = (function (util) {
       }));
       $('#form-chat')[0].reset();
     });
-  }
+  };
 
   gameView.renderMessage = function (messageObj) {
     var msgDiv = document.createElement('div');

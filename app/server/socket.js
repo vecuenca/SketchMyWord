@@ -1,21 +1,26 @@
 module.exports = {
-	roomHandler: function (io, rooms) {
+	roomHandler: function (io, rooms, gameHandler, onCorrectGuess) {
 		io.on('connection', function (socket) {
+
 			// has the client's socket join the requested room
 			socket.on('join_room', function (username, room) {
 				console.log('cur room state', rooms);
-				console.log('join room', username, room);
+				console.log('user ', username, ' is joining room ', room);
+
+				// setup socket info to be used later
 				socket.username = username;
 				socket.room = room;
 
+				// store socket id in room 
+				rooms[room].users[username].socketId = socket.id;
+				console.log('room state after join', rooms);
 				socket.join(room);
-
-				// READY TO START GAME
-				console.log('room size', rooms[room].roomSize);
-				console.log('room length', rooms[room].users.length);
-				if (rooms[room].users.length >= rooms[room].roomSize) {
-					console.log('emitting full_users');
+				
+				// game is ready to start
+				if (Object.keys(rooms[room].users).length >= rooms[room].roomSize) {
+					console.log('game ', room, ' ready to start. emitting full_users');
 					io.sockets.in(socket.room).emit('full_users');
+					gameHandler(io, room, rooms[room]);
 				}
 			});
 
@@ -26,11 +31,22 @@ module.exports = {
 				rooms[socket.room].lineHistory.push(data);
 				// send line to all clients in the current room EXCEPT itself
 				io.sockets.in(socket.room).emit('draw_line', data);
+
 			});
 
 			socket.on('new_message', function(messageObj) {
-				rooms[socket.room].chatHistory.push(messageObj);
-				io.sockets.in(socket.room).emit('render_message', messageObj);
+				var room = rooms[socket.room];
+				room.chatHistory.push(messageObj);
+
+				// We don't want to render a correct guess...
+				if (room.wordToDraw 
+						&& room.wordToDraw === messageObj.message
+						&& room.artist != socket.username
+						&& !(socket.username in room.correctGuessers)) {
+					onCorrectGuess(io, socket.room, room, socket);
+				} else {
+					io.sockets.in(socket.room).emit('render_message', messageObj);
+				}
 			});
 		});
 	},
@@ -38,7 +54,7 @@ module.exports = {
 	stateHandler: function(io, rooms) {
 		Object.keys(rooms).forEach(function(key, index) {
 			// if host leave or room is empty, remove it from state and close all sockets
-			if (rooms[key].users.indexOf(rooms[key].host) == -1 || rooms[key].users.length == 0){
+			if (rooms[key].host in rooms[key] || Object.keys(rooms[key].users).length == 0){
         io.sockets.in(key).emit('leave_room');
 				delete rooms[key];
 			}

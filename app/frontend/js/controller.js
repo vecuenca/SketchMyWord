@@ -44,7 +44,6 @@
     });
   });
 
-
   document.addEventListener('connectSocket', function (e) {
     socket = io.connect();
   });
@@ -58,9 +57,10 @@
     roomView.hide();
     gameView.display();
 
-    socket.on('draw_line', function(data){
+    socket.on('draw_line', function (data) {
       gameView.drawLine(data);
     });
+
     socket.on('render_message', function (messageObj) {
       gameView.renderMessage(messageObj);
     });
@@ -68,6 +68,7 @@
     socket.on('is_artist', function (wordToDraw) {
       util.displayToast('You are the Artist! Your word is ' + wordToDraw);
       gameView.setLineRecord();
+
     });
 
     socket.on('is_guesser', function (artist) {
