@@ -187,10 +187,20 @@ var gameView = (function (util) {
     });
   };
 
+  gameView.displayScore = function (scoreObj) {
+    $('#game-winner-points').text(scoreObj.score);
+    $('#game-winner').text(scoreObj.username);
+    $('#game-over-score-modal').modal('open');
+  };
+
+  gameView.closeScore = function() {
+    $('#game-over-score-modal').modal('close');
+  };
+
   gameView.showWord = function(word_to_show) {
     console.log(word_to_show);
     document.getElementById("word_to_show").textContent = word_to_show;
-  }
+  };
 
   // main loop, running every 25ms
   function mainLoop() {

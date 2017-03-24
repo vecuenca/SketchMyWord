@@ -97,11 +97,13 @@
       gameView.resetTimer();
     });
 
-    socket.on('game_over', function () {
-      util.displayToast('The game is over! The winner is Me');
-
-      gameView.hide();
-      roomView.display();
+    socket.on('game_over', function (score) {
+      gameView.displayScore(score);
+      setTimeout(function() {
+        gameView.closeScore();
+        gameView.hide();
+        roomView.display();
+      }, 5000);
     });
 
     socket.on('next_round_starting_soon', function () {
