@@ -134,6 +134,10 @@ var gameView = (function (util) {
     msgDiv.className += ' slide-in-right';
   };
 
+  gameView.clearChat = function () {
+    $('#chat-flex-container').empty();
+  };
+
   gameView.display = function () {
     $('#game-area').show();
     $('.fixed-action-btn').openFAB();

@@ -70,6 +70,7 @@
     });
 
     socket.on('is_artist', function (wordToDraw) {
+      gameView.clearChat();
       gameView.renderSystemMessage('You are the Artist! Your word is \'' + wordToDraw + '\'');
       gameView.startTimer();
       gameView.setLineRecord();
@@ -77,6 +78,7 @@
     });
 
     socket.on('is_guesser', function (data) {
+      gameView.clearChat();
       gameView.renderSystemMessage(data.artist + ' is the Artist!');
       gameView.startTimer();
       gameView.removeLineRecord();
