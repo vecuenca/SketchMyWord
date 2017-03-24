@@ -163,7 +163,6 @@ var roomView = (function (util) {
       // o.w. we tried to join a game
       $('#join-game-modal').modal('close');
       $('#join-game-container').show();
-      $('#waiting-user-container').hide();
     }
   }
   return roomView;
