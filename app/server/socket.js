@@ -44,6 +44,7 @@ module.exports = {
 						&& !(socket.username in room.correctGuessers)) {
 					onCorrectGuess(io, socket.room, room, socket);
 				} else {
+					messageObj.color = rooms[socket.room].users[socket.username].color;
 					io.sockets.in(socket.room).emit('render_message', messageObj);
 				}
 			});

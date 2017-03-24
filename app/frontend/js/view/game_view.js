@@ -103,11 +103,25 @@ var gameView = (function (util) {
     });
   };
 
-  gameView.renderMessage = function (messageObj) {
+  gameView.renderSystemMessage = function(message) {
+    var msgDiv = document.createElement('div');
+    msgDiv.className = 'card orange white-text chat-message';
+    msgDiv.innerHTML = `${message}`;
+    $('#chat-flex-container').prepend(msgDiv);
+
+    var height = 0;
+    $('#chat-flex-container div').each(function (i, value) {
+      height += parseInt($(this).height());
+    });
+    $('#chat-contents').animate({ scrollTop: height }, 'slow');
+    msgDiv.className += ' slide-in-right';
+  };
+
+  gameView.renderMessage = function (msgObj) {
     var msgDiv = document.createElement('div');
     msgDiv.className = 'card chat-message';
     msgDiv.innerHTML = `
-    <span class="green-text">${messageObj.username}&nbsp;</span>${messageObj.message}
+    <span style="color: ${msgObj.color}">${msgObj.username}:&nbsp;</span>${msgObj.message}
     `;
     $('#chat-flex-container').prepend(msgDiv);
 
@@ -120,8 +134,13 @@ var gameView = (function (util) {
     msgDiv.className += ' slide-in-right';
   };
 
+  gameView.clearChat = function () {
+    $('#chat-flex-container').empty();
+  };
+
   gameView.display = function () {
     $('#game-area').show();
+    $('.fixed-action-btn').openFAB();
   };
 
   gameView.hide = function () {
@@ -180,28 +199,34 @@ var gameView = (function (util) {
       var e = document.createElement('li');
       e.className = 'collection-item';
       e.innerHTML = `
-        <div>${score.username}<a href="#!" class="secondary-content">${score.score} pts</a></div>
+        <div><span style="color: ${score.color}">${score.username}</span><a href="#!" class="secondary-content">${score.score} pts</a></div>
       `;
       scoreList.append(e);
       e.className += ' bounce-in-left';
     });
   };
 
-  gameView.displayScore = function (scoreObj) {
+  gameView.displayEndScore = function (scoreObj) {
     $('#game-winner-points').text(scoreObj.score);
     $('#game-winner').text(scoreObj.username);
     $('#game-over-score-modal').modal('open');
   };
 
-  gameView.closeScore = function() {
+  gameView.closeEndScore = function() {
     $('#game-over-score-modal').modal('close');
   };
 
   gameView.showWord = function(word_to_show) {
-    console.log(word_to_show);
     document.getElementById("word_to_show").textContent = word_to_show;
   };
 
+  gameView.baffleWord = function(word) {
+    document.getElementById("word_to_show").textContent = word;
+    let b = baffle('#word_to_show');
+    b.start();
+    b.reveal(2500);
+  }
+  
   // main loop, running every 25ms
   function mainLoop() {
     // if we open a socket connection AND is artist

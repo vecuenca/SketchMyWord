@@ -117,17 +117,17 @@
   <div id="game-area" class="section no-pad-bot">
     <div class="sketch-container">
       <br>
-      <div class="row center">
+      <div class="row" style="display:flex; height: 700px">
         <!--sketchpad tools-->
-        <div class="col s1">
-          <div class="card sketchpad-tools grey lighten-4">
+        <div class="col s2">
+          <div class="card sketchpad-tools grey lighten-4 z-depth-3" style="height: 100%">
             <ul id="score-list" class="collection center-block">
             </ul>
           </div>
         </div>
         <!--sketchpad-->
-        <div class="col s8">
-          <div id="canvas_box" class="card sketchpad grey lighten-4">
+        <div class="col s7">
+          <div id="canvas_box" class="card sketchpad grey lighten-4 z-depth-3" style="height:100%">
             <div id="word-box" class="row">
               <div id="post_container" class="col s12 m5">
                 <div class="card-panel yellow lighten-2">
@@ -137,9 +137,9 @@
             </div>
 
             <canvas id="drawing"></canvas>
-            <div class="clock z-depth-1 waves-effect inactive">1:00</div>
+            <div class="clock z-depth-2 waves-effect inactive">1:00</div>
             <div class="fixed-action-btn horizontal click-to-toggle" >
-              <a id="tool_button" class="btn-floating btn-large red tool cog"></a>
+              <a id="tool_button" class="btn-floating btn-large red tool cog tooltipped" data-position="bottom" data-delay="50" data-tooltip="Toggle Artist Tools"></a>
               <ul>
                 <li>
                   <a id="pencil-tool" class="btn-floating red tool pencil tooltipped" data-position="bottom" data-delay="50" data-tooltip="Small Brush"></a>
@@ -160,8 +160,8 @@
           </div>
         </div>
         <!--chat-->
-        <div class="col s3 m3">
-          <div class="card chat-container grey lighten-4">
+        <div class="col s3">
+          <div style="height:100%" class="card chat-container grey lighten-4 z-depth-3">
             <div id="chat-contents" class="card-content">
               <div id="chat-flex-container">
                 <div id="chat-end"></div>
@@ -194,6 +194,9 @@
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="js/materialize/materialize.js"></script>
   <script src="js/materialize/init.js"></script>
+
+  <!--BAFFLE!!!-->
+  <script src="js/lib/baffle.min.js"></script>
 
   <!--other stuff-->
   <!--<script src="js/RecordableDrawing.js"></script>-->

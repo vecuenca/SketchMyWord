@@ -65,49 +65,57 @@
       gameView.renderMessage(messageObj);
     });
 
+    socket.on('render_system_message', function(messageObj) {
+      gameView.renderSystemMessage(messageObj);
+    });
+
     socket.on('is_artist', function (wordToDraw) {
-      util.displayToast('You are the Artist! Your word is ' + wordToDraw);
+      gameView.clearChat();
+      gameView.renderSystemMessage('You are the Artist! Your word is \'' + wordToDraw + '\'');
       gameView.startTimer();
       gameView.setLineRecord();
-      gameView.showWord(wordToDraw);
+      gameView.baffleWord(wordToDraw);
     });
 
     socket.on('is_guesser', function (data) {
-      util.displayToast(data.artist + ' is the Artist!');
+      gameView.clearChat();
+      gameView.renderSystemMessage(data.artist + ' is the Artist!');
       gameView.startTimer();
       gameView.removeLineRecord();
       gameView.showWord(data.wordToShow);
     });
 
-    socket.on('correct_guess', function () {
-      util.displayToast('You guessed the word!');
+    socket.on('correct_guess', function (data) {
+      gameView.renderSystemMessage('You guessed the word! You earned ' + data.pointsEarned + ' points.');
+      gameView.showWord(data.word);
     });
 
     socket.on('word_guessed', function (guesser) {
-      util.displayToast(guesser + ' guessed the word!');
+      gameView.renderSystemMessage(guesser + ' guessed the word!');
     });
 
     socket.on('round_time_over', function () {
-      util.displayToast('Time\'s up! Onto the next round!');
+      gameView.renderSystemMessage('Time\'s up for this round!');
       gameView.resetTimer();
     });
 
-    socket.on('everyone_guessed', function () {
-      util.displayToast('Everyone guessed the word! Onto the next round!');
+    socket.on('everyone_guessed', function (artist) {
+      gameView.renderSystemMessage('Everyone guessed the word! ' + artist + ' earned 2 points!');
       gameView.resetTimer();
     });
 
     socket.on('game_over', function (score) {
-      gameView.displayScore(score);
+      gameView.displayEndScore(score);
+
       setTimeout(function() {
-        gameView.closeScore();
+        gameView.closeEndScore();
         gameView.hide();
         roomView.display();
       }, 5000);
     });
 
     socket.on('next_round_starting_soon', function () {
-      util.displayToast('The next round starts in 10 seconds!');
+      gameView.renderSystemMessage('The next round starts in 10 seconds!');
     });
 
     socket.on('round_over', function (currentScore) {
