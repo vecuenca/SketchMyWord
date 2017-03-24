@@ -1,11 +1,11 @@
 .chat-container {
-	
+	height:100%;
 }
 
 #chat-contents {
 	overflow-y: scroll;
 	overflow-x: hidden;
-	height: 600px;
+	height: 90%;
 }
 
 #chat-flex-container {

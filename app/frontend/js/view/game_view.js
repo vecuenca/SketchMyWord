@@ -96,6 +96,7 @@ var gameView = (function (util) {
 
   gameView.display = function () {
     $('#game-area').show();
+    $('.fixed-action-btn').openFAB();
   };
 
   gameView.hide = function () {
