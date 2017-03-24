@@ -72,7 +72,7 @@
     socket.on('is_artist', function (wordToDraw) {
       gameView.renderSystemMessage('You are the Artist! Your word is \'' + wordToDraw + '\'');
       gameView.setLineRecord();
-      gameView.showWord(wordToDraw);
+      gameView.baffleWord(wordToDraw);
     });
 
     socket.on('is_guesser', function (data) {

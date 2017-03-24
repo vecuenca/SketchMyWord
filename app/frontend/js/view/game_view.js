@@ -172,9 +172,15 @@ var gameView = (function (util) {
   };
 
   gameView.showWord = function(word_to_show) {
-    console.log(word_to_show);
     document.getElementById("word_to_show").textContent = word_to_show;
   };
+
+  gameView.baffleWord = function(word) {
+    document.getElementById("word_to_show").textContent = word;
+    let b = baffle('#word_to_show');
+    b.start();
+    b.reveal(2500);
+  }
 
   // main loop, running every 25ms
   function mainLoop() {
