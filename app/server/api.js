@@ -42,6 +42,16 @@ var createUser = function(user){
             VALUES (?, ?);`, [user.username, user.password]);
 };
 
+// i dunno whre to put this LOL
+var getRandomColor = function() {
+  var letters = '0123456789ABCDEF'.split('');
+  var color = '#';
+  for (var i = 0; i < 6; i++ ) {
+    color += letters[Math.round(Math.random() * 15)];
+  }
+  return color;
+}
+
 //AUTHENTICATION
 
 app.post('/signin/', function(req, res, next){
@@ -108,7 +118,7 @@ app.put('/game/', function(req, res, next) {
     timer:           null,
     artist:          null,
   };
-  state.rooms[roomId].users[username] = { score: 0 };
+  state.rooms[roomId].users[username] = { score: 0, color: getRandomColor() };
 
   res.json({ roomId: roomId });
   return next();
@@ -141,7 +151,7 @@ app.post('/game/:roomId/', function(req, res, next) {
   }
   
   // update room with new user
-  room.users[username] = { score: 0 };
+  room.users[username] = { score: 0, color: getRandomColor() };
 
   res.json({success: true}); 
   return next();

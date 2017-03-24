@@ -63,11 +63,25 @@ var gameView = (function (util) {
     });
   };
 
-  gameView.renderMessage = function (messageObj) {
+  gameView.renderSystemMessage = function(message) {
+    var msgDiv = document.createElement('div');
+    msgDiv.className = 'card orange white-text chat-message';
+    msgDiv.innerHTML = `${message}`;
+    $('#chat-flex-container').prepend(msgDiv);
+
+    var height = 0;
+    $('#chat-flex-container div').each(function (i, value) {
+      height += parseInt($(this).height());
+    });
+    $('#chat-contents').animate({ scrollTop: height }, 'slow');
+    msgDiv.className += ' slide-in-right';
+  };
+
+  gameView.renderMessage = function (msgObj) {
     var msgDiv = document.createElement('div');
     msgDiv.className = 'card chat-message';
     msgDiv.innerHTML = `
-    <span class="green-text">${messageObj.username}&nbsp;</span>${messageObj.message}
+    <span style="color: ${msgObj.color}">${msgObj.username}:&nbsp;</span>${msgObj.message}
     `;
     $('#chat-flex-container').prepend(msgDiv);
 
