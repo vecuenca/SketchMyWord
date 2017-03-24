@@ -81,6 +81,7 @@ module.exports = {
     Object.keys(room.users).forEach(function(user) {
       var userObj = {};
       userObj.username = user;
+      userObj.color = room.users[user].color;
       userObj.score = room.users[user].score;
       currentScore.push(userObj);
     });

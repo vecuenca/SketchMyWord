@@ -105,9 +105,10 @@
     });
 
     socket.on('game_over', function (score) {
-      gameView.displayScore(score);
+      gameView.displayEndScore(score);
+
       setTimeout(function() {
-        gameView.closeScore();
+        gameView.closeEndScore();
         gameView.hide();
         roomView.display();
       }, 5000);

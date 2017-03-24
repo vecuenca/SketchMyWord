@@ -199,20 +199,20 @@ var gameView = (function (util) {
       var e = document.createElement('li');
       e.className = 'collection-item';
       e.innerHTML = `
-        <div>${score.username}<a href="#!" class="secondary-content">${score.score} pts</a></div>
+        <div><span style="color: ${score.color}">${score.username}</span><a href="#!" class="secondary-content">${score.score} pts</a></div>
       `;
       scoreList.append(e);
       e.className += ' bounce-in-left';
     });
   };
 
-  gameView.displayScore = function (scoreObj) {
+  gameView.displayEndScore = function (scoreObj) {
     $('#game-winner-points').text(scoreObj.score);
     $('#game-winner').text(scoreObj.username);
     $('#game-over-score-modal').modal('open');
   };
 
-  gameView.closeScore = function() {
+  gameView.closeEndScore = function() {
     $('#game-over-score-modal').modal('close');
   };
 
