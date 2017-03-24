@@ -226,7 +226,7 @@ var gameView = (function (util) {
     b.start();
     b.reveal(2500);
   }
-
+  
   // main loop, running every 25ms
   function mainLoop() {
     // if we open a socket connection AND is artist
