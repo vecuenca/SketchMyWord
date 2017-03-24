@@ -77,8 +77,9 @@
       gameView.showWord(data.wordToShow);
     });
 
-    socket.on('correct_guess', function (pointsEarned) {
-      util.displayToast('You guessed the word! You earned ' + pointsEarned + ' points.');
+    socket.on('correct_guess', function (data) {
+      util.displayToast('You guessed the word! You earned ' + data.pointsEarned + ' points.');
+      gameView.showWord(data.word);
     });
 
     socket.on('word_guessed', function (guesser) {

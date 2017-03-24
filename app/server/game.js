@@ -21,7 +21,10 @@ module.exports = {
     let pointsEarned = room.correctGuessers.length === 1 ? 3 : 1;
     room.users[socket.username].score += pointsEarned;
 
-    socket.emit('correct_guess', pointsEarned);
+    socket.emit('correct_guess', {
+      pointsEarned: pointsEarned,
+      word: room.wordToDraw
+    });
     socket.broadcast.to(socket.room).emit('word_guessed', socket.username);
 
     // check if everyone (except the Artist) guessed correctly
