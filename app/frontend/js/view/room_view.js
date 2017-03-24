@@ -65,7 +65,7 @@ var roomView = (function (util) {
     // start interval to fire off room fetch requests
     roomView.roomFetchInterval = setInterval(function () { 
       document.dispatchEvent(new CustomEvent('onGetRooms'))
-    }, 5000);
+    }, 2000);
   };
 
   roomView.hide = function () {
