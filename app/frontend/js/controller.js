@@ -71,12 +71,14 @@
 
     socket.on('is_artist', function (wordToDraw) {
       gameView.renderSystemMessage('You are the Artist! Your word is \'' + wordToDraw + '\'');
+      gameView.startTimer();
       gameView.setLineRecord();
       gameView.baffleWord(wordToDraw);
     });
 
     socket.on('is_guesser', function (data) {
       gameView.renderSystemMessage(data.artist + ' is the Artist!');
+      gameView.startTimer();
       gameView.removeLineRecord();
       gameView.showWord(data.wordToShow);
     });
@@ -92,10 +94,12 @@
 
     socket.on('round_time_over', function () {
       gameView.renderSystemMessage('Time\'s up for this round!');
+      gameView.resetTimer();
     });
 
     socket.on('everyone_guessed', function (artist) {
       gameView.renderSystemMessage('Everyone guessed the word! ' + artist + ' earned 2 points!');
+      gameView.resetTimer();
     });
 
     socket.on('game_over', function (score) {

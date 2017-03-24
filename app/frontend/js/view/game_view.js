@@ -24,6 +24,46 @@ var gameView = (function (util) {
   var isErase = false;
   var username = util.getUsername();
 
+  // round timer stuff
+  var timerClock = $('.clock');
+  var ROUND_TIME_SECONDS = 60;
+  var timerInterval = 0,
+      timerTime     = ROUND_TIME_SECONDS;
+  
+  gameView.startTimer = function () {
+    clearInterval(timerInterval) ;
+
+    timerInterval = setInterval(function() {
+      timerTime--;
+      timerClock.text(returnFormattedToSeconds(timerTime));
+
+      if (timerTime <= 0) {
+        timerClock.text(returnFormattedToSeconds(0));
+        gameView.pauseTimer();
+        timerTime = ROUND_TIME_SECONDS;
+      }
+    }, 1000);
+  }
+
+  gameView.pauseTimer = function () {
+    clearInterval(timerInterval);
+  }
+
+  gameView.resetTimer = function (){
+    gameView.pauseTimer();
+    timerTime = ROUND_TIME_SECONDS;
+    timerClock.text(returnFormattedToSeconds(timerTime));
+  }
+
+  function returnFormattedToSeconds(time){
+    var minutes = Math.floor(time / 60),
+        seconds = Math.round(time - minutes * 60);
+
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+
+    return minutes + ":" + seconds;
+  }
+
   document.getElementById('pencil-tool').onclick = function (e) {
     lineWidth = 5;
     isErase = false;
