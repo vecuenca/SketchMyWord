@@ -1,5 +1,5 @@
 module.exports = {
-	roomHandler: function (io, rooms, gameHandler, onCorrectGuess) {
+	roomHandler: function (io, rooms, gameHandler, onCorrectGuess, updateUserStats) {
 		io.on('connection', function (socket) {
 
 			// has the client's socket join the requested room
@@ -19,7 +19,7 @@ module.exports = {
 				if (Object.keys(rooms[room].users).length >= rooms[room].roomSize) {
 					console.log('game ', room, ' ready to start. emitting full_users');
 					io.sockets.in(socket.room).emit('full_users');
-					gameHandler(io, room, rooms[room]);
+					gameHandler(io, room, rooms[room], updateUserStats);
 				}
 			});
 
@@ -42,7 +42,7 @@ module.exports = {
 						&& room.wordToDraw === messageObj.message
 						&& room.artist != socket.username
 						&& !(socket.username in room.correctGuessers)) {
-					onCorrectGuess(io, socket.room, room, socket);
+					onCorrectGuess(io, socket.room, room, socket, updateUserStats);
 				} else {
 					messageObj.color = rooms[socket.room].users[socket.username].color;
 					io.sockets.in(socket.room).emit('render_message', messageObj);

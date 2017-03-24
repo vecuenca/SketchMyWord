@@ -25,11 +25,16 @@ mysql.createConnection({
     port: config.mysql.port
 }).then(function(conn){
     connection = conn;
-    conn.query(
-    `CREATE TABLE IF NOT EXISTS \`sketch-my-word\`.\`users\`(
-        \`username\` VARCHAR(45) NOT NULL,
-        \`password\` VARCHAR(45) NOT NULL,
-        PRIMARY KEY(\`username\`));`)
+    conn.query(`CREATE TABLE IF NOT EXISTS \`sketch-my-word\`.\`users\`( 
+      \`password\`                  VARCHAR(45) NOT NULL,
+      \`username\`                  VARCHAR(45) NOT NULL,
+      \`total_games\`               INT default 0,
+      \`games_won\`                 INT default 0,
+      \`total_points\`              INT default 0,
+      \`words_guessed\`             INT default 0,
+      \`avg_draw_word_guess_time\`  INT default 0,
+      \`avg_word_guess_time\`       INT default 0,
+          PRIMARY KEY(\`username\`));`)
         .then(function(result, error){
             if(error) console.log(error);
         });
@@ -118,7 +123,7 @@ app.put('/game/', function(req, res, next) {
     timer:           null,
     artist:          null,
   };
-  state.rooms[roomId].users[username] = { score: 0, color: getRandomColor() };
+  state.rooms[roomId].users[username] = { score: 0, wordsGuessed: 0, color: getRandomColor() };
 
   res.json({ roomId: roomId });
   return next();
@@ -151,7 +156,7 @@ app.post('/game/:roomId/', function(req, res, next) {
   }
   
   // update room with new user
-  room.users[username] = { score: 0, color: getRandomColor() };
+  room.users[username] = { score: 0, wordsGuessed: 0, color: getRandomColor() };
 
   res.json({success: true}); 
   return next();
