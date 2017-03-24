@@ -9,7 +9,7 @@
 
 		// initially, user will only see the roomView.
 		// gameView is displayed once we are actually in a game
-		roomView.display();
+		roomView.hide();
 		gameView.hide();
 
 		// populate app bar username with logged in user

@@ -10,7 +10,7 @@ var util = (function() {
 
 	// taken from http://stackoverflow.com/questions/5047346/converting-strings-like-document-cookie-to-objects
   util.str_obj = function(str) {
-    str = str.split(', ');
+    str = str.split('; ');
     var result = {};
     for (var i = 0; i < str.length; i++) {
       var cur = str[i].split('=');
@@ -21,6 +21,10 @@ var util = (function() {
 
   util.getUsername = function() {
     return util.str_obj(document.cookie).username;
+  }
+
+  util.getRoomId = function() {
+    return util.str_obj(document.cookie).roomId;
   }
 
   return util;

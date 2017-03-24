@@ -30,6 +30,20 @@
     </div>
   </nav>
 
+  <div id="preloader" class="preloader-wrapper big active">
+    <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div>
+      <div class="gap-patch">
+        <div class="circle"></div>
+      </div>
+      <div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+  </div>
+
   <!--###################ROOMS HTML###################-->
   <!--game session id modal-->
   <div id="create-game-modal" class="modal" style="width: 40%">
@@ -72,7 +86,7 @@
       <a href="#!" id="cancel-room-join" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
     </div>
   </div>
-  
+
 
   <!--game over score modal-->
   <div id="game-over-score-modal" class="modal" style="width: 40%">
@@ -138,7 +152,7 @@
 
             <canvas id="drawing"></canvas>
             <div class="clock z-depth-2 waves-effect inactive">1:00</div>
-            <div class="fixed-action-btn horizontal click-to-toggle" >
+            <div class="fixed-action-btn horizontal click-to-toggle">
               <a id="tool_button" class="btn-floating btn-large red tool cog tooltipped" data-position="bottom" data-delay="50" data-tooltip="Toggle Artist Tools"></a>
               <ul>
                 <li>

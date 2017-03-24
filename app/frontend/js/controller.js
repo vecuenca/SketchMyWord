@@ -3,6 +3,19 @@
 
   var socket;
 
+  var setupView = function() {
+    if (util.getRoomId()){
+      if (gameModel.isActive()){
+
+      }else{
+        
+      }
+    }else{
+      roomView.show();
+      gameView.hide();
+    }
+  }
+
   // Room functions
   document.addEventListener('onCreateRoom', function (e) {
     roomModel.createRoom(e.detail, function (err, resp) {
