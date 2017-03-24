@@ -14,9 +14,6 @@ module.exports = {
   },
 
   onCorrectGuess: function (io, roomId, room, socket) {
-    socket.emit('correct_guess');
-    socket.broadcast.to(socket.room).emit('word_guessed', socket.username);
-
     room.correctGuessers.push(socket.username);
 
     // this player earns 3 points for guessing first
@@ -24,10 +21,13 @@ module.exports = {
     let pointsEarned = room.correctGuessers.length === 1 ? 3 : 1;
     room.users[socket.username].score += pointsEarned;
 
+    socket.emit('correct_guess', pointsEarned);
+    socket.broadcast.to(socket.room).emit('word_guessed', socket.username);
+
     // check if everyone (except the Artist) guessed correctly
     // the artist earns 2 points if this happens
     if (room.correctGuessers.length === Object.keys(room.users).length - 1) {
-      io.in(roomId).emit('everyone_guessed');
+      io.in(roomId).emit('everyone_guessed', room.artist);
       room.users[room.artist].score += 2;
       module.exports.endRound(io, roomId, room);
     }

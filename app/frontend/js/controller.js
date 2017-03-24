@@ -77,8 +77,8 @@
       gameView.showWord(data.wordToShow);
     });
 
-    socket.on('correct_guess', function () {
-      util.displayToast('You guessed the word!');
+    socket.on('correct_guess', function (pointsEarned) {
+      util.displayToast('You guessed the word! You earned ' + pointsEarned + ' points.');
     });
 
     socket.on('word_guessed', function (guesser) {
@@ -86,11 +86,11 @@
     });
 
     socket.on('round_time_over', function () {
-      util.displayToast('Time\'s up! Onto the next round!');
+      util.displayToast('Time\'s up for this round!');
     });
 
-    socket.on('everyone_guessed', function () {
-      util.displayToast('Everyone guessed the word! Onto the next round!');
+    socket.on('everyone_guessed', function (artist) {
+      util.displayToast('Everyone guessed the word! ' + artist + ' earned 2 points!');
     });
 
     socket.on('game_over', function (score) {
