@@ -4,7 +4,7 @@ module.exports = {
     // the users array...
     room.userArray = Object.keys(room.users);
     room.numRounds = (room.userArray.length * 2) - 1;
-    module.exports.broadcastScores(io, roomId, room);
+    io.in(roomId).emit('broadcast_score', module.exports.getScores(io, roomId, room));
     module.exports.setupRound(io, roomId, room);
   },
 
@@ -73,8 +73,7 @@ module.exports = {
     });   
 	},
 
-  broadcastScores: function (io, roomId, room) {
-    // create a sorted score array; emit to user
+  getScores: function (io, roomId, room) {
     var currentScore = [];
     Object.keys(room.users).forEach(function(user) {
       var userObj = {};
@@ -83,7 +82,7 @@ module.exports = {
       currentScore.push(userObj);
     });
     currentScore.sort(function(a, b) { return b.score - a.score});
-    io.in(roomId).emit('broadcast_score', currentScore);
+    return currentScore;
   },
 
   endRound: function (io, roomId, room) {
@@ -91,7 +90,7 @@ module.exports = {
       clearTimeout(room.timer);
     }
 
-    module.exports.broadcastScores(io, roomId, room);
+    io.in(roomId).emit('broadcast_score', module.exports.getScores(io, roomId, room));
     io.in(roomId).emit('round_over');
     room.numRounds -= 1;
 
@@ -111,11 +110,7 @@ module.exports = {
   },
 
   gameOver: function (io, roomId, room) {
-    // TODO: calculate scores and broadcast them
-
-
-    io.in(roomId).emit('game_over');
-
-    // send them back to room lobby?
+    io.in(roomId).emit('game_over', module.exports.getScores(io, roomId, room)[0]);
+    // kill room
   }
 }
