@@ -1,13 +1,13 @@
 (function (preloaderView, roomView, gameView, util) {
 	"use strict";
 
-	window.onload = function () {
+	window.onload = () => {
 		// run onloads of each view component.
 		// this initializes things like onsubmits, onclicks, etc.
 		roomView.onload();
 		gameView.onload();
 
-		$("#btn-logout").click(function(){
+		$("#btn-logout").click(() => {
 			util.deleteCookie('roomId');
 		});
 		// initially, user will only see the roomView.

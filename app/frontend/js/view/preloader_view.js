@@ -3,11 +3,11 @@ var preloaderView = (function(util) {
 
     var preloaderView = {};
 
-    preloaderView.display = function() {
+    preloaderView.display = () => {
         $('#preloader').show();
     };
 
-    preloaderView.hide = function() {
+    preloaderView.hide = () => {
         $('#preloader').hide();
     };
 

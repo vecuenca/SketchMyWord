@@ -8,87 +8,68 @@ var roomModel = (function () {
 
   var roomModel = {};
 
-  roomModel.createRoom = function (data, callback) {
-    fetch('/api/game/', {
+  roomModel.createRoom = data => {
+    return fetch('/api/game/', {
       method: 'put',
       credentials: 'include',
       headers: headers,
       body: JSON.stringify({
         roomSize: data.roomSize
       })
-    }).then(function (resp) {
+    }).then(resp => {
       if (resp.status == 403) {
-        callback(resp, null);
-      } else {
-        callback(null, resp);
+        return resp.json().then(err => {
+          return Promise.reject(err);
+        });
       }
-    }).catch(function (err) {
-      callback(err, null);
-    });
+      return resp.json();
+    })
   };
-  // roomModel.createRoom = function (data) {
-  //   return fetch('/api/game/', {
-  //     method: 'put',
-  //     credentials: 'include',
-  //     headers: headers,
-  //     body: JSON.stringify({
-  //       roomSize: data.roomSize
-  //     })
-  //   }).then(function (resp) {
-  //     if (resp.status == 403) {
-  //       return resp.json().then(Promise.reject);
-  //     } else {
-  //       return resp.json();
-  //     }
-  //   })
-  // };
 
-  roomModel.joinRoom = function (data, callback) {
-    fetch('/api/game/' + data.roomId, {
+  roomModel.joinRoom = data => {
+    return fetch('/api/game/' + data.roomId, {
       method: 'post',
       credentials: 'include',
       headers: headers
-    }).then(function (resp) {
+    }).then(resp => {
       if (resp.status == 403 || resp.status == 400) {
-        callback(resp, null);
-      } else {
-        callback(null, resp);
+        return resp.json().then(err => {
+          return Promise.reject(err);
+        });
       }
-    }).catch(function (err) {
-      callback(err, null);
-    });
+      return resp.json();
+    })
   };
 
-  roomModel.getRooms = function (callback) {
-    fetch('/api/game', {
-      method: 'get',
-      credentials: 'include',
-      headers: headers
-    }).then(function (resp) {
-      if (resp.status == 403 || resp.status == 400) {
-        callback(resp, null);
-      } else {
-        callback(null, resp);
-      }
-    }).catch(function (err) {
-      callback(err, null);
-    });
-  }
-
-  roomModel.leaveRoom = function(data, callback) {
-    fetch('/api/game/' + data.roomId, {
+  roomModel.leaveRoom = data => {
+    return fetch('/api/game/' + data.roomId, {
       method: 'delete',
       credentials: 'include',
       headers: headers
-    }).then(function (resp) {
+    }).then(resp => {
       if (resp.status == 403 || resp.status == 400) {
-        callback(resp, null);
-      } else {
-        callback(null, resp);
+        return resp.json().then(err => {
+          return Promise.reject(err);
+        });
       }
-    }).catch(function (err) {
-      callback(err, null);
-    });
+      return resp.json();
+
+    })
+  }
+
+  roomModel.getRooms = () => {
+    return fetch('/api/game', {
+      method: 'get',
+      credentials: 'include',
+      headers: headers
+    }).then(resp => {
+      if (resp.status == 403 || resp.status == 400) {
+        return resp.json().then(err => {
+          return Promise.reject(err);
+        });
+      }
+      return resp.json();
+    })
   }
 
   return roomModel;

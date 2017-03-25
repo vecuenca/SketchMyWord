@@ -8,8 +8,8 @@ var model = (function() {
 
   var model = {};
 
-  model.signIn = function(data, callback) {
-    fetch('/api/signin/', {
+  model.signIn = data => {
+    return fetch('/api/signin/', {
 			method: 'post',
 			credentials: 'include',
 			headers: headers,
@@ -17,19 +17,18 @@ var model = (function() {
 				username: data.username, 
 				password: data.password
 			})
-		}).then(function(resp) {
-			if (resp.status == 401) {
-				callback('The username or password you entered is incorrect.', resp);
-			} else {
-				callback(null, resp);
-			}
-		}).catch(function(err) {
-			callback(err, null);
-		});
+		}).then(resp => {
+			if (resp.status == 401 || resp.status == 400) {
+				return resp.json().then(err => {
+					return Promise.reject(err);
+				});
+			} 
+			return resp.json();
+		})
   };
 
-	model.signUp = function(data, callback) {
-    fetch('/api/users/', {
+	model.signUp = data => {
+    return fetch('/api/users/', {
 			method: 'put',
 			credentials: 'include',
 			headers: headers,
@@ -37,11 +36,14 @@ var model = (function() {
 				username: data.username, 
 				password: data.password
 			})
-		}).then(function(resp) {
-			callback(null, resp);
-		}).catch(function(err) {
-			callback(err, null);
-		});
+		}).then(resp => {
+			if(resp.status == 400) {
+				return resp.json().then(err => {
+					return Promise.reject(err);
+				});
+			}
+			return resp.json();
+		})
   };  
 
   return model;

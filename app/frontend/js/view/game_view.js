@@ -28,10 +28,10 @@ var gameView = (function (util) {
   var timerInterval = 0,
     timerTime = ROUND_TIME_SECONDS;
 
-  gameView.startTimer = function () {
+  gameView.startTimer = () => {
     clearInterval(timerInterval);
 
-    timerInterval = setInterval(function () {
+    timerInterval = setInterval(() => {
       timerTime--;
       timerClock.text(returnFormattedToSeconds(timerTime));
 
@@ -43,11 +43,11 @@ var gameView = (function (util) {
     }, 1000);
   }
 
-  gameView.pauseTimer = function () {
+  gameView.pauseTimer = () => {
     clearInterval(timerInterval);
   }
 
-  gameView.resetTimer = function () {
+  gameView.resetTimer = () => {
     gameView.pauseTimer();
     timerTime = ROUND_TIME_SECONDS;
     timerClock.text(returnFormattedToSeconds(timerTime));
@@ -62,26 +62,26 @@ var gameView = (function (util) {
     return minutes + ":" + seconds;
   }
 
-  document.getElementById('pencil-tool').onclick = function (e) {
+  $('#pencil-tool').click(e => {
     lineWidth = 5;
     isErase = false;
-  };
+  });
 
-  document.getElementById('marker-tool').onclick = function (e) {
+  $('#marker-tool').click(e => {
     lineWidth = 20;
     isErase = false;
-  };
+  });
 
-  document.getElementById('eraser-tool').onclick = function (e) {
+  $('#eraser-tool').click(e => {
     isErase = true;
-  }
+  });
 
-  document.getElementById('color-tool').onchange = function (e) {
+  $('#color-tool').change(e => {
     color = document.getElementById('color').value;
-  }
+  });
 
-  $(window).resize(function () {
-    canvas.onmousemove = function (e) {
+  $(window).resize(() => {
+    canvas.onmousemove = e => {
       canvas.width = document.getElementById('canvas_box').clientWidth;
       canvas.height = document.getElementById('canvas_box').clientHeight;
 
@@ -93,8 +93,8 @@ var gameView = (function (util) {
     };
   });
 
-  gameView.onload = function () {
-    $('#form-chat').submit(function (e) {
+  gameView.onload = () => {
+    $('#form-chat').submit(e => {
       e.preventDefault();
       var messageValue = $('#chat-input').val();
       if (messageValue == "") {
@@ -114,21 +114,21 @@ var gameView = (function (util) {
     });
   };
 
-  gameView.renderSystemMessage = function (message) {
+  gameView.renderSystemMessage = message => {
     var msgDiv = document.createElement('div');
     msgDiv.className = 'card orange white-text chat-message';
     msgDiv.innerHTML = `${message}`;
     $('#chat-flex-container').prepend(msgDiv);
 
     var height = 0;
-    $('#chat-flex-container div').each(function (i, value) {
+    $('#chat-flex-container div').each((i, value) => {
       height += parseInt($(this).height());
     });
     $('#chat-contents').animate({ scrollTop: height }, 'slow');
     msgDiv.className += ' slide-in-right';
   };
 
-  gameView.renderMessage = function (msgObj) {
+  gameView.renderMessage = msgObj => {
     var msgDiv = document.createElement('div');
     msgDiv.className = 'card chat-message';
     msgDiv.innerHTML = `
@@ -138,39 +138,39 @@ var gameView = (function (util) {
 
     // scroll down chat box to the message we just rendered
     var height = 0;
-    $('#chat-flex-container div').each(function (i, value) {
+    $('#chat-flex-container div').each((i, value) => {
       height += parseInt($(this).height());
     });
     $('#chat-contents').animate({ scrollTop: height }, 'slow');
     msgDiv.className += ' slide-in-right';
   };
 
-  gameView.clearChat = function () {
+  gameView.clearChat = () => {
     $('#chat-flex-container').empty();
   };
 
-  gameView.display = function () {
+  gameView.display = () => {
     $('#game-area').show();
     $('.fixed-action-btn').openFAB();
   };
 
-  gameView.hide = function () {
+  gameView.hide = () => {
     $('#game-area').hide();
   };
 
-  gameView.setup = function () {
+  gameView.setup = () => {
     canvas.width = document.getElementById('canvas_box').clientWidth;
     canvas.height = document.getElementById('canvas_box').clientHeight;
 
     // register mouse event handlers
-    canvas.onmousedown = function (e) {
+    canvas.onmousedown = e => {
       mouse.click = true;
     };
-    canvas.onmouseup = function (e) {
+    canvas.onmouseup = e => {
       mouse.click = false;
     };
 
-    canvas.onmousemove = function (e) {
+    canvas.onmousemove = e => {
       // normalize mouse position to range 0.0 - 1.0
       mouse.pos.x = e.pageX - document.getElementById("canvas_box").offsetLeft;
       mouse.pos.y = e.pageY - document.getElementById("canvas_box").offsetTop;
@@ -180,7 +180,7 @@ var gameView = (function (util) {
     isRecord = true;
   }
 
-  gameView.drawLine = function (data) {
+  gameView.drawLine = data => {
     var line = data.line;
     context.beginPath();
     context.moveTo(line[0].x, line[0].y);
@@ -190,23 +190,23 @@ var gameView = (function (util) {
     context.stroke();
   };
 
-  gameView.clearCanvas = function () {
+  gameView.clearCanvas = () => {
     context.clearRect(0, 0, canvas.width, canvas.height)
   };
 
-  gameView.removeLineRecord = function () {
+  gameView.removeLineRecord = () => {
     isRecord = false;
   };
 
-  gameView.setLineRecord = function () {
+  gameView.setLineRecord = () => {
     isRecord = true;
   }
 
-  gameView.renderScore = function (scoreArr) {
+  gameView.renderScore = scoreArr => {
     var scoreList = $('#score-list');
     scoreList.empty();
 
-    scoreArr.forEach(function (score) {
+    scoreArr.forEach(score => {
       var e = document.createElement('li');
       e.className = 'collection-item';
       e.innerHTML = `
@@ -217,33 +217,33 @@ var gameView = (function (util) {
     });
   };
 
-  gameView.displayEndScore = function (scoreObj) {
+  gameView.displayEndScore = scoreObj => {
     $('#game-winner-points').text(scoreObj.score);
     $('#game-winner').text(scoreObj.username);
     $('#game-over-score-modal').modal('open');
   };
 
-  gameView.closeEndScore = function () {
+  gameView.closeEndScore = () => {
     $('#game-over-score-modal').modal('close');
   };
 
-  gameView.showWord = function (word_to_show) {
+  gameView.showWord = word_to_show => {
     document.getElementById("word_to_show").textContent = word_to_show;
   };
 
-  gameView.baffleWord = function (word) {
+  gameView.baffleWord = word => {
     document.getElementById("word_to_show").textContent = word;
     let b = baffle('#word_to_show');
     b.start();
     b.reveal(2500);
   };
 
-  gameView.populateGame = function (data) {
+  gameView.populateGame = data => {
     document.dispatchEvent(new CustomEvent('displayGame'));
-    data.chatHistory.forEach(function (element) {
+    data.chatHistory.forEach(element => {
       gameView.renderMessage(element);
     });
-    data.lineHistory.forEach(function (element) {
+    data.lineHistory.forEach(element => {
       gameView.drawLine(element);
     });
 

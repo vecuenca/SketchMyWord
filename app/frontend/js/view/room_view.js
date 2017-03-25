@@ -3,8 +3,8 @@ var roomView = (function (util) {
 
   var roomView = {};
 
-  roomView.onload = function () {
-    $('#cancel-room-create').click(function (e) {
+  roomView.onload = () => {
+    $('#cancel-room-create').click(e => {
       if (!$('#room-id').text()) return;
       document.dispatchEvent(new CustomEvent('onLeaveRoom', {
         detail: {
@@ -13,7 +13,7 @@ var roomView = (function (util) {
       }));
     });
 
-    $('#cancel-room-join').click(function (e) {
+    $('#cancel-room-join').click(e => {
       if (!$('#join-waiting-text').is(':visible')) return;
       document.dispatchEvent(new CustomEvent('onLeaveRoom', {
         detail: {
@@ -22,7 +22,7 @@ var roomView = (function (util) {
       }));
     });
 
-    $('#form-create-room').submit(function (e) {
+    $('#form-create-room').submit(e => {
       e.preventDefault();
       var roomSize = $('#room-size').val();
       // create the room
@@ -31,7 +31,7 @@ var roomView = (function (util) {
       }));
     });
 
-    $('#form-join-game').submit(function (e) {
+    $('#form-join-game').submit(e => {
       e.preventDefault();
       var event = new CustomEvent('onRoomJoin', {
         detail: {
@@ -44,12 +44,12 @@ var roomView = (function (util) {
 
     // callback for modal open. fire event to fetch room list
     $('#join-game-modal').modal({
-      ready: function (modal, trigger) {
+      ready: (modal, trigger) => {
         document.dispatchEvent(new CustomEvent('onGetRooms'));
       }
     });
 
-    $('#form-chat').submit(function (e) {
+    $('#form-chat').submit(e => {
       e.preventDefault();
       var event = new CustomEvent('onMessageSubmit', {
         detail: {
@@ -59,21 +59,21 @@ var roomView = (function (util) {
     });
   };
 
-  roomView.display = function () {
+  roomView.display = () => {
     $('#room-area').show();
-    
+
     // start interval to fire off room fetch requests
-    roomView.roomFetchInterval = setInterval(function () { 
+    roomView.roomFetchInterval = setInterval(() => {
       document.dispatchEvent(new CustomEvent('onGetRooms'))
     }, 2000);
   };
 
-  roomView.hide = function () {
+  roomView.hide = () => {
     $('#room-area').hide();
     clearInterval(roomView.roomFetchInterval);
   };
 
-  roomView.roomCreateSuccess = function (roomId) {
+  roomView.roomCreateSuccess = roomId => {
     // display room id, show waiting for users container
     document.getElementById('room-id').innerHTML = roomId;
     $('#modal-users-waiting-container').show();
@@ -89,7 +89,7 @@ var roomView = (function (util) {
     }));
   };
 
-  roomView.roomJoinSuccess = function (roomId) {
+  roomView.roomJoinSuccess = roomId => {
     $('#join-waiting-text').attr('roomId', roomId);
 
     // waiting for room to be full
@@ -102,7 +102,7 @@ var roomView = (function (util) {
     }));
   };
 
-  roomView.roomFullUsersHost = function () {
+  roomView.roomFullUsersHost = () => {
     $('#room-id-spinner').hide();
     // close currently open room creation modal
     $('#create-game-modal').modal('close');
@@ -112,17 +112,17 @@ var roomView = (function (util) {
     $('#form-create-room').show();
   };
 
-  roomView.roomFullUsersDefault = function () {
+  roomView.roomFullUsersDefault = () => {
     $('#join-game-modal').modal('close');
   };
 
-  roomView.displayRoomListInModal = function (rooms) {
+  roomView.displayRoomListInModal = rooms => {
     // clear all rows except header
     $('#room-header').nextAll('li').remove();
 
     // insert the rooms
     var roomList = $('#room-list');
-    rooms.forEach(function (room) {
+    rooms.forEach(room => {
       var e = document.createElement('li');
       e.id = room.roomId;
       e.className = 'collection-item';
@@ -133,11 +133,11 @@ var roomView = (function (util) {
       if (Object.keys(room.users).length >= room.roomSize) {
         e.className += ' grey lighten-2';
         e.querySelector('.secondary-content').className += ' red-text';
-			} else if (util.getUsername() in room.users) {
-				e.className += ' grey lighten-2';
-      // we can join this room, setup the onclick event
-			} else {
-        e.onclick = function(e) {
+      } else if (util.getUsername() in room.users) {
+        e.className += ' grey lighten-2';
+        // we can join this room, setup the onclick event
+      } else {
+        e.onclick = e => {
           e.preventDefault();
 
           var event = new CustomEvent('onRoomJoin', {
@@ -151,7 +151,7 @@ var roomView = (function (util) {
     });
   };
 
-  roomView.roomLeaveSuccess = function (data) {
+  roomView.roomLeaveSuccess = data => {
     //close socket and close the modal
     document.dispatchEvent(new CustomEvent('closeSocket'));
     if (data.host) {

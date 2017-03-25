@@ -8,19 +8,18 @@ var gameModel = (function () {
 
   var gameModel = {};
 
-  gameModel.isActive = function (roomId) {
+  gameModel.isActive = roomId => {
     return fetch('/api/game/' + roomId, {
       method: 'get',
       credentials: 'include',
       headers: headers
-    }).then(function (resp) {
+    }).then(resp => {
       if (resp.status == 403 || resp.status == 400) {
-        return resp.json().then(function(err){
+        return resp.json().then(err => {
           return Promise.reject(err);
         });
-      } else {
-        return resp.json();
       }
+      return resp.json();
     })
   };
 

@@ -1,12 +1,12 @@
 /*jshint esversion: 6 */
-var view = (function() {
-  "use strict";
+var view = (function () {
+	"use strict";
 
-  var view = {};
+	var view = {};
 
-	document.getElementById('signin').onsubmit = function(e) {
+	$('#signin').submit(e => {
 		e.preventDefault();
-		
+
 		var username = document.getElementById('signin-username').value;
 		var password = document.getElementById('signin-password').value;
 
@@ -22,9 +22,9 @@ var view = (function() {
 		} else {
 			util.displayToast('Please enter a username or password');
 		}
-	}
+	}); 
 
-	document.getElementById('signup').onsubmit = function(e) {
+	$('#signup').submit(e => {
 		e.preventDefault();
 
 		var username = document.getElementById('signup-username').value;
@@ -38,21 +38,21 @@ var view = (function() {
 		} else {
 			var event = new CustomEvent('onSignUp', {
 				detail: {
-					username:        username,
-					password:        password,
+					username: username,
+					password: password,
 					passwordConfirm: passwordConfirm
 				}
 			});
 			document.dispatchEvent(event);
 			document.getElementById('signup').reset();
 		}
-	}
+	});
 
-	view.signUpSuccess = function() {
+	view.signUpSuccess = () => {
 		util.displayToast('Your user was created successfully!');
 		$('ul.tabs').tabs('select_tab', 'signin');
 	}
 
-  return view;
+	return view;
 
 }());
