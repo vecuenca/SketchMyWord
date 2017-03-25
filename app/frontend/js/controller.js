@@ -1,22 +1,34 @@
-(function (roomView, roomModel, gameView, gameModel, util) {
+(function (preloaderView, roomView, roomModel, gameView, gameModel, util) {
   "use strict";
 
   var socket;
 
-  var setupView = function() {
-    if (util.getRoomId()){
-      if (gameModel.isActive()){
-
-      }else{
-        
-      }
-    }else{
-      roomView.show();
-      gameView.hide();
+  var setupView = function () {
+    preloaderView.hide();
+    var roomId = util.getRoomId();
+    if (roomId) {
+      gameModel.isActive(roomId)
+        .then(function (resp) {
+          if (resp.isActive) {
+            gameView.display();
+          } else {
+            roomView.display();
+          }
+        })
+        .catch(util.displayToast);
+    } else {
+      roomView.display();
     }
   }
 
+  setupView();
+
   // Room functions
+  document.addEventListener('displayLobby', function (e) {
+    roomView.show();
+    gameView.hide();
+  });
+
   document.addEventListener('onCreateRoom', function (e) {
     roomModel.createRoom(e.detail, function (err, resp) {
       // TODO: REFACTOR THIS
@@ -26,6 +38,15 @@
       });
     });
   });
+  // document.addEventListener('onCreateRoom', function (e) {
+  //   roomModel.createRoom(e.detail)
+  //     .then(function (resp) {
+  //       roomView.roomCreateSuccess(resp.roomId);
+  //     })
+  //     .catch(function (err) {
+  //       util.displayToast(err);
+  //     });
+  // });
 
   document.addEventListener('onRoomJoin', function (e) {
     var roomId = e.detail.roomId;
@@ -78,7 +99,7 @@
       gameView.renderMessage(messageObj);
     });
 
-    socket.on('render_system_message', function(messageObj) {
+    socket.on('render_system_message', function (messageObj) {
       gameView.renderSystemMessage(messageObj);
     });
 
@@ -120,11 +141,12 @@
     socket.on('game_over', function (score) {
       gameView.displayEndScore(score);
 
-      setTimeout(function() {
+      setTimeout(function () {
         gameView.closeEndScore();
         gameView.hide();
         roomView.display();
       }, 5000);
+      socket.close();
     });
 
     socket.on('next_round_starting_soon', function () {
@@ -178,4 +200,4 @@
     });
   });
 
-}(roomView, roomModel, gameView, gameModel, util));
+}(preloaderView, roomView, roomModel, gameView, gameModel, util));

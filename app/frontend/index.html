@@ -30,23 +30,9 @@
     </div>
   </nav>
 
-  <div id="preloader" class="preloader-wrapper big active">
-    <div class="spinner-layer spinner-blue-only">
-      <div class="circle-clipper left">
-        <div class="circle"></div>
-      </div>
-      <div class="gap-patch">
-        <div class="circle"></div>
-      </div>
-      <div class="circle-clipper right">
-        <div class="circle"></div>
-      </div>
-    </div>
-  </div>
-
   <!--###################ROOMS HTML###################-->
   <!--game session id modal-->
-  <div id="create-game-modal" class="modal" style="width: 40%">
+  <div id="create-game-modal" class="modal">
     <div class="modal-content">
       <form id="form-create-room" action="#">
         <p class="range-field">
@@ -72,7 +58,7 @@
   </div>
 
   <!--join game modal-->
-  <div id="join-game-modal" class="modal" style="width: 40%">
+  <div id="join-game-modal" class="modal">
     <div class="modal-content">
       <div id="waiting-user-container">
         <h3 id="room-id" class="header center orange-text"></h3>
@@ -89,7 +75,7 @@
 
 
   <!--game over score modal-->
-  <div id="game-over-score-modal" class="modal" style="width: 40%">
+  <div id="game-over-score-modal" class="modal">
     <div class="modal-content">
       <h4 class="header center orange-text">The game is over! </h4>
       <p class="center">The winner is... <span id="game-winner">jasen zhang</span> with <span id="game-winner-points">53</span> points!</p>
@@ -97,6 +83,23 @@
     </div>
   </div>
 
+  <div id="preloader">
+    <center>
+      <div class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-blue-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+    </center>
+  </div>
 
   <!--room functions-->
   <main id="room-area">
@@ -141,7 +144,7 @@
         </div>
         <!--sketchpad-->
         <div class="col s7">
-          <div id="canvas_box" class="card sketchpad grey lighten-4 z-depth-3" style="height:100%">
+          <div id="canvas_box" class="card sketchpad grey lighten-4 z-depth-3">
             <div id="word-box" class="row">
               <div id="post_container" class="col s12 m5">
                 <div class="card-panel yellow lighten-2">
@@ -175,7 +178,7 @@
         </div>
         <!--chat-->
         <div class="col s3">
-          <div style="height:100%" class="card chat-container grey lighten-4 z-depth-3">
+          <div class="card chat-container grey lighten-4 z-depth-3">
             <div id="chat-contents" class="card-content">
               <div id="chat-flex-container">
                 <div id="chat-end"></div>
@@ -217,6 +220,7 @@
   <script src="js/util.js"></script>
 
   <!--Views-->
+  <script src="js/view/preloader_view.js"></script>
   <script src="js/view/game_view.js"></script>
   <script src="js/view/room_view.js"></script>
   <script src="js/view.js"></script>

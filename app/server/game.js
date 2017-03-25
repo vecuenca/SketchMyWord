@@ -99,7 +99,6 @@ module.exports = {
     room.numRounds -= 1;
 
     // reset round state of room
-    room.roundActive      = false;
     room.correctGuessers  = [];
     room.lineHistory      = []; 
     room.wordToDraw       = null;
