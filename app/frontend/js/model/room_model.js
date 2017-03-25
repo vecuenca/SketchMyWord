@@ -26,6 +26,22 @@ var roomModel = (function () {
       callback(err, null);
     });
   };
+  // roomModel.createRoom = function (data) {
+  //   return fetch('/api/game/', {
+  //     method: 'put',
+  //     credentials: 'include',
+  //     headers: headers,
+  //     body: JSON.stringify({
+  //       roomSize: data.roomSize
+  //     })
+  //   }).then(function (resp) {
+  //     if (resp.status == 403) {
+  //       return resp.json().then(Promise.reject);
+  //     } else {
+  //       return resp.json();
+  //     }
+  //   })
+  // };
 
   roomModel.joinRoom = function (data, callback) {
     fetch('/api/game/' + data.roomId, {

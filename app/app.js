@@ -109,6 +109,5 @@ app.get('/signout/', function (req, res, next) {
 app.use(express.static('frontend'));
 app.use('/api', api);
 app.use(function (req, res, next) {
-  socketlib.stateHandler(io, state.rooms);
   res.end();
 })

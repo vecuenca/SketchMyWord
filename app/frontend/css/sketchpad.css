@@ -76,6 +76,30 @@
 	height: 56px;
 }
 
+#room-area {
+	display: none;
+}
+
+#game-area {
+	display: none;
+}
+
+#create-game-modal {
+	width: 40%;
+}
+
+#join-game-modal {
+	width: 40%;
+}
+
+#game-over-score-modal {
+	width: 40%;
+}
+
+#canvas_box { 
+	height:100%;
+}
+
 #word-box {
 	position: absolute;
     top: -5%;
@@ -109,4 +133,6 @@
 	background-image: url(./../resources/eraser.png);
 }
 
-.
+.card chat-container grey lighten-4 z-depth-3 {
+	height:100%;
+}
