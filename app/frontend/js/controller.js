@@ -9,8 +9,8 @@
     if (roomId) {
       gameModel.isActive(roomId)
         .then(function (resp) {
-          if (resp.isActive) {
-            gameView.display();
+          if (resp.active) {
+            gameView.populateGame(resp);
           } else {
             roomView.display();
           }
@@ -92,6 +92,7 @@
     gameView.display();
 
     socket.on('draw_line', function (data) {
+      console.log("got some lines here");
       gameView.drawLine(data);
     });
 
@@ -193,6 +194,7 @@
   });
 
   document.addEventListener('socketDrawLine', function (e) {
+    console.log("DRAWING")
     socket.emit('draw_line', {
       line: [e.detail.line[0], e.detail.line[1]],
       color: e.detail.color,

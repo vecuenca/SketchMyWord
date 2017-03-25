@@ -225,7 +225,24 @@ var gameView = (function (util) {
     let b = baffle('#word_to_show');
     b.start();
     b.reveal(2500);
-  }
+  };
+
+  gameView.populateGame = function(data) {
+    debugger;
+    data.chatHistory.forEach(function(element) {
+      gameView.renderMessage(element);
+    });
+
+    data.lineHistory.forEach(function(element){
+      gameView.drawLine(element);
+    });
+
+    gameView.showWord(data.wordToDraw);
+    gameView.renderScore(data.scores);
+
+    document.dispatchEvent(new CustomEvent('connectSocket'));
+    document.dispatchEvent(new CustomEvent('displayGame'));
+  };
   
   // main loop, running every 25ms
   function mainLoop() {

@@ -183,10 +183,37 @@ app.get('/game/:roomId/', function (req, res, next) {
   if (!req.session.user) return res.status(403).json('Forbidden');
   var room = state.rooms[req.params.roomId];
   if (!room) {
-    return res.json({active: false});
+    return res.json({ active: false });
+  }
+  var wordToDraw;
+
+  var currentScore = [];
+  if (room.roundActive) {
+    Object.keys(room.users).forEach(function(user) {
+      var userObj = {};
+      userObj.username = user;
+      userObj.color = room.users[user].color;
+      userObj.score = room.users[user].score;
+      currentScore.push(userObj);
+    });
+    currentScore.sort(function(a, b) { return b.score - a.score});
+    if (room.artist == req.session.username) {
+      wordToDraw = wordToDraw
+    } else {
+      wordToDraw = "";
+      for (var i = 0; i < room.wordToDraw.length; i++) {
+        wordToDraw = wordToDraw.concat("_ ");
+      }
+    }
   }
 
-  res.json({ active: room.roundActive });
+  res.json({
+    active: room.roundActive,
+    chatHistory: room.chatHistory,
+    lineHistory: room.lineHistory,
+    wordToDraw: wordToDraw,
+    scores: currentScore,
+  });
   return next();
 });
 

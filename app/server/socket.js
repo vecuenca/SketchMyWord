@@ -50,7 +50,7 @@ module.exports = {
       });
 
       socket.on('disconnect', function (data) {
-        console.log('disconnected socket');
+        console.log('disconnected socket ' + socket.username);
 
         var sioRoom = io.sockets.adapter.rooms[socket.room];
         var room = rooms[socket.room];
@@ -59,37 +59,29 @@ module.exports = {
         // as a host
         if (room) {
           //if we're in a lobby, remove the user from the state room
-          if (!room.isActive) {
+          if (!room.roundActive) {
             delete rooms[socket.room].users[socket.username];
 
             // if host leave or room is empty, remove it from state and close all sockets
             if (room.host == socket.username || Object.keys(room.users).length == 0) {
+              console.log("there's no one here now");
               io.sockets.in(socket.room).emit('leave_room');
+              delete rooms[socket.room];
+              return;
+            }
+          } else {
+            console.log("we're in game");
+            if (sioRoom) {
+              console.log("still someone in here");
+            } else {
+              //if the sioroom this socket belongs does not exist, 
+              //remove state room since everyone is gone
+              console.log("there's no one here now");
+              delete rooms[socket.room];
             }
           }
-
-          if (sioRoom) {
-            console.log("still someone in here");
-          } else {
-            //if the sioroom this socket belongs does not exist, 
-            //remove state room
-            console.log("there's no one here now")
-            delete rooms[socket.room];
-          }
         }
-
-
       });
-    });
-  },
-
-  stateHandler: function (io, rooms) {
-    Object.keys(rooms).forEach(function (key, index) {
-      // if host leave or room is empty, remove it from state and close all sockets
-      if (!(rooms[key].host in rooms[key].users) || Object.keys(rooms[key].users).length == 0) {
-        io.sockets.in(key).emit('leave_room');
-        delete rooms[key];
-      }
     });
   }
 }
