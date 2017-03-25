@@ -22,6 +22,18 @@ var roomView = (function (util) {
       }));
     });
 
+    $('#header-scores').click(function(e) {
+      $('#stats-modal').modal('open');
+      if ($('#personalScoreTab').hasClass('active')) {
+        $('#personal-score-spinner').show();
+        document.dispatchEvent(new CustomEvent('fetchPersonalStats', {
+          detail: { username: util.getUsername() }
+        }));
+      } else {
+        document.dispatchEvent(new CustomEvent('fetchGlobalStats'));
+      }
+    });
+
     $('#form-create-room').submit(function (e) {
       e.preventDefault();
       var roomSize = $('#room-size').val();
@@ -100,6 +112,29 @@ var roomView = (function (util) {
         usertype: 'default'
       }
     }));
+  };
+
+  roomView.renderPersonalScore = score => {
+    $('#personal-score-spinner').hide();
+    $('#personal-score-tbody').empty();
+  
+    var row = document.createElement('tr');
+    row.append(createTd(score.total_games));
+    row.append(createTd(score.games_won));
+    row.append(createTd(score.total_points));
+    row.append(createTd(score.words_guessed));
+    row.append(createTd(score.avg_draw_word_guess_time));
+    row.append(createTd(score.avg_word_guess_time));    
+
+    $('#personal-score-tbody').append(row);
+  };
+
+  var createTd = item => {
+    var tr = document.createElement('td');
+    tr.innerHTML = `
+      <td>${item}</td>
+    `
+    return tr;
   };
 
   roomView.roomFullUsersHost = function () {

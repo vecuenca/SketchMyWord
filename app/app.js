@@ -46,6 +46,7 @@ var updateUserStats = function(user) {
     WHERE username = ?;
   `, [gameWon, pointsEarned, wordsGuessed, username]);
 };
+
 socketlib.roomHandler(io, state.rooms, gamelib.gameHandler, 
   gamelib.onCorrectGuess, updateUserStats);
 

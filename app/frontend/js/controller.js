@@ -1,4 +1,4 @@
-(function (roomView, roomModel, gameView, gameModel, util) {
+(function (roomView, roomModel, gameView, gameModel, scoreModel, util) {
   "use strict";
 
   var socket;
@@ -50,6 +50,23 @@
 
   document.addEventListener('closeSocket', function (e) {
     socket.close();
+  });
+
+  // Score functions
+  document.addEventListener('fetchPersonalStats', function (e) {
+    scoreModel.fetchPersonalStats(e.detail, function(err, res) {
+      if (err) return util.displayToast(err);
+      res.json().then(data => {
+        roomView.renderPersonalScore(data[0]);
+      });
+    });
+  });
+
+  document.addEventListener('fetchGlobalStats', function (e) {
+    scoreModel.fetchGlobalStats(e.detail, function(err, res) {
+      // TODO
+      return;
+    });
   });
 
   // Game functions
@@ -165,4 +182,4 @@
     });
   });
 
-}(roomView, roomModel, gameView, gameModel, util));
+}(roomView, roomModel, gameView, gameModel, scoreModel, util));

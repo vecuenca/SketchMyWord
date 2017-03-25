@@ -47,6 +47,15 @@ var createUser = function(user){
             VALUES (?, ?);`, [user.username, user.password]);
 };
 
+var fetchUserStats = function(username) {
+  return connection.query(`SELECT total_games, 
+    games_won, total_points, words_guessed,
+    avg_draw_word_guess_time, avg_word_guess_time
+    FROM \`sketch-my-word\`.\`users\` 
+    WHERE username = ?;
+  `, [username]);
+};
+
 // i dunno whre to put this LOL
 var getRandomColor = function() {
   var letters = '0123456789ABCDEF'.split('');
@@ -179,9 +188,21 @@ app.get('/game', function(req, res, next) {
   return next();
 });
 
-var generateRoomToken = function() {
-  return crypto.randomBytes(8).toString('hex');
-};
+app.get('/stats/:username/', function(req, res, next) {
+  if (!req.session.user) {
+    return res.status(403).send('Forbidden');
+  }
+
+  var username = req.params.username;
+  fetchUserStats(username).then(result => {
+    res.json(result);
+    return next();
+  })
+  .catch(err => {
+    if (err) return res.status(500).send(err);
+    return next();
+  });
+});
 
 // -------------------- DELETE --------------------
 app.delete('/game/:roomId/', function(req, res, next){
@@ -203,5 +224,9 @@ app.delete('/game/:roomId/', function(req, res, next){
   
   return next();
 });
+
+var generateRoomToken = function() {
+  return crypto.randomBytes(8).toString('hex');
+};
 
 module.exports = app;
