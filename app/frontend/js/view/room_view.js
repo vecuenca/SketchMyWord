@@ -62,6 +62,7 @@ var roomView = (function (util) {
   roomView.display = function () {
     $('#room-area').show();
     
+    document.dispatchEvent(new CustomEvent('onGetRooms'));
     // start interval to fire off room fetch requests
     roomView.roomFetchInterval = setInterval(function () { 
       document.dispatchEvent(new CustomEvent('onGetRooms'))
