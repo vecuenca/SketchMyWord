@@ -15,7 +15,7 @@ var scoreModel = (function () {
       headers: headers
     }).then(function (resp) {
       if (resp.status == 403) {
-        callback(resp, null);
+        callback(resp, null);		
       } else {
         callback(null, resp);
       }
