@@ -37,9 +37,6 @@ module.exports = {
   },
 
 	setupRound: function (io, roomId, room) {
-    var ROUND_TIME = 60000;
-    room.timer = setTimeout(module.exports.roundTimeOver, ROUND_TIME, io, roomId, room);
-
     // pick a user
     if (room.numRounds >= room.userArray.length) {
       room.artist = room.userArray[room.numRounds - room.userArray.length];
@@ -79,7 +76,11 @@ module.exports = {
         }
         io.to(socketId).emit('is_guesser', {artist: room.artist, wordToShow: wordToShow});
       }
-    });   
+    });
+
+    var ROUND_TIME = 60000;
+    room.roundStartTime = new Date();
+    room.timer = setTimeout(module.exports.roundTimeOver, ROUND_TIME, io, roomId, room); 
 	},
 
   getScores: function (io, roomId, room) {

@@ -209,6 +209,7 @@ app.get('/game/:roomId/', function (req, res, next) {
 
   res.json({
     active: room.roundActive,
+    roundStartTime: room.roundStartTime,
     chatHistory: room.chatHistory,
     lineHistory: room.lineHistory,
     wordToDraw: wordToDraw,
