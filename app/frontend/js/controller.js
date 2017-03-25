@@ -156,6 +156,7 @@
 
     socket.on('next_round_starting_soon', function () {
       gameView.renderSystemMessage('The next round starts in 10 seconds!');
+      gameView.setNextRoundWaitTimer();
     });
 
     socket.on('round_over', function (currentScore) {
