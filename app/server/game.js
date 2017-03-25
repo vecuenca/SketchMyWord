@@ -53,7 +53,9 @@ module.exports = {
     console.log('THE ARTIST IS...', room.artist);
 
 		// pick a random word
-		var words = ['crab', 'archer', 'house', 'cat', 'lion', 'cigar', 'holding hands'];
+		var words = ['crab', 'archer', 'house', 'cat', 
+      'lion', 'cigar', 'holding hands', 'tennis racket',
+      'dragon', 'finger', 'zebra', 'crying', 'stomach'];
 		var wordIndex = Math.floor(Math.random() * words.length);
 		room.wordToDraw = words[wordIndex];
     
