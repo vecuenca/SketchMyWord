@@ -10,6 +10,9 @@
       gameModel.isActive(roomId)
         .then(function (resp) {
           if (resp.active) {
+            socket.connect();
+            var cookieUsername = util.str_obj(document.cookie).username;
+            socket.emit('join_room', cookieUsername, roomId);
             gameView.populateGame(resp);
           } else {
             roomView.display();
@@ -83,6 +86,7 @@
   });
 
   document.addEventListener('closeSocket', function (e) {
+    util.deleteCookie('roomId');
     socket.close();
   });
 
@@ -146,6 +150,7 @@
         gameView.closeEndScore();
         gameView.hide();
         roomView.display();
+        util.deleteCookie('roomId');
       }, 5000);
       socket.close();
     });

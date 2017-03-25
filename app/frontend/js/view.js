@@ -6,6 +6,10 @@
 		// this initializes things like onsubmits, onclicks, etc.
 		roomView.onload();
 		gameView.onload();
+
+		$("#btn-logout").click(function(){
+			util.deleteCookie('roomId');
+		});
 		// initially, user will only see the roomView.
 		// gameView is displayed once we are actually in a game
 		// roomView.hide();

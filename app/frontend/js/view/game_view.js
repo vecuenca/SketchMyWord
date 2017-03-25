@@ -239,8 +239,6 @@ var gameView = (function (util) {
 
     gameView.showWord(data.wordToDraw);
     gameView.renderScore(data.scores);
-
-    document.dispatchEvent(new CustomEvent('connectSocket'));
     document.dispatchEvent(new CustomEvent('displayGame'));
   };
   
