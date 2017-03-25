@@ -10,7 +10,7 @@
       gameModel.isActive(roomId)
         .then(function (resp) {
           if (resp.active) {
-            socket.connect();
+            socket = io.connect();
             var cookieUsername = util.str_obj(document.cookie).username;
             socket.emit('join_room', cookieUsername, roomId);
             gameView.populateGame(resp);
@@ -96,7 +96,6 @@
     gameView.display();
 
     socket.on('draw_line', function (data) {
-      console.log("got some lines here");
       gameView.drawLine(data);
     });
 
@@ -199,7 +198,6 @@
   });
 
   document.addEventListener('socketDrawLine', function (e) {
-    console.log("DRAWING")
     socket.emit('draw_line', {
       line: [e.detail.line[0], e.detail.line[1]],
       color: e.detail.color,

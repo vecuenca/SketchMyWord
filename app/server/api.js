@@ -197,8 +197,8 @@ app.get('/game/:roomId/', function (req, res, next) {
       currentScore.push(userObj);
     });
     currentScore.sort(function(a, b) { return b.score - a.score});
-    if (room.artist == req.session.username) {
-      wordToDraw = wordToDraw
+    if (room.artist == req.session.user.username) {
+      wordToDraw = room.wordToDraw
     } else {
       wordToDraw = "";
       for (var i = 0; i < room.wordToDraw.length; i++) {
@@ -213,6 +213,7 @@ app.get('/game/:roomId/', function (req, res, next) {
     lineHistory: room.lineHistory,
     wordToDraw: wordToDraw,
     scores: currentScore,
+    isArtist: room.artist == req.session.user.username,
   });
   return next();
 });

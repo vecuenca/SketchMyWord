@@ -16,8 +16,6 @@ var gameView = (function (util) {
 
   var canvas = document.getElementById('drawing');
   var context = canvas.getContext('2d');
-  var width = document.getElementById('canvas_box').clientWidth;
-  var height = document.getElementById('canvas_box').clientHeight;
   var isRecord = false;
   var lineWidth = 3;
   var color = '#000000';
@@ -28,12 +26,12 @@ var gameView = (function (util) {
   var timerClock = $('.clock');
   var ROUND_TIME_SECONDS = 60;
   var timerInterval = 0,
-      timerTime     = ROUND_TIME_SECONDS;
-  
-  gameView.startTimer = function () {
-    clearInterval(timerInterval) ;
+    timerTime = ROUND_TIME_SECONDS;
 
-    timerInterval = setInterval(function() {
+  gameView.startTimer = function () {
+    clearInterval(timerInterval);
+
+    timerInterval = setInterval(function () {
       timerTime--;
       timerClock.text(returnFormattedToSeconds(timerTime));
 
@@ -49,15 +47,15 @@ var gameView = (function (util) {
     clearInterval(timerInterval);
   }
 
-  gameView.resetTimer = function (){
+  gameView.resetTimer = function () {
     gameView.pauseTimer();
     timerTime = ROUND_TIME_SECONDS;
     timerClock.text(returnFormattedToSeconds(timerTime));
   }
 
-  function returnFormattedToSeconds(time){
+  function returnFormattedToSeconds(time) {
     var minutes = Math.floor(time / 60),
-        seconds = Math.round(time - minutes * 60);
+      seconds = Math.round(time - minutes * 60);
 
     seconds = seconds < 10 ? '0' + seconds : seconds;
 
@@ -82,6 +80,19 @@ var gameView = (function (util) {
     color = document.getElementById('color').value;
   }
 
+  $(window).resize(function () {
+    canvas.onmousemove = function (e) {
+      canvas.width = document.getElementById('canvas_box').clientWidth;
+      canvas.height = document.getElementById('canvas_box').clientHeight;
+
+
+      // normalize mouse position to range 0.0 - 1.0
+      mouse.pos.x = e.pageX - document.getElementById("canvas_box").offsetLeft;
+      mouse.pos.y = e.pageY - document.getElementById("canvas_box").offsetTop;
+      mouse.move = true;
+    };
+  });
+
   gameView.onload = function () {
     $('#form-chat').submit(function (e) {
       e.preventDefault();
@@ -103,7 +114,7 @@ var gameView = (function (util) {
     });
   };
 
-  gameView.renderSystemMessage = function(message) {
+  gameView.renderSystemMessage = function (message) {
     var msgDiv = document.createElement('div');
     msgDiv.className = 'card orange white-text chat-message';
     msgDiv.innerHTML = `${message}`;
@@ -148,8 +159,8 @@ var gameView = (function (util) {
   };
 
   gameView.setup = function () {
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = document.getElementById('canvas_box').clientWidth;
+    canvas.height = document.getElementById('canvas_box').clientHeight;
 
     // register mouse event handlers
     canvas.onmousedown = function (e) {
@@ -212,36 +223,35 @@ var gameView = (function (util) {
     $('#game-over-score-modal').modal('open');
   };
 
-  gameView.closeEndScore = function() {
+  gameView.closeEndScore = function () {
     $('#game-over-score-modal').modal('close');
   };
 
-  gameView.showWord = function(word_to_show) {
+  gameView.showWord = function (word_to_show) {
     document.getElementById("word_to_show").textContent = word_to_show;
   };
 
-  gameView.baffleWord = function(word) {
+  gameView.baffleWord = function (word) {
     document.getElementById("word_to_show").textContent = word;
     let b = baffle('#word_to_show');
     b.start();
     b.reveal(2500);
   };
 
-  gameView.populateGame = function(data) {
-    debugger;
-    data.chatHistory.forEach(function(element) {
+  gameView.populateGame = function (data) {
+    document.dispatchEvent(new CustomEvent('displayGame'));
+    data.chatHistory.forEach(function (element) {
       gameView.renderMessage(element);
     });
-
-    data.lineHistory.forEach(function(element){
+    data.lineHistory.forEach(function (element) {
       gameView.drawLine(element);
     });
 
     gameView.showWord(data.wordToDraw);
     gameView.renderScore(data.scores);
-    document.dispatchEvent(new CustomEvent('displayGame'));
+    isRecord = data.isArtist;
   };
-  
+
   // main loop, running every 25ms
   function mainLoop() {
     // if we open a socket connection AND is artist

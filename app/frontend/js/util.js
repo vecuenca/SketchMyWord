@@ -9,7 +9,6 @@ var util = (function () {
   }
 
   util.deleteCookie = function (name) {
-    console.log("removing the token...");
     var cookieString = name + '=';
 
     var expiryDate = new Date();

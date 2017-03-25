@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // register mouse event handlers
     canvas.onmousedown = function (e) {
-        console.log(document.getElementById("canvas_box").offsetTop);
         mouse.click = true;
     };
     canvas.onmouseup = function (e) {
