@@ -123,6 +123,15 @@ var roomView = (function (util) {
 
     // insert the rooms
     var roomList = $('#room-list');
+
+    if (rooms.length === 0) {
+      var e = document.createElement('li');
+      e.className = 'collection-item';
+      e.innerHTML = `
+        <div class="center">There are no games active. Why don't you start one?</div>`;
+      roomList.append(e);
+    }
+
     rooms.forEach(function (room) {
       var e = document.createElement('li');
       e.id = room.roomId;
