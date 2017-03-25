@@ -30,8 +30,21 @@ var roomView = (function (util) {
           detail: { username: util.getUsername() }
         }));
       } else {
+        $('#leaderboard-spinner').show();
         document.dispatchEvent(new CustomEvent('fetchGlobalStats'));
       }
+    });
+
+    $('#load-personal-stats').click(e => {
+      $('#personal-score-spinner').show();
+      document.dispatchEvent(new CustomEvent('fetchPersonalStats', {
+        detail: { username: util.getUsername() }
+      }));
+    });
+
+    $('#load-global-stats').click(e => {
+      $('#leaderboard-spinner').show();
+      document.dispatchEvent(new CustomEvent('fetchGlobalStats'));
     });
 
     $('#form-create-room').submit(function (e) {
@@ -117,16 +130,31 @@ var roomView = (function (util) {
   roomView.renderPersonalScore = score => {
     $('#personal-score-spinner').hide();
     $('#personal-score-tbody').empty();
-  
+    var row = createRow(score);
+    $('#personal-score-tbody').append(row);
+  };
+
+  roomView.renderLeaderboard = data => {
+    $('#leaderboard-spinner').hide();
+    let leaderboard = $('#global-score-tbody');
+    leaderboard.empty();
+    data.forEach(score => {
+      let row = createRow(score);
+      row.prepend(createTd(score.username));
+      leaderboard.append(row);
+    });
+  };
+
+  var createRow = score => {
     var row = document.createElement('tr');
     row.append(createTd(score.total_games));
     row.append(createTd(score.games_won));
     row.append(createTd(score.total_points));
     row.append(createTd(score.words_guessed));
     row.append(createTd(score.avg_draw_word_guess_time));
-    row.append(createTd(score.avg_word_guess_time));    
-
-    $('#personal-score-tbody').append(row);
+    row.append(createTd(score.avg_word_guess_time));
+    row.append(createTd(score.high_score));
+    return row;  
   };
 
   var createTd = item => {

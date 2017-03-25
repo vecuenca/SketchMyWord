@@ -33,18 +33,27 @@ app.use(bodyParser.json());
 var connection;
 
 var updateUserStats = function(user) {
-  var gameWon      = user.gameWon ? 1 : 0;
-  var pointsEarned = user.pointsEarned;
-  var wordsGuessed = user.wordsGuessed;
-  var username     = user.username;
+  let gameWon      = user.gameWon ? 1 : 0;
+  let pointsEarned = user.pointsEarned;
+  let wordsGuessed = user.wordsGuessed;
+  let username     = user.username;
 
-  return connection.query(`UPDATE \`sketch-my-word\`.\`users\`
-    SET total_games = total_games + 1,
-    games_won = games_won + ?,
-    total_points = total_points + ?,
-    words_guessed = words_guessed + ?
-    WHERE username = ?;
-  `, [gameWon, pointsEarned, wordsGuessed, username]);
+  connection.query(`SELECT high_score
+    FROM \`sketch-my-word\`.\`users\` 
+    WHERE username = ?;`, [username]).then(res => {
+    let oldHighScore = res[0].high_score;
+    let newHighScore = pointsEarned > oldHighScore ? pointsEarned : oldHighScore;
+
+    return connection.query(`UPDATE \`sketch-my-word\`.\`users\`
+      SET total_games = total_games + 1,
+      games_won = games_won + ?,
+      total_points = total_points + ?,
+      words_guessed = words_guessed + ?,
+      high_score = ?
+      WHERE username = ?;
+    `, [gameWon, pointsEarned, wordsGuessed, newHighScore, username]);
+  });
+
 };
 
 socketlib.roomHandler(io, state.rooms, gamelib.gameHandler, 
@@ -68,6 +77,7 @@ mysql.createConnection({
       \`words_guessed\`             INT default 0,
       \`avg_draw_word_guess_time\`  INT default 0,
       \`avg_word_guess_time\`       INT default 0,
+      \`high_score\`       INT default 0,
           PRIMARY KEY(\`username\`));`)
   .then(function (result, error) {
     if (error) console.log(error);

@@ -25,7 +25,10 @@ var scoreModel = (function () {
   };
 
 	scoreModel.fetchGlobalStats = function (data, callback) {
-    fetch('/api/stats', {
+		let sortBy = data ? data.sortBy : 'games_won';
+		let limit  = data ? data.limit : 10;
+
+    fetch('/api/stats?sort=' + sortBy + '&limit=' + limit, {
       method: 'get',
       credentials: 'include',
       headers: headers

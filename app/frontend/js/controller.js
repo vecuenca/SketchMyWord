@@ -55,7 +55,9 @@
   // Score functions
   document.addEventListener('fetchPersonalStats', function (e) {
     scoreModel.fetchPersonalStats(e.detail, function(err, res) {
-      if (err) return util.displayToast(err);
+      if (err) {
+        return util.displayToast(err);
+      } 
       res.json().then(data => {
         roomView.renderPersonalScore(data[0]);
       });
@@ -64,8 +66,13 @@
 
   document.addEventListener('fetchGlobalStats', function (e) {
     scoreModel.fetchGlobalStats(e.detail, function(err, res) {
-      // TODO
-      return;
+      if (err) {
+        return util.displayToast(err);
+      }
+
+      res.json().then(data => {
+        roomView.renderLeaderboard(data);
+      }); 
     });
   });
 

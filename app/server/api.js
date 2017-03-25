@@ -34,11 +34,14 @@ mysql.createConnection({
       \`words_guessed\`             INT default 0,
       \`avg_draw_word_guess_time\`  INT default 0,
       \`avg_word_guess_time\`       INT default 0,
+      \`high_score\`       INT default 0,
           PRIMARY KEY(\`username\`));`)
         .then(function(result, error){
             if(error) console.log(error);
         });
 });
+
+// sql queries
 
 var createUser = function(user){
     return connection.query(
@@ -50,10 +53,20 @@ var createUser = function(user){
 var fetchUserStats = function(username) {
   return connection.query(`SELECT total_games, 
     games_won, total_points, words_guessed,
-    avg_draw_word_guess_time, avg_word_guess_time
+    avg_draw_word_guess_time, avg_word_guess_time, high_score
     FROM \`sketch-my-word\`.\`users\` 
     WHERE username = ?;
   `, [username]);
+};
+
+var fetchGlobalStats = (sortParam, limitTo) => {
+  return connection.query(`SELECT username, total_games,
+    games_won, total_points, words_guessed,
+    avg_draw_word_guess_time, avg_word_guess_time, high_score
+    FROM \`sketch-my-word\`.\`users\`
+    ORDER BY ? DESC
+    LIMIT ?; 
+  `, [sortParam, parseInt(limitTo)]);
 };
 
 // i dunno whre to put this LOL
@@ -188,6 +201,31 @@ app.get('/game', function(req, res, next) {
   return next();
 });
 
+app.get('/stats/', (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).json('Forbidden');
+  }
+
+  // default: sort by games_won; limit to 10 players
+  var sortParam = req.query.sort ? req.query.sort : 'games_won';
+  var limitTo = req.query.limit && req.query.limit > 0 &&
+    req.query.limit < 11 ? req.query.limit : 10;
+
+  fetchGlobalStats(sortParam, limitTo).then(result => {
+    console.log('snek');
+    console.log(result);
+    res.json(result);
+    return next();   
+  }).catch(err => {
+    console.log(err);
+    if (err) {
+      res.status(500).json(err);
+    }
+    return next();
+  });
+});
+
+
 app.get('/stats/:username/', function(req, res, next) {
   if (!req.session.user) {
     return res.status(403).send('Forbidden');
@@ -199,7 +237,9 @@ app.get('/stats/:username/', function(req, res, next) {
     return next();
   })
   .catch(err => {
-    if (err) return res.status(500).send(err);
+    if (err) {
+      res.status(500).json(err);
+    } 
     return next();
   });
 });

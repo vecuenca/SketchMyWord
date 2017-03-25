@@ -94,8 +94,8 @@
         <div class="row">
           <div class="col s12">
             <ul class="tabs">
-              <li class="tab col s6"><a href="#personalScoreTab">Your stats</a></li>
-              <li class="tab col s6"><a href="#globalScoreTab">Leaderboard</a></li>
+              <li id="load-personal-stats" class="tab col s6"><a href="#personalScoreTab">Your stats</a></li>
+              <li id="load-global-stats" class="tab col s6"><a href="#globalScoreTab">Leaderboard</a></li>
             </ul>
           </div>
           <div id="personalScoreTab" class="col s12">
@@ -119,6 +119,7 @@
                     <th>Words guessed</th>
                     <th>Avg time to guess your drawing</th>
                     <th>Avg time to guess someone else's drawing</th>
+                    <th>High score</th>
                 </tr>
               </thead>
               <tbody id="personal-score-tbody">
@@ -128,7 +129,7 @@
 
           </div>
           <div id="globalScoreTab" class="col s12">
-            <div class="preloader-wrapper big active">
+            <div id="leaderboard-spinner" class="preloader-wrapper big active">
               <div class="spinner-layer spinner-blue-only">
                 <div class="circle-clipper left">
                   <div class="circle"></div>
@@ -143,22 +144,16 @@
               <thead>
                 <tr>
                   <th>Player</th>
-                  <th>Games played</th>
+                  <th>Total games</th>
                   <th>Games won</th>
-                  <th>Total points earned</th>
+                  <th>Total points</th>
                   <th>Words guessed</th>
-                  <th>Highest score</th>
+                  <th>Avg time to guess your drawing</th>
+                  <th>Avg time to guess someone else's drawing</th>
+                  <th>High score</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Jason</td>
-                  <td>3</td>
-                  <td>2</td>
-                  <td>20</td>
-                  <td>11</td>
-                  <td>32</td>
-                </tr>
+              <tbody id="global-score-tbody">
               </tbody>
             </table>
           </div>
