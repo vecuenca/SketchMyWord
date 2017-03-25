@@ -101,6 +101,7 @@ module.exports = {
     // reset round state of room
     room.correctGuessers  = [];
     room.lineHistory      = []; 
+    room.chatHistory      = [];
     room.wordToDraw       = null;
     room.timer            = null;
     
