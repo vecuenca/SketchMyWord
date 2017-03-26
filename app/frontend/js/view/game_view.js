@@ -246,9 +246,11 @@ var gameView = (function (util) {
     data.lineHistory.forEach(function (element) {
       gameView.drawLine(element);
     });
-
+ 
     gameView.showWord(data.wordToDraw);
     gameView.renderScore(data.scores);
+    timerTime = Math.floor(ROUND_TIME_SECONDS - (new Date() - new Date(data.roundStartTime)) / 1000);
+    gameView.startTimer();
     isRecord = data.isArtist;
   };
 
