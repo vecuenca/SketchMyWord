@@ -1,0 +1,8 @@
+mount: /home/nodejs/uploads
+ssl:
+    cert: /server.crt
+    key: /server.crt
+
+options:
+    mysql:
+        root: 1234
