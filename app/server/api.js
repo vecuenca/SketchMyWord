@@ -18,28 +18,54 @@ app.use(bodyParser.json());
 
 var connection;
 mysql.createConnection({
-  host: config.mysql.host,
-  user: config.mysql.user,
-  password: config.mysql.password,
-  database: config.mysql.database,
-  port: config.mysql.port
-}).then(function (conn) {
-  connection = conn;
-  conn.query(
-    `CREATE TABLE IF NOT EXISTS \`sketch-my-word\`.\`users\`(
-        \`username\` VARCHAR(45) NOT NULL,
-        \`password\` VARCHAR(45) NOT NULL,
-        PRIMARY KEY(\`username\`));`)
-    .then(function (result, error) {
-      if (error) console.log(error);
-    });
+    host: config.mysql.host,
+    user: config.mysql.user,
+    password: config.mysql.password,
+    database: config.mysql.database,
+    port: config.mysql.port,
+    multipleStatements: true
+}).then(function(conn){
+    connection = conn;
+    conn.query(`CREATE TABLE IF NOT EXISTS \`sketch-my-word\`.\`users\`( 
+      \`password\`                  VARCHAR(45) NOT NULL,
+      \`username\`                  VARCHAR(45) NOT NULL,
+      \`total_games\`               INT default 0,
+      \`games_won\`                 INT default 0,
+      \`total_points\`              INT default 0,
+      \`words_guessed\`             INT default 0,
+      \`high_score\`       INT default 0,
+          PRIMARY KEY(\`username\`));`)
+        .then(function(result, error){
+            if(error) console.log(error);
+        });
 });
 
-var createUser = function (user) {
-  return connection.query(
-    `INSERT INTO \`sketch-my-word\`.\`users\`
+// sql queries
+
+var createUser = function(user){
+    return connection.query(
+        `INSERT INTO \`sketch-my-word\`.\`users\`
             (\`username\`, \`password\`)
             VALUES (?, ?);`, [user.username, user.password]);
+};
+
+var fetchUserStats = function(username) {
+  return connection.query(`SELECT total_games, 
+    games_won, total_points, words_guessed,
+    high_score
+    FROM \`sketch-my-word\`.\`users\` 
+    WHERE username = ?;
+  `, [username]);
+};
+
+var fetchGlobalStats = (sortParam, limitTo) => {
+  return connection.query(`SELECT username, total_games,
+    games_won, total_points, words_guessed,
+    high_score
+    FROM \`sketch-my-word\`.\`users\` 
+    ORDER BY ? DESC 
+    LIMIT ?; 
+  `, [sortParam, parseInt(limitTo)]);
 };
 
 // i dunno whre to put this LOL
@@ -118,7 +144,7 @@ app.put('/game/', function (req, res, next) {
     timer: null,
     artist: null,
   };
-  state.rooms[roomId].users[username] = { score: 0, color: getRandomColor() };
+  state.rooms[roomId].users[username] = { score: 0, wordsGuessed: 0, color: getRandomColor() };
   res.cookie('roomId', roomId);
   res.json({ roomId: roomId });
   return next();
@@ -151,7 +177,7 @@ app.post('/game/:roomId/', function (req, res, next) {
   }
 
   // update room with new user
-  room.users[username] = { score: 0, color: getRandomColor() };
+  room.users[username] = { score: 0, wordsGuessed: 0, color: getRandomColor() };
 
   //set a cookie for the roomId
   res.cookie('roomId', roomId);
@@ -176,6 +202,52 @@ app.get('/game', function (req, res, next) {
   });
   res.json({ rooms: roomsWithUsers });
   return next();
+});
+
+app.get('/stats/', (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(403).json('Forbidden');
+  }
+
+  // default: sort by games_won; limit to 10 players
+  var sortParam = req.query.sort ? req.query.sort : 'games_won';
+  var limitTo = req.query.limit && req.query.limit > 0 &&
+    req.query.limit < 11 ? req.query.limit : 10;
+
+  fetchGlobalStats(sortParam, limitTo).then(result => {
+    // THIS MYSQL LIBRARY'S ORDER BY DOES NOT WORK!!!!!!!
+    result.sort((a, b) => {
+      return b[sortParam] - a[sortParam];
+    });
+    result = result.sort(0, limitTo);
+    res.json(result);
+    return next();   
+  }).catch(err => {
+    console.log(err);
+    if (err) {
+      res.status(500).json(err);
+    }
+    return next();
+  });
+});
+
+
+app.get('/stats/:username/', function(req, res, next) {
+  if (!req.session.user) {
+    return res.status(403).send('Forbidden');
+  }
+
+  var username = req.params.username;
+  fetchUserStats(username).then(result => {
+    res.json(result);
+    return next();
+  })
+  .catch(err => {
+    if (err) {
+      res.status(500).json(err);
+    } 
+    return next();
+  });
 });
 
 //get the current status of the game
@@ -218,10 +290,6 @@ app.get('/game/:roomId/', function (req, res, next) {
   return next();
 });
 
-var generateRoomToken = function () {
-  return crypto.randomBytes(8).toString('hex');
-};
-
 // -------------------- DELETE --------------------
 app.delete('/game/:roomId/', function (req, res, next) {
   if (!req.session.user) {
@@ -242,5 +310,9 @@ app.delete('/game/:roomId/', function (req, res, next) {
 
   return next();
 });
+
+var generateRoomToken = function() {
+  return crypto.randomBytes(8).toString('hex');
+};
 
 module.exports = app;
