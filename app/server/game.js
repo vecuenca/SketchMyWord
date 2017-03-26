@@ -1,4 +1,19 @@
 module.exports = {
+
+  getNextWord: function(wordBank, usedWords) {
+    var index = Math.floor(Math.random() * wordBank.length);
+    while (usedWords.includes(wordBank[index])){
+      index = Math.floor(Math.random() * wordBank.length);
+    }
+    usedWords.push(wordBank[index]);
+    return wordBank[index];
+  },
+
+  WORD_BANK: ['crab', 'archer', 'house', 'cat', 
+      'lion', 'cigar', 'holding hands', 'tennis racket',
+      'dragon', 'finger', 'zebra', 'crying', 'stomach'],
+  
+
   gameHandler: function (io, roomId, room, updateUserStats) {
     // zero indexed because we're going to use this to iterate through
     // the users array...
@@ -53,11 +68,7 @@ module.exports = {
     console.log('THE ARTIST IS...', room.artist);
 
 		// pick a random word
-		var words = ['crab', 'archer', 'house', 'cat', 
-      'lion', 'cigar', 'holding hands', 'tennis racket',
-      'dragon', 'finger', 'zebra', 'crying', 'stomach'];
-		var wordIndex = Math.floor(Math.random() * words.length);
-		room.wordToDraw = words[wordIndex];
+		room.wordToDraw = module.exports.getNextWord(module.exports.WORD_BANK, room.usedWords);;
     
     console.log('THE WORD IS...', room.wordToDraw);
     console.log('ROOM state as of new round', room);
