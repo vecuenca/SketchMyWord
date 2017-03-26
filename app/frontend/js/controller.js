@@ -132,6 +132,12 @@
       gameView.renderSystemMessage(guesser + ' guessed the word!');
     });
 
+    socket.on('next_round_starting_soon', function () {
+      gameView.renderSystemMessage('The next round starts in 10 seconds!');
+      gameView.setNextRoundWaitTimer();
+      gameView.startTimer();
+    });
+    
     socket.on('round_time_over', function () {
       gameView.renderSystemMessage('Time\'s up for this round!');
       gameView.resetTimer();
@@ -152,11 +158,6 @@
         util.deleteCookie('roomId');
       }, 5000);
       socket.close();
-    });
-
-    socket.on('next_round_starting_soon', function () {
-      gameView.renderSystemMessage('The next round starts in 10 seconds!');
-      gameView.setNextRoundWaitTimer();
     });
 
     socket.on('round_over', function (currentScore) {

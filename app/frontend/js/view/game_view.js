@@ -46,7 +46,6 @@ var gameView = (function (util) {
 
   gameView.setNextRoundWaitTimer = () => {
     timerTime = ROUND_WAIT_SECONDS;
-    gameView.startTimer();
   };
 
   gameView.pauseTimer = function () {
