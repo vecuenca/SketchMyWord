@@ -26,6 +26,9 @@ module.exports = {
 
       // handler for when a client draws a line
       socket.on('draw_line', function (data) {
+        if (socket.username !== rooms[socket.room].artist) {
+          return;
+        }
         // add received line to history 
         rooms[socket.room].lineHistory.push(data);
         // send line to all clients in the current room EXCEPT itself

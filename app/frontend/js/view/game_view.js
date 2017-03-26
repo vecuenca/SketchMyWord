@@ -25,6 +25,7 @@ var gameView = (function (util) {
   // round timer stuff
   var timerClock = $('.clock');
   var ROUND_TIME_SECONDS = 60;
+  var ROUND_WAIT_SECONDS = 10;
   var timerInterval = 0,
     timerTime = ROUND_TIME_SECONDS;
 
@@ -42,6 +43,10 @@ var gameView = (function (util) {
       }
     }, 1000);
   }
+
+  gameView.setNextRoundWaitTimer = () => {
+    timerTime = ROUND_WAIT_SECONDS;
+  };
 
   gameView.pauseTimer = function () {
     clearInterval(timerInterval);

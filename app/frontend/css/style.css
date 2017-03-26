@@ -55,3 +55,19 @@ main {
 }
 
 
+.range-field {
+	width: 100%;
+}
+
+.range-startpoint {
+	padding-top: 25px;
+	padding-right: 10px;
+	font-size: 25px;
+}
+
+.range-endpoint {
+	padding-top: 25px;
+	padding-left: 10px;
+	font-size: 25px;
+}
+
