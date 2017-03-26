@@ -30,27 +30,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-var connection;
-
 socketlib.roomHandler(io, state.rooms, gamelib.gameHandler, gamelib.onCorrectGuess);
-
-mysql.createConnection({
-  host: config.mysql.host,
-  user: 'root',
-  password: '1234',
-  database: 'sketch-my-word',
-  port: '3306'
-}).then(function (conn) {
-  connection = conn;
-
-  conn.query(`CREATE TABLE IF NOT EXISTS \`sketch-my-word\`.\`users\`( 
-        \`username\` VARCHAR(45) NOT NULL,
-        \`password\` VARCHAR(45) NOT NULL,
-            PRIMARY KEY(\`username\`));`)
-    .then(function (result, error) {
-      if (error) console.log(error);
-    });
-});
 
 app.use(function (req, res, next) {
   console.log("HTTP request", req.method, req.url, req.body);
