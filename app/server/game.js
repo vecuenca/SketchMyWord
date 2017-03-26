@@ -73,7 +73,11 @@ module.exports = {
       } else {
         var wordToShow = "";
         for (var i = 0; i < room.wordToDraw.length; i ++) {
-          wordToShow = wordToShow.concat("_ ");
+          if (room.wordToDraw[i] === " ") {
+            wordToShow = wordToShow.concat("  ");
+          } else {
+            wordToShow = wordToShow.concat("_ ");
+          }
         }
         io.to(socketId).emit('is_guesser', {artist: room.artist, wordToShow: wordToShow});
       }
