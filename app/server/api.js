@@ -143,6 +143,7 @@ app.put('/game/', function (req, res, next) {
     wordToDraw: null,
     timer: null,
     artist: null,
+    usedWords: []
   };
   state.rooms[roomId].users[username] = { score: 0, wordsGuessed: 0, color: getRandomColor() };
   res.cookie('roomId', roomId);
