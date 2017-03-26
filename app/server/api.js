@@ -1,13 +1,14 @@
-var config = require('../config.js');
-var schema = require('./Schemas/signin')
-var ZSchema = require("z-schema");
-var mysql = require('promise-mysql');
-var express = require('express');
-var app = express.Router();
-var bodyParser = require('body-parser');
-var crypto = require('crypto');
-var socket = require('./socket');
-var state = require('./state.js');
+var config       = require('../config.js');
+var schema       = require('./Schemas/signin')
+var ZSchema      = require("z-schema");
+var mysql        = require('promise-mysql');
+var express      = require('express');
+var app          = express.Router();
+var bodyParser   = require('body-parser');
+var crypto       = require('crypto');
+var socket       = require('./socket');
+var state        = require('./state.js');
+var Sentencer    = require('sentencer');
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
@@ -291,6 +292,17 @@ app.get('/game/:roomId/', function (req, res, next) {
   return next();
 });
 
+var generateRoomToken = () => {
+  let adj1 = capitalize(Sentencer.make('{{adjective}}'));
+  let adj2 = capitalize(Sentencer.make('{{adjective}}'));
+  let noun = capitalize(Sentencer.make('{{noun}}'));
+  return adj1 + adj2 + noun;
+};
+
+var capitalize = (le) => {
+  return le.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
+};
+
 // -------------------- DELETE --------------------
 app.delete('/game/:roomId/', function (req, res, next) {
   if (!req.session.user) {
@@ -311,9 +323,5 @@ app.delete('/game/:roomId/', function (req, res, next) {
 
   return next();
 });
-
-var generateRoomToken = function() {
-  return crypto.randomBytes(8).toString('hex');
-};
 
 module.exports = app;
