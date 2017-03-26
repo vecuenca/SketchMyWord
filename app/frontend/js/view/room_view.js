@@ -151,8 +151,6 @@ var roomView = (function (util) {
     row.append(createTd(score.games_won));
     row.append(createTd(score.total_points));
     row.append(createTd(score.words_guessed));
-    row.append(createTd(score.avg_draw_word_guess_time));
-    row.append(createTd(score.avg_word_guess_time));
     row.append(createTd(score.high_score));
     return row;  
   };

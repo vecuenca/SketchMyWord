@@ -33,8 +33,6 @@ mysql.createConnection({
       \`games_won\`                 INT default 0,
       \`total_points\`              INT default 0,
       \`words_guessed\`             INT default 0,
-      \`avg_draw_word_guess_time\`  INT default 0,
-      \`avg_word_guess_time\`       INT default 0,
       \`high_score\`       INT default 0,
           PRIMARY KEY(\`username\`));`)
         .then(function(result, error){
@@ -54,7 +52,7 @@ var createUser = function(user){
 var fetchUserStats = function(username) {
   return connection.query(`SELECT total_games, 
     games_won, total_points, words_guessed,
-    avg_draw_word_guess_time, avg_word_guess_time, high_score
+    high_score
     FROM \`sketch-my-word\`.\`users\` 
     WHERE username = ?;
   `, [username]);
@@ -63,7 +61,7 @@ var fetchUserStats = function(username) {
 var fetchGlobalStats = (sortParam, limitTo) => {
   return connection.query(`SELECT username, total_games,
     games_won, total_points, words_guessed,
-    avg_draw_word_guess_time, avg_word_guess_time, high_score
+    high_score
     FROM \`sketch-my-word\`.\`users\` 
     ORDER BY ? DESC 
     LIMIT ?; 

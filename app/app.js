@@ -75,8 +75,6 @@ mysql.createConnection({
       \`games_won\`                 INT default 0,
       \`total_points\`              INT default 0,
       \`words_guessed\`             INT default 0,
-      \`avg_draw_word_guess_time\`  INT default 0,
-      \`avg_word_guess_time\`       INT default 0,
       \`high_score\`       INT default 0,
           PRIMARY KEY(\`username\`));`)
   .then(function (result, error) {
