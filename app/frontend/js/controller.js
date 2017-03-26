@@ -41,15 +41,6 @@
       });
     });
   });
-  // document.addEventListener('onCreateRoom', function (e) {
-  //   roomModel.createRoom(e.detail)
-  //     .then(function (resp) {
-  //       roomView.roomCreateSuccess(resp.roomId);
-  //     })
-  //     .catch(function (err) {
-  //       util.displayToast(err);
-  //     });
-  // });
 
   document.addEventListener('onRoomJoin', function (e) {
     var roomId = e.detail.roomId;
@@ -135,6 +126,7 @@
     socket.on('next_round_starting_soon', function () {
       gameView.renderSystemMessage('The next round starts in 10 seconds!');
       gameView.setNextRoundWaitTimer();
+      gameView.removeLineRecord();
       gameView.startTimer();
     });
     
