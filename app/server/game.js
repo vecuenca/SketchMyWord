@@ -30,36 +30,6 @@ module.exports = {
     module.exports.setupRound(io, roomId, room, updateUserStats);
   },
 
-  roundTimeOver: function (io, roomId, room, updateUserStats) {
-    io.in(roomId).emit('round_time_over');
-    module.exports.endRound(io, roomId, room, updateUserStats);
-  },
-
-  onCorrectGuess: function (io, roomId, room, socket, updateUserStats) {
-    room.correctGuessers.push(socket.username);
-
-    // this player earns 3 points for guessing first
-    // otherwise they get one.
-    let pointsEarned = room.correctGuessers.length === 1 ? 3 : 1;
-
-    room.users[socket.username].score += pointsEarned;
-    room.users[socket.username].wordsGuessed += 1;
-
-    socket.emit('correct_guess', {
-      pointsEarned: pointsEarned,
-      word: room.wordToDraw
-    });
-    socket.broadcast.to(socket.room).emit('word_guessed', socket.username);
-
-    // check if everyone (except the Artist) guessed correctly
-    // the artist earns 2 points if this happens
-    if (room.correctGuessers.length === Object.keys(room.users).length - 1) {
-      io.in(roomId).emit('everyone_guessed', room.artist);
-      room.users[room.artist].score += 2;
-      module.exports.endRound(io, roomId, room, updateUserStats);
-    }
-  },
-
 	setupRound: function (io, roomId, room, updateUserStats) {
 
     // pick a user
@@ -116,6 +86,36 @@ module.exports = {
     });
     currentScore.sort(function(a, b) { return b.score - a.score});
     return currentScore;
+  },
+
+  roundTimeOver: function (io, roomId, room, updateUserStats) {
+    io.in(roomId).emit('round_time_over');
+    module.exports.endRound(io, roomId, room, updateUserStats);
+  },
+
+  onCorrectGuess: function (io, roomId, room, socket, updateUserStats) {
+    room.correctGuessers.push(socket.username);
+
+    // this player earns 3 points for guessing first
+    // otherwise they get one.
+    let pointsEarned = room.correctGuessers.length === 1 ? 3 : 1;
+
+    room.users[socket.username].score += pointsEarned;
+    room.users[socket.username].wordsGuessed += 1;
+
+    socket.emit('correct_guess', {
+      pointsEarned: pointsEarned,
+      word: room.wordToDraw
+    });
+    socket.broadcast.to(socket.room).emit('word_guessed', socket.username);
+
+    // check if everyone (except the Artist) guessed correctly
+    // the artist earns 2 points if this happens
+    if (room.correctGuessers.length === Object.keys(room.users).length - 1) {
+      io.in(roomId).emit('everyone_guessed', room.artist);
+      room.users[room.artist].score += 2;
+      module.exports.endRound(io, roomId, room, updateUserStats);
+    }
   },
 
   endRound: function (io, roomId, room, updateUserStats) {
