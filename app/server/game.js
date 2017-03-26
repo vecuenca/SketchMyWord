@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 module.exports = {
 
   getNextWord: function(wordBank, usedWords) {
@@ -18,7 +20,6 @@ module.exports = {
     'death', 'poison', 'gun', 'art', 'internet', 'victory',
     'hot air balloon', 'sushi'
   ],
-  
 
   gameHandler: function (io, roomId, room, updateUserStats) {
     // zero indexed because we're going to use this to iterate through
@@ -125,6 +126,16 @@ module.exports = {
     io.in(roomId).emit('broadcast_score', module.exports.getScores(io, roomId, room));
     io.in(roomId).emit('round_over');
     room.numRounds -= 1;
+
+    // tell players who didnt guess the word the word
+    let losers = _.differenceWith(room.userArray, room.correctGuessers, _.isEqual);
+    var sioRoom = io.sockets.adapter.rooms[roomId];
+    Object.keys(sioRoom.sockets).forEach(socketId => {
+      var socket = io.sockets.connected[socketId];
+      if (_.includes(losers, socket.username)) {
+        io.to(socketId).emit('loser_word', room.wordToDraw);     
+      }
+    });
 
     // reset round state of room
     room.correctGuessers  = [];
