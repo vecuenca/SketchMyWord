@@ -38,10 +38,7 @@ module.exports = {
     }
   },
 
-
 	setupRound: function (io, roomId, room, updateUserStats) {
-    var ROUND_TIME = 60000;
-    room.timer = setTimeout(module.exports.roundTimeOver, ROUND_TIME, io, roomId, room, updateUserStats);
 
     // pick a user
     if (room.numRounds >= room.userArray.length) {
