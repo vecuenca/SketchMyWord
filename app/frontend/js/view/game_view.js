@@ -81,9 +81,9 @@ var gameView = (function (util) {
     isErase = true;
   }
 
-  document.getElementById('color-tool').onchange = function (e) {
-    color = document.getElementById('color').value;
-  }
+  $('a.color-picker').click(function (e) {
+    color = $(e.target).attr('color');
+  });
 
   $(window).resize(function () {
     canvas.onmousemove = function (e) {
