@@ -184,6 +184,11 @@
       gameView.renderScore(score);
     });
 
+    socket.on('loser_word', word => {
+      gameView.renderSystemMessage('The word was ' + word + '.');
+      gameView.showWord(word);
+    });
+
     gameView.setup();
   });
 
