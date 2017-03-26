@@ -21,8 +21,12 @@
         <li><a id="btn-logout" href="/signout">Sign out</a></li>
       </ul>
       <ul class="right hide-on-med-and-down">
+        <li><a id="header-scores" href="#">Scores</a></li>
+      </ul>
+      <ul class="right hide-on-med-and-down">
         <li><a id="header-username" href="#">Hello, </a></li>
       </ul>
+      
       <ul id="nav-mobile" class="side-nav">
         <li><a href="#">Logout</a></li>
       </ul>
@@ -80,6 +84,80 @@
       <h4 class="header center orange-text">The game is over! </h4>
       <p class="center">The winner is... <span id="game-winner">jasen zhang</span> with <span id="game-winner-points">53</span> points!</p>
       <p class="center">Returning to the lobby in 5 seconds...</p>
+    </div>
+  </div>
+
+  <!--stats modal-->
+  <div id="stats-modal" class="modal" style="">
+    <div class="modal-content">
+      <div id="stats-container" class="container">
+        <div class="row">
+          <div class="col s12">
+            <ul class="tabs">
+              <li id="load-personal-stats" class="tab col s6"><a href="#personalScoreTab">Your stats</a></li>
+              <li id="load-global-stats" class="tab col s6"><a href="#globalScoreTab">Leaderboard</a></li>
+            </ul>
+          </div>
+          <div id="personalScoreTab" class="col s12">
+            <div id="personal-score-spinner" class="preloader-wrapper big active">
+              <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div><div class="gap-patch">
+                  <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+            <table class="centered">
+              <thead>
+                <tr>
+                    <th>Total games</th>
+                    <th>Games won</th>
+                    <th>Total points</th>
+                    <th>Words guessed</th>
+                    <th>High score</th>
+                </tr>
+              </thead>
+              <tbody id="personal-score-tbody">
+              </tbody>
+            </table>
+
+
+          </div>
+          <div id="globalScoreTab" class="col s12">
+            <div id="leaderboard-spinner" class="preloader-wrapper big active">
+              <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div><div class="gap-patch">
+                  <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+            <table class="centered highlight">
+              <thead>
+                <tr>
+                  <th>Player</th>
+                  <th>Total games</th>
+                  <th>Games won</th>
+                  <th>Total points</th>
+                  <th>Words guessed</th>
+                  <th>High score</th>
+                </tr>
+              </thead>
+              <tbody id="global-score-tbody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
     </div>
   </div>
 
@@ -228,6 +306,7 @@
   <!--Models-->
   <script src="js/model/game_model.js"></script>
   <script src="js/model/room_model.js"></script>
+  <script src="js/model/score_model.js"></script>
 
   <!--should be last, as it has a lot of dependencies-->
   <script src="js/controller.js"></script>
