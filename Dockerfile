@@ -11,6 +11,6 @@ WORKDIR /home/nodejs/app
 RUN npm install --production
 WORKDIR /home/nodejs/app/app/
 
-EXPOSE 443
+EXPOSE 3000
 # run the nodejs application
 CMD NODE_ENV=production node app.js
