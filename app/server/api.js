@@ -1,18 +1,50 @@
-var config       = require('../config.js');
-var schema       = require('./Schemas/signin')
-var ZSchema      = require("z-schema");
-var mysql        = require('promise-mysql');
-var express      = require('express');
-var app          = express.Router();
-var bodyParser   = require('body-parser');
-var crypto       = require('crypto');
-var socket       = require('./socket');
-var state        = require('./state.js');
-var Sentencer    = require('sentencer');
-var cookieParser = require('cookie-parser');
-app.use(cookieParser());
+var config           = require('../config.js');
+var mysql            = require('promise-mysql');
+var express          = require('express');
+var app              = express.Router();
+var bodyParser       = require('body-parser');
+var crypto           = require('crypto');
+var socket           = require('./socket');
+var state            = require('./state.js');
+var Sentencer        = require('sentencer');
+var cookieParser     = require('cookie-parser');
 
-var validator = new ZSchema();
+var expressValidator = require('express-validator');
+var util             = require('util');
+app.use(expressValidator({
+  customValidators: {
+    fail: function(value){
+      return false;
+    }
+  }
+})); 
+app.use(function(req, res, next) {
+	Object.keys(req.body).forEach(function(arg) {
+			switch(arg) {
+				case 'username':
+					req.checkBody(arg, 'Invalid username').notEmpty().isAlphanumeric();
+					break;
+				case 'password':
+					req.checkBody(arg, 'Invalid password').notEmpty();
+					break;
+				case 'roomSize':
+					req.checkBody(arg, 'Invalid title').notEmpty().isNumeric();
+					break;
+				default:
+					req.checkBody(arg, 'unknown argument').fail();
+			}
+	});
+	req.getValidationResult().then(function(result) {
+		if (!result.isEmpty()) {
+      console.log(util.inspect(result.array()));
+      return res.status(400).send('Validation errors: ' + util.inspect(result.array()));
+    } else {
+      next();
+    } 
+	});
+});
+
+app.use(cookieParser());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -82,7 +114,6 @@ var getRandomColor = function () {
 //AUTHENTICATION
 
 app.post('/signin/', function (req, res, next) {
-  validator.validate(req, schema);
   if (!req.body.username || !req.body.password) {
     return res.status(400).send("Bad Request");
   }
@@ -106,7 +137,6 @@ app.post('/signin/', function (req, res, next) {
 // -------------------- CREATE -------------------- 
 // create a new user
 app.put('/users/', function (req, res, next) {
-  validator.validate(req, schema);
   if (!req.body.username || !req.body.password) return res.status(400).send("Bad Request");
   createUser(req.body)
     .then(function (result) {
