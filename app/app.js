@@ -12,7 +12,7 @@ app.use(session({
   secret: 'big crab',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true, sameSite: true, httpOnly:true }
+  cookie: { secure: false, sameSite: true }
 }));
 
 var bodyParser = require('body-parser');
