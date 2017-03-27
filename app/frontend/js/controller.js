@@ -150,8 +150,8 @@
     socket.on('next_round_starting_soon', function () {
       gameView.renderSystemMessage('The next round starts in 10 seconds!');
       gameView.setNextRoundWaitTimer();
-      gameView.removeLineRecord();
       gameView.startTimer();
+      gameView.removeLineRecord();
     });
     
     socket.on('round_time_over', function () {
@@ -161,7 +161,6 @@
 
     socket.on('everyone_guessed', function (artist) {
       gameView.renderSystemMessage('Everyone guessed the word! ' + artist + ' earned 2 points!');
-      gameView.resetTimer();
     });
 
     socket.on('game_over', function (score) {

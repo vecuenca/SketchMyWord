@@ -14,7 +14,9 @@ var view = (function () {
 		var username = document.getElementById('signin-username').value;
 		var password = document.getElementById('signin-password').value;
 
-		if (username.length > 0 && password.length > 0) {
+		if (password.length < 6) {
+			util.displayToast('Your password is too short.');
+		} else if (username.length > 0 && password.length > 0) {
 			var event = new CustomEvent('onSignIn', {
 				detail: {
 					username: username,
@@ -39,6 +41,8 @@ var view = (function () {
 			util.displayToast('Please fill in all fields.');
 		} else if (password !== passwordConfirm) {
 			util.displayToast('Your passwords don\'t match.');
+		} else if (password.length < 6 || passwordConfirm.length < 6) {
+			util.displayToast('Your password is too short');
 		} else {
 			var event = new CustomEvent('onSignUp', {
 				detail: {
