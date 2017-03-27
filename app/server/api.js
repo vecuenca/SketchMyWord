@@ -150,7 +150,7 @@ app.post('/signin/', function (req, res, next) {
       }
 
       req.session.user = user;
-      res.cookie('username', user.username, { secure: false });
+      res.cookie('username', user.username, {secure: true, sameSite: true});
       return res.json({ success: true });
     })
     .catch(function (error) {
@@ -209,7 +209,7 @@ app.put('/game/', function (req, res, next) {
     usedWords: []
   };
   state.rooms[roomId].users[username] = { score: 0, wordsGuessed: 0, color: getRandomColor() };
-  res.cookie('roomId', roomId);
+  res.cookie('roomId', roomId, {secure: true, sameSite: true});
   res.json({ roomId: roomId });
   return next();
 });
@@ -244,7 +244,7 @@ app.post('/game/:roomId/', function (req, res, next) {
   room.users[username] = { score: 0, wordsGuessed: 0, color: getRandomColor() };
 
   //set a cookie for the roomId
-  res.cookie('roomId', roomId);
+  res.cookie('roomId', roomId, {secure: true, sameSite: true});
   res.json({ success: true });
   return next();
 });
