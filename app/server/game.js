@@ -130,6 +130,8 @@ module.exports = {
 
     // tell players who didnt guess the word the word
     let losers = _.differenceWith(room.userArray, room.correctGuessers, _.isEqual);
+    losers.splice(losers.indexOf(room.artist), 1);
+    
     var sioRoom = io.sockets.adapter.rooms[roomId];
     Object.keys(sioRoom.sockets).forEach(socketId => {
       var socket = io.sockets.connected[socketId];
