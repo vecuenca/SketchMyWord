@@ -11,6 +11,7 @@ var cookieParser     = require('cookie-parser');
 
 var expressValidator = require('express-validator');
 var util             = require('util');
+var _                = require('lodash');
 app.use(expressValidator({
   customValidators: {
     fail: function(value){
@@ -37,7 +38,7 @@ app.use(function(req, res, next) {
 	req.getValidationResult().then(function(result) {
 		if (!result.isEmpty()) {
       console.log(util.inspect(result.array()));
-      return res.status(400).send('Validation errors: ' + util.inspect(result.array()));
+      return res.status(400).json('Validation errors: ' + util.inspect(result.array()));
     } else {
       next();
     } 
@@ -59,15 +60,16 @@ mysql.createConnection({
     multipleStatements: true
 }).then(function(conn){
     connection = conn;
-    conn.query(`CREATE TABLE IF NOT EXISTS \`sketch-my-word\`.\`users\`( 
-      \`password\`                  VARCHAR(45) NOT NULL,
-      \`username\`                  VARCHAR(45) NOT NULL,
-      \`total_games\`               INT default 0,
-      \`games_won\`                 INT default 0,
-      \`total_points\`              INT default 0,
-      \`words_guessed\`             INT default 0,
-      \`high_score\`       INT default 0,
-          PRIMARY KEY(\`username\`));`)
+    conn.query(`CREATE TABLE IF NOT EXISTS \`sketch-my-word\`.\`users\`(
+        \`username\` VARCHAR(45) NOT NULL,
+        \`salt\` VARCHAR(255) NOT NULL,
+        \`salted_hash\` VARCHAR(255) NOT NULL,
+        \`total_games\`               INT default 0,
+        \`games_won\`                 INT default 0,
+        \`total_points\`              INT default 0,
+        \`words_guessed\`             INT default 0,
+        \`high_score\`       INT default 0,
+        PRIMARY KEY(\`username\`));`)
         .then(function(result, error){
             if(error) console.log(error);
         });
@@ -75,12 +77,13 @@ mysql.createConnection({
 
 // sql queries
 
-var createUser = function(user){
-    return connection.query(
-        `INSERT INTO \`sketch-my-word\`.\`users\`
-            (\`username\`, \`password\`)
-            VALUES (?, ?);`, [user.username, user.password]);
+var createUser = function (user) {
+  return connection.query(
+    `INSERT INTO \`sketch-my-word\`.\`users\`
+      (username, salt, salted_hash)
+      VALUES (?, ?, ?);`, [user.username, user.salt, user.saltedHash]);
 };
+
 
 var fetchUserStats = function(username) {
   return connection.query(`SELECT total_games, 
@@ -112,25 +115,46 @@ var getRandomColor = function () {
 }
 
 //AUTHENTICATION
+var User = function (user) {
+  var salt = crypto.randomBytes(16).toString('base64');
+  var hash = crypto.createHmac('sha512', salt);
+  hash.update(user.password);
+  this.username = user.username;
+  this.salt = salt;
+  this.saltedHash = hash.digest('base64');
+};
+
+var verifyPassword = (user, password) => {
+  var hash = crypto.createHmac('sha512', user.salt);
+  hash.update(password);
+  var value = hash.digest('base64');
+  return user.salted_hash === value;
+};
 
 app.post('/signin/', function (req, res, next) {
   if (!req.body.username || !req.body.password) {
-    return res.status(400).send("Bad Request");
+    return res.status(400).json("Bad Request");
   }
-  connection.query(
-    `SELECT * FROM \`sketch-my-word\`.\`users\`
-      WHERE \`username\` = ?
-      AND \`password\`= ? `, [req.body.username, req.body.password])
-    .then(function (results, fields) {
-      if (!results || results.length == 0 || results[0].password != req.body.password) {
-        return res.status(401).send('Sorry, we couldn\'t find your account.');
+  if (_.includes(req.body.username, " ")) return res.status(400).json("no spaces in username allowed");
+  if (_.includes(req.body.password, " ")) return res.status(400).json("no spaces in password allowed");
+  connection.query(`SELECT * FROM \`sketch-my-word\`.\`users\`
+    WHERE \`username\` = ?;`, [req.body.username])
+    .then((results, fields) => {
+      if (!results || results.length == 0) {
+        return res.status(401).json('Sorry, we couldn\'t find your account.');
       }
-      req.session.user = results[0];
-      res.cookie('username', results[0].username, { secure: false });
+
+      let user = results[0];
+      if (!verifyPassword(user, req.body.password)) {
+        return res.status(401).json('Unauthorized');  
+      }
+
+      req.session.user = user;
+      res.cookie('username', user.username, { secure: false });
       return res.json({ success: true });
     })
     .catch(function (error) {
-      if (error) return res.status(500).send(error);
+      if (error) return res.status(500).json(error);
     });
 });
 
@@ -138,13 +162,21 @@ app.post('/signin/', function (req, res, next) {
 // create a new user
 app.put('/users/', function (req, res, next) {
   if (!req.body.username || !req.body.password) return res.status(400).send("Bad Request");
-  createUser(req.body)
-    .then(function (result) {
-      res.json(result);
-      return next();
-    })
-    .catch(function (error) {
-      if (error) return res.status(500).send(error);
+  if (_.includes(req.body.username, " ")) return res.status(400).json("no spaces in username allowed");
+  if (_.includes(req.body.password, " ")) return res.status(400).json("no spaces in password allowed");
+  var data = new User(req.body);
+
+  connection.query(`SELECT * FROM \`sketch-my-word\`.\`users\` 
+                    WHERE username=?`, [data.username])
+    .then(result => {
+      if (result.length == 1) return res.status(400).json('username already exists');
+      createUser(data)
+        .then(result => {
+          res.json(result);
+          return next();
+        })
+    }).catch(err => {
+      if (err) return res.status(500).json(err);
       return next();
     });
 });
@@ -152,7 +184,7 @@ app.put('/users/', function (req, res, next) {
 // create a new room
 app.put('/game/', function (req, res, next) {
   if (!req.session.user) {
-    return res.status(403).send("Forbidden");
+    return res.status(403).json("Forbidden");
   }
 
   var roomSize = req.body.roomSize;
@@ -185,7 +217,7 @@ app.put('/game/', function (req, res, next) {
 // join an existing room
 app.post('/game/:roomId/', function (req, res, next) {
   if (!req.session.user) {
-    return res.status(403).send('Forbidden');
+    return res.status(403).json('Forbidden');
   }
 
   var roomId = req.params.roomId;
@@ -194,18 +226,18 @@ app.post('/game/:roomId/', function (req, res, next) {
 
   // check if room exists
   if (!room) {
-    return res.status(400).send('No room with that id exists.');
+    return res.status(400).json('No room with that id exists.');
   }
 
   // check if room is full
   // currently, max num of players is 4
   if (Object.keys(room.users).length >= room.roomSize) {
-    return res.status(400).send('Sorry, that room is full.');
+    return res.status(400).json('Sorry, that room is full.');
   }
 
   // check if we are already in this room
   if (username in room.users) {
-    return res.status(400).send('You have already joined this room.');
+    return res.status(400).json('You have already joined this room.');
   }
 
   // update room with new user
@@ -221,7 +253,7 @@ app.post('/game/:roomId/', function (req, res, next) {
 // get all current games with number of users in them
 app.get('/game', function (req, res, next) {
   if (!req.session.user) {
-    return res.status(403).send('Forbidden');
+    return res.status(403).json('Forbidden');
   }
   // there's probably a more elegant way to do this..
   var roomsWithUsers = [];
@@ -266,7 +298,7 @@ app.get('/stats/', (req, res, next) => {
 
 app.get('/stats/:username/', function(req, res, next) {
   if (!req.session.user) {
-    return res.status(403).send('Forbidden');
+    return res.status(403).json('Forbidden');
   }
 
   var username = req.params.username;
@@ -337,11 +369,11 @@ var capitalize = (le) => {
 // -------------------- DELETE --------------------
 app.delete('/game/:roomId/', function (req, res, next) {
   if (!req.session.user) {
-    return res.status(403).send('Forbidden');
+    return res.status(403).json('Forbidden');
   }
   var roomId = req.params.roomId;
   if (!state.rooms[roomId]) {
-    return res.status(400).send('No room with that id exists.');
+    return res.status(400).json('No room with that id exists.');
   }
 
   //remove the user from the room
