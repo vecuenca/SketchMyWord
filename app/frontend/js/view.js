@@ -1,6 +1,10 @@
 (function (preloaderView, roomView, gameView, util) {
 	"use strict";
 
+	$('#references_link').click(e =>{
+		$('#references').modal('open');
+	});
+
 	window.onload = function () {
 		// run onloads of each view component.
 		// this initializes things like onsubmits, onclicks, etc.
