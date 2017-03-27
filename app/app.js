@@ -38,7 +38,7 @@ var updateUserStats = function(user) {
   let wordsGuessed = user.wordsGuessed;
   let username     = user.username;
 
-  connection.query(`SELECT high_score
+  return connection.query(`SELECT high_score
     FROM \`sketch-my-word\`.\`users\` 
     WHERE username = ?;`, [username]).then(res => {
     let oldHighScore = res[0].high_score;

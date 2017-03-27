@@ -203,6 +203,7 @@ app.put('/game/', function (req, res, next) {
     roundActive: false,
 
     // these props will be set later
+    roundOver: true,
     wordToDraw: null,
     timer: null,
     artist: null,

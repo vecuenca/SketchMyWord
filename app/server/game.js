@@ -50,6 +50,7 @@ module.exports = {
     console.log('THE WORD IS...', room.wordToDraw);
     console.log('ROOM state as of new round', room);
 
+    room.roundOver = false;
     // tell all players their roles
     var sioRoom = io.sockets.adapter.rooms[roomId];
     Object.keys(sioRoom.sockets).forEach(function (socketId){
@@ -141,7 +142,7 @@ module.exports = {
     room.correctGuessers  = [];
     room.lineHistory      = []; 
     room.chatHistory      = [];
-    room.wordToDraw       = null;
+    room.roundOver        = true;
     room.timer            = null;
     
     if (room.numRounds > -1) {

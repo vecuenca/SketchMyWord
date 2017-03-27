@@ -41,6 +41,7 @@ module.exports = {
 
         // We don't want to render a correct guess...
         if (room.wordToDraw
+          && room.roundOver === false
           && room.wordToDraw === messageObj.message
           && room.artist != socket.username
           && !(socket.username in room.correctGuessers)) {
