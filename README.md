@@ -1,5 +1,6 @@
-# 3honeys
-Three Honeys
+# SketchMyWord by the Three Honeys
+You can access our app at:
+https://3honeys.cms-weblab.utsc.utoronto.ca/
 
 ## Compatibility
 Please use Chrome.
