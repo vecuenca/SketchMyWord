@@ -9,7 +9,7 @@ var roomModel = (function () {
   var roomModel = {};
 
   roomModel.createRoom = function (data, callback) {
-    fetch('/api/game/', {
+    return fetch('/api/game/', {
       method: 'put',
       credentials: 'include',
       headers: headers,
@@ -44,7 +44,7 @@ var roomModel = (function () {
   // };
 
   roomModel.joinRoom = function (data, callback) {
-    fetch('/api/game/' + data.roomId, {
+    return fetch('/api/game/' + data.roomId, {
       method: 'post',
       credentials: 'include',
       headers: headers
@@ -60,7 +60,7 @@ var roomModel = (function () {
   };
 
   roomModel.getRooms = function (callback) {
-    fetch('/api/game', {
+    return fetch('/api/game', {
       method: 'get',
       credentials: 'include',
       headers: headers
@@ -76,7 +76,7 @@ var roomModel = (function () {
   }
 
   roomModel.leaveRoom = function(data, callback) {
-    fetch('/api/game/' + data.roomId, {
+    return fetch('/api/game/' + data.roomId, {
       method: 'delete',
       credentials: 'include',
       headers: headers
