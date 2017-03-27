@@ -4,6 +4,8 @@ var util = (function () {
 
   var util = {};
 
+  util.BAD_RESPONSE = [400, 409, 500];
+
   util.displayToast = function (msg, lifetime = 5000) {
     Materialize.toast(msg, lifetime);
   }

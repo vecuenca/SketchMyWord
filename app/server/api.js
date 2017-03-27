@@ -59,15 +59,16 @@ mysql.createConnection({
     multipleStatements: true
 }).then(function(conn){
     connection = conn;
-    conn.query(`CREATE TABLE IF NOT EXISTS \`sketch-my-word\`.\`users\`( 
-      \`password\`                  VARCHAR(45) NOT NULL,
-      \`username\`                  VARCHAR(45) NOT NULL,
-      \`total_games\`               INT default 0,
-      \`games_won\`                 INT default 0,
-      \`total_points\`              INT default 0,
-      \`words_guessed\`             INT default 0,
-      \`high_score\`       INT default 0,
-          PRIMARY KEY(\`username\`));`)
+    conn.query(`CREATE TABLE IF NOT EXISTS \`sketch-my-word\`.\`users\`(
+        \`username\` VARCHAR(45) NOT NULL,
+        \`salt\` VARCHAR(255) NOT NULL,
+        \`salted_hash\` VARCHAR(255) NOT NULL,
+        \`total_games\`               INT default 0,
+        \`games_won\`                 INT default 0,
+        \`total_points\`              INT default 0,
+        \`words_guessed\`             INT default 0,
+        \`high_score\`       INT default 0,
+        PRIMARY KEY(\`username\`));`)
         .then(function(result, error){
             if(error) console.log(error);
         });
@@ -75,12 +76,13 @@ mysql.createConnection({
 
 // sql queries
 
-var createUser = function(user){
-    return connection.query(
-        `INSERT INTO \`sketch-my-word\`.\`users\`
-            (\`username\`, \`password\`)
-            VALUES (?, ?);`, [user.username, user.password]);
+var createUser = function (user) {
+  return connection.query(
+    `INSERT INTO \`sketch-my-word\`.\`users\`
+      (username, salt, salted_hash)
+      VALUES (?, ?, ?);`, [user.username, user.salt, user.saltedHash]);
 };
+
 
 var fetchUserStats = function(username) {
   return connection.query(`SELECT total_games, 
@@ -112,21 +114,40 @@ var getRandomColor = function () {
 }
 
 //AUTHENTICATION
+var User = function (user) {
+  var salt = crypto.randomBytes(16).toString('base64');
+  var hash = crypto.createHmac('sha512', salt);
+  hash.update(user.password);
+  this.username = user.username;
+  this.salt = salt;
+  this.saltedHash = hash.digest('base64');
+};
+
+var verifyPassword = (user, password) => {
+  var hash = crypto.createHmac('sha512', user.salt);
+  hash.update(password);
+  var value = hash.digest('base64');
+  return user.salted_hash === value;
+};
 
 app.post('/signin/', function (req, res, next) {
   if (!req.body.username || !req.body.password) {
     return res.status(400).send("Bad Request");
   }
-  connection.query(
-    `SELECT * FROM \`sketch-my-word\`.\`users\`
-      WHERE \`username\` = ?
-      AND \`password\`= ? `, [req.body.username, req.body.password])
-    .then(function (results, fields) {
-      if (!results || results.length == 0 || results[0].password != req.body.password) {
-        return res.status(401).send('Sorry, we couldn\'t find your account.');
+  connection.query(`SELECT * FROM \`sketch-my-word\`.\`users\`
+    WHERE \`username\` = ?;`, [req.body.username])
+    .then((results, fields) => {
+      if (!results || results.length == 0) {
+        return res.status(401).json('Sorry, we couldn\'t find your account.');
       }
-      req.session.user = results[0];
-      res.cookie('username', results[0].username, { secure: false });
+
+      let user = results[0];
+      if (!verifyPassword(user, req.body.password)) {
+        return res.status(401).json('Unauthorized');
+      }
+
+      req.session.user = user;
+      res.cookie('username', user.username, { secure: false });
       return res.json({ success: true });
     })
     .catch(function (error) {
@@ -138,13 +159,20 @@ app.post('/signin/', function (req, res, next) {
 // create a new user
 app.put('/users/', function (req, res, next) {
   if (!req.body.username || !req.body.password) return res.status(400).send("Bad Request");
-  createUser(req.body)
-    .then(function (result) {
-      res.json(result);
-      return next();
-    })
-    .catch(function (error) {
-      if (error) return res.status(500).send(error);
+
+  var data = new User(req.body);
+
+  connection.query(`SELECT * FROM \`sketch-my-word\`.\`users\` 
+                    WHERE username=?`, [data.username])
+    .then(result => {
+      if (result.length == 1) return res.status(400).json('username already exists');
+      createUser(data)
+        .then(result => {
+          res.json(result);
+          return next();
+        })
+    }).catch(err => {
+      if (err) return res.status(500).json(err);
       return next();
     });
 });

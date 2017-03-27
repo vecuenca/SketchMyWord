@@ -28,21 +28,24 @@ var model = (function() {
 		});
   };
 
-	model.signUp = function(data, callback) {
-    fetch('/api/users/', {
+	model.signUp = function (data) {
+		return fetch('/api/users/', {
 			method: 'put',
 			credentials: 'include',
 			headers: headers,
 			body: JSON.stringify({
-				username: data.username, 
+				username: data.username,
 				password: data.password
 			})
-		}).then(function(resp) {
-			callback(null, resp);
-		}).catch(function(err) {
-			callback(err, null);
-		});
-  };  
+		}).then(resp => {
+			if (util.BAD_RESPONSE.includes(resp.status)) {
+				return resp.json().then(err => {
+					return Promise.reject(err);
+				});
+			}
+			return resp.json();
+		})
+	}; 
 
   return model;
 }());

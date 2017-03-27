@@ -8,10 +8,9 @@
 	});
 
 	document.addEventListener('onSignUp', function(e) {
-		model.signUp(e.detail, function(err, resp) {
-			if (err) return util.displayToast(err);
-      view.signUpSuccess();
-		});
+		model.signUp(e.detail).then(resp => {
+			view.signUpSuccess();
+		}).catch(util.displayToast);
 	});
   
 }(model, view, util));
