@@ -104,6 +104,7 @@ var fetchGlobalStats = (sortParam, limitTo) => {
   `, [sortParam, parseInt(limitTo)]);
 };
 
+
 // i dunno whre to put this LOL
 var getRandomColor = function () {
   var letters = '0123456789ABCDEF'.split('');
