@@ -1,30 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>SketchMyWord</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+	<title>SketchMyWord</title>
 
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-	<link href="css/login.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+	<!-- CSS  -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+	<link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+	<link href="css/login.css" type="text/css" rel="stylesheet" media="screen,projection" />
 </head>
-<body>
-  <!--app bar nav-->
-  <nav class="light-blue lighten-1" role="navigation">
-    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">SketchMyWord</a>
-    </div>
-  </nav>
 
-  <div class="section"></div>
-  <main>
-    <center>
-      <br>
-      <h5 class="">Welcome!</h5>
+<body>
+	<!--references modal-->
+	<div id="references" class="modal">
+		<div class="modal-content">
+			<h4 class="header center orange-text">References</h4>
+			<p class="center">
+				<div>Icons made by <a href="http://www.flaticon.com/authors/google" title="Google">Google</a> from
+					<a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by
+					<a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+				</div>
+			</p>
+			<p class="center">
+				<div>Icons made by <a href="http://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from
+					<a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by
+					<a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+				</div>
+			</p>
+			<p class="center">
+				<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>					is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+			</p>
+			<p>
+				Code taken from the following areas
+			</p>
+			<p>
+				http://stackoverflow.com/questions/5047346/converting-strings-like-document-cookie-to-objects for cookies
+			</p>
+			<p>
+				http://code-and.coffee/post/2015/collaborative-drawing-canvas-node-websocket/ for reference for using sockets to draw
+			</p>
+			<div class="modal-footer">
+				<a href="#!" id="cancel-room-create" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+			</div>
+		</div>
+	</div>
+
+	<!--app bar nav-->
+	<nav class="light-blue lighten-1" role="navigation">
+		<div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">SketchMyWord</a>
+		</div>
+	</nav>
+
+	<div class="section"></div>
+	<main>
+		<center>
+			<br>
+			<h5 class="">Welcome!</h5>
 			<h5 class="">Please log in or create an account to play SketchMyWord!</h5>
-      <br>			
+			<br>
 
 			<!--sign in form-->
 			<div id="signin-form">
@@ -34,94 +69,97 @@
 							<li class="tab col s6"><a href="#signin">Sign in</a></li>
 							<li class="tab col s6"><a href="#signup">Sign up</a></li>
 						</ul>
-						<h4 id="error" class="red-text"></h3>
-						<form id="signin" class="col s12" method="post">
-							<div class='row'>
-								<div class='col s12'>
+						<h4 id="error" class="red-text">
+							</h3>
+							<form id="signin" class="col s12" method="post">
+								<div class='row'>
+									<div class='col s12'>
+									</div>
 								</div>
-							</div>
-							<div class='row'>
-								<div class='input-field col s12'>
-									<input class='validate' type='text' name='username' id='signin-username' />
-									<label for='username'>Enter your username</label>
+								<div class='row'>
+									<div class='input-field col s12'>
+										<input class='validate' type='text' name='username' id='signin-username' />
+										<label for='username'>Enter your username</label>
+									</div>
 								</div>
-							</div>
-							<div class='row'>
-								<div class='input-field col s12'>
-									<input class='validate' type='password' name='password' id='signin-password' />
-									<label for='password'>Enter your password</label>
-								</div>
-								<label>
+								<div class='row'>
+									<div class='input-field col s12'>
+										<input class='validate' type='password' name='password' id='signin-password' />
+										<label for='password'>Enter your password</label>
+									</div>
+									<label>
 									<a href='#!'><b>Forgot Password?</b></a>
 								</label>
-							</div>
-							<br/>
-							<center>
+								</div>
+								<br/>
+								<center>
+									<div class='row'>
+										<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect orange'>Login</button>
+									</div>
+								</center>
+							</form>
+							<form id="signup" class="col s12" method="post">
 								<div class='row'>
-									<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect orange'>Login</button>
+									<div class='col s12'>
+									</div>
 								</div>
-							</center>
-						</form>
-						<form id="signup" class="col s12" method="post">
-							<div class='row'>
-								<div class='col s12'>
-								</div>
-							</div>
-							<div class='row'>
-								<div class='input-field col s12'>
-									<input class='validate' type='text' name='username' id='signup-username' />
-									<label for='username'>Enter your username</label>
-								</div>
-							</div>
-							<div class='row'>
-								<div class='input-field col s12'>
-									<input class='validate' type='password' name='password' id='signup-password' />
-									<label for='password'>Enter your password</label>
-								</div>
-								<label>
-								</label>
-							</div>
-							<div class='row'>
-								<div class='input-field col s12'>
-									<input class='validate' type='password' name='password' id='signup-confirm-password' />
-									<label for='confirm-password'>Confirm your password</label>
-								</div>
-								<label>
-								</label>
-							</div>
-							<br/>
-							<center>
 								<div class='row'>
-									<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect orange'>Sign up</button>
+									<div class='input-field col s12'>
+										<input class='validate' type='text' name='username' id='signup-username' />
+										<label for='username'>Enter your username</label>
+									</div>
 								</div>
-							</center>
-						</form>
+								<div class='row'>
+									<div class='input-field col s12'>
+										<input class='validate' type='password' name='password' id='signup-password' />
+										<label for='password'>Enter your password</label>
+									</div>
+									<label>
+								</label>
+								</div>
+								<div class='row'>
+									<div class='input-field col s12'>
+										<input class='validate' type='password' name='password' id='signup-confirm-password' />
+										<label for='confirm-password'>Confirm your password</label>
+									</div>
+									<label>
+								</label>
+								</div>
+								<br/>
+								<center>
+									<div class='row'>
+										<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect orange'>Sign up</button>
+									</div>
+								</center>
+							</form>
 					</div>
 				</div>
 
 			</div>
 		</center>
 
-    <div class="section"></div>
-    <div class="section"></div>
-  </main>
+		<div class="section"></div>
+		<div class="section"></div>
+	</main>
 
-  <footer class="page-footer orange">
-    <div class="footer-copyright">
-      <div class="container">
-      Made with 🦀 by the <a class="orange-text text-lighten-3">3 Honeys</a>
-      </div>
-    </div>
-  </footer>
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/materialize/materialize.js"></script>
-  <script src="js/materialize/init.js"></script>
+	<footer class="page-footer orange">
+		<div class="footer-copyright">
+			<div class="container">
+				Made with 🦀 by the <a class="orange-text text-lighten-3">3 Honeys</a>
+				<a id="references_link">references</a>
+			</div>
+		</div>
+	</footer>
+	<!--  Scripts-->
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="js/materialize/materialize.js"></script>
+	<script src="js/materialize/init.js"></script>
 
 	<script src="js/util.js"></script>
 
 	<script src="js/login/loginmodel.js"></script>
 	<script src="js/login/loginview.js"></script>
 	<script src="js/login/logincontroller.js"></script>
-  </body>
+</body>
+
 </html>
