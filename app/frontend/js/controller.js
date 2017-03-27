@@ -33,43 +33,30 @@
   });
 
   document.addEventListener('onCreateRoom', function (e) {
-    roomModel.createRoom(e.detail, function (err, resp) {
-      // TODO: REFACTOR THIS
-      if (err) return util.displayToast(err);
-      resp.json().then(function (data) {
-        roomView.roomCreateSuccess(data.roomId);
-      });
-    });
+    roomModel.createRoom(e.detail).then(resp => {
+      roomView.roomCreateSuccess(resp.roomId);
+    }).catch(util.displayToast); 
   });
 
   document.addEventListener('onRoomJoin', function (e) {
     var roomId = e.detail.roomId;
     // TODO: REFACTOR THIS
-    roomModel.joinRoom(e.detail, function (err, resp) {
-      if (err) return util.displayToast(err);
-      resp.json().then(function (data) {
-        roomView.roomJoinSuccess(roomId);
-      });
-    });
+    roomModel.joinRoom(e.detail).then(resp => {
+      roomView.roomJoinSuccess(roomId);
+    }).catch(util.displayToast); 
   });
 
   document.addEventListener('onLeaveRoom', function (e) {
     var roomId = e.detail.roomId;
-    roomModel.leaveRoom(e.detail, function (err, resp) {
-      if (err) return util.displayToast(err);
-      resp.json().then(function (data) {
-        roomView.roomLeaveSuccess(data);
-      });
-    });
+    roomModel.leaveRoom(e.detail).then(resp => {
+      roomView.roomLeaveSuccess(resp);
+    }).catch(util.displayToast); 
   });
 
   document.addEventListener('onGetRooms', function (e) {
-    roomModel.getRooms(function (err, res) {
-      if (err) return util.displayToast(err);
-      res.json().then(function (data) {
-        roomView.displayRoomListInModal(data.rooms);
-      });
-    });
+    roomModel.getRooms().then(resp => {
+      roomView.displayRoomListInModal(resp.rooms);
+    }).catch(util.displayToast); 
   });
 
   document.addEventListener('connectSocket', function (e) {
