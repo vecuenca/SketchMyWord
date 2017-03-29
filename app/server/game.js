@@ -7,6 +7,7 @@ module.exports = {
     let chosenWord = wordBank[index];
     while (usedWords.includes(chosenWord)){
       index = Math.floor(Math.random() * wordBank.length);
+      chosenWord = wordBank[index];
     }
     usedWords.push(chosenWord);
     return chosenWord;
