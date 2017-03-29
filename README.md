@@ -2,6 +2,8 @@
 You can access our app at:
 https://3honeys.cms-weblab.utsc.utoronto.ca/
 
+our video demo can be found here https://www.youtube.com/watch?v=kxthCLOEQjg&feature=youtu.be
+
 ## Compatibility
 Please use Chrome.
 
