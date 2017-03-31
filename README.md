@@ -8,7 +8,7 @@ our api docs can be found [here](api.md)
 
 
 ## Compatibility
-Please use Chrome.
+Please use the latest version of Chrome, as Safari (and anything not supporting the fetch API)) will not work.
 
 ## team members
 * Brandon Ramoudith (ramoudit)
