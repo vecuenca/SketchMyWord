@@ -71,9 +71,10 @@ module.exports = {
       }
     });
 
+
     var ROUND_TIME = 60000;
     room.roundStartTime = new Date();
-    room.timer = setTimeout(module.exports.roundTimeOver, ROUND_TIME, io, roomId, room); 
+    room.timer = setTimeout(module.exports.roundTimeOver, ROUND_TIME, io, roomId, room, updateUserStats); 
 	},
 
   getScores: function (io, roomId, room) {
