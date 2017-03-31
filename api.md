@@ -169,99 +169,41 @@ $ curl -k -b cookie.txt \
 - response: 200
     - content-type: `application/json`
     - body: object
-        - active  total games of SMW played
-        - games_won:     (num) number of SMW games won
-        - total_points:  (num) total number of points earned across all games
-        - words_guessed: (num) total words guessed
-        - high_score:    (num) highest score earned
+        - active: (bool) is this room joinable?
+        - roundStartTime: (date) time this round started
+        - chatHistory: array of objects:
+            - username: (string) username of sender
+            - message: (string) message of sender
+            - color: (string) color of sender
+        - isArtist: (bool) are you the current artist for this round
+        - lineHistory: array of line objects
+        - scores: array of user objects with score:
+            - username: (string) username of sender
+            - message: (string) message of sender
+            - score: (num) score of sender
+        - wordToDraw: (string) word to draw if artist, blanks otherwise
 - response: 403
-    - body: Forbiddend
+    - body: Forbidden
  
  
 ``` 
 $ curl -k -b cookie.txt \
-    https://3honeys.cms-weblab.utsc.utoronto.ca/api/stats/Vincent
+    https://3honeys.cms-weblab.utsc.utoronto.ca/api/game/AgogFeistySquirrel
 ```
-
-### Read
-
-- description: retrieve the first image in the gallery
-- request: `GET /api/images?first`   
-- response: 200
-    - content-type: `application/json`
-    - body: object
-        - image: object
-            - _id:       (string) the message id
-            - user:      (string) the author of this image
-            - title:     (string) the title of this image
-            - createdAt: (string) date of creation
-            - updatedAt: (string) date of creation
-            - url:       (string) location of image, OR
-            - file       (object) contains metadata about this images file
-        - pages: object
-            - next: (string) the id of the next image in the gallery
-            - prev: (string) the id of the previous image in the gallery
- 
- 
-``` 
-$ curl http://localhost:3000/api/images"?"first
-```
-
-### Read
-
-- description: retrieve the comments for an image on a given page
-- request: `GET /api/images/:id/comments[?page=1]`   
-- response: 200
-    - content-type: `application/json`
-    - body: list of objects
-      - comments: (array of objects) the comments that belong to this page
-      - numPages: (int) the total number of comment pages
-      - page: (int) the current page of comments
- 
-``` 
-$ curl -k -b cookie.txt https://localhost:3000/api/users/aaa/images/1Raze84UsB5VbmxW/comments/
-``` 
   
 ### Delete
   
-- description: delete the image with given id
-- request: `DELETE /api/users/:username/images/:id/`
+- description: remove yourself from the given room
+- request: `DELETE /api/game/:roomId`
 - response: 200
     - content-type: `application/json`
     - body: object
-        - next: (string) the next image to show
-- response: 404
-    - body: Image id does not exist
+        - success: (bool) if you left the room correctly
+        - host: (bool) if you are the host of the room you left
+- response: 403
+    - body: Forbidden
 
 ``` 
-$ curl -X DELETE https://localhost:3000/api/users/aaa/images/jed5672jd90xg4awo789/
+$ curl -X DELETE -k -b cookie.txt \
+    https://3honeys.cms-weblab.utsc.utoronto.ca/api/game/AgogFeistySquirrel
 ``` 
-
-### Delete
-  
-- description: delete the comment id
-- request: `DELETE /api/messages/:id/comments/:cid/`
-- response: 200
-    - content-type: `application/json`
-    - body: object
-        - id:    (string) the id of the deleted comment
-        - count: (int)    the number of comments remaining for this image
-- response: 404
-    - body: comment :id does not exists
-
-``` 
-$ curl -X DELETE https://localhost:3000/api/users/aaa/images/jed5672jd90xg4awo789/comments/jed5672jd90xg4awo789/
-```
-
-### Delete
-  
-- description: sign out
-- request: `DELETE /signout/
-- response: 200
-- response: 404
-    - body: comment :id does not exists
-
-``` 
-$ curl -k -X DELETE https://localhost:3000/signout/
-```
-
