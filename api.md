@@ -1,7 +1,5 @@
 # SketchMyWord API Documentation
 
-## Image API
-
 ### Create
 
 - description: create a new user
