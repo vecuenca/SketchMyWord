@@ -4,7 +4,7 @@ https://3honeys.cms-weblab.utsc.utoronto.ca/
 
 our video demo can be found here https://www.youtube.com/watch?v=kxthCLOEQjg&feature=youtu.be
 
-our api docs can be found [here](docs/api.md)
+our api docs can be found [here](api.md)
 
 
 ## Compatibility
